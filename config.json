@@ -3,6 +3,6 @@
         "host":"localhost",
         "user":"pytester",
         "password":"tortoise",
-        "db":"paje"
+        "database":"paje"
     }
 }
