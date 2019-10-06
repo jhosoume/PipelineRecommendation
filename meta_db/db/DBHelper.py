@@ -28,15 +28,41 @@ class DBHelper:
     def create_table(self):
         sql_create = """
             CREATE TABLE metadata (id INT PRIMARY KEY AUTO_INCREMENT,
-                                   name VARCHAR(255){}
+                                   name VARCHAR(255) NOT NULL UNIQUE{}
                                   );
         """
         for feature in self.__get_rows():
             if feature == "int":
-                feature = "int_"
+                feature = "intt"
             sql_create = sql_create.format(""", {} DOUBLE{}""").format(feature, {})
         sql_create = sql_create.format("")
         self.__cursor.execute(sql_create)
 
     def drop_table(self):
         self.__cursor.execute("DROP TABLE metadata;")
+
+    def add_record(self, types, values):
+        if (len(types) > 0 and len(types) != len(values)):
+            raise ValueError("List of types and values must be of same length")
+        sql_insert = """ INSERT INTO metadata ({}) VALUES ({});"""
+
+        # Getting types in the format suitable for inclusion
+        valid_types = ""
+        for type in types:
+            if type == "int":
+                type = "intt"
+            valid_types += type.replace(".", ",") + ", "
+        valid_types = valid_types[:-2]
+        # Including fields to be substituted by the values
+        to_subst = ""
+        for indx in range(len(values)):
+            to_subst += "%s, "
+        to_subst = to_subst[:-2] # Elimineting comma and empty space
+        print(sql_insert.format(valid_types, to_subst))
+        self.__cursor.execute(sql_insert.format(valid_types, to_subst), values)
+        self.__con.commit()
+        print(self.__cursor.rowcount, "record inserted.")
+
+    def get_all(self):
+        self.__cursor.execute("SELECT * FROM metadata;")
+        return self.__cursor.fetchall()
