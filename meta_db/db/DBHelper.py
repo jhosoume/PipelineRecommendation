@@ -51,7 +51,7 @@ class DBHelper:
         for type in types:
             if type == "int":
                 type = "intt"
-            valid_types += type.replace(".", ",") + ", "
+            valid_types += type.replace(".", "_") + ", "
         valid_types = valid_types[:-2]
         # Including fields to be substituted by the values
         to_subst = ""
