@@ -29,4 +29,4 @@ for dataset in datasets:
     # Adding name to the list
     labels = ["name"] + labels[not_nan].tolist()
     results = [dataset[:-5]] + results[not_nan].tolist()
-    db.add_record(labels, results)
+    db.add_metadata_record(labels, results)
