@@ -6,6 +6,8 @@ import arff
 PATH = "datasets"
 
 # Saving selected dataset from openml to PATH in JSON format
+# Format chosen: https://towardsdatascience.com/the-best-format-to-save-pandas-data-414dca023e0d
+# https://medium.com/@shmulikamar/python-serialization-benchmarks-8e5bb700530b
 def save_dataset(data_id):
     try:
         dataset = openml.datasets.get_dataset(int(data_id))

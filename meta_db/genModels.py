@@ -11,10 +11,11 @@ from sklearn.model_selection import cross_validate
 from sklearn.metrics import SCORERS
 from sklearn import preprocessing
 
+import constants
+
 from meta_db.db.DBHelper import DBHelper
 
-np.random.seed(7)
-RANDOM_STATE = 7
+np.random.seed(constants.RANDOM_STATE)
 
 SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
           "precision_macro", "f1_micro", "f1_macro"]
@@ -44,7 +45,7 @@ for dataset in datasets:
     models["svm"] = svm_clf # Actually not needed, the cv does the training again
 
     # Creating LogisticRegression model using default parameters
-    lg_clf = linear_model.LogisticRegression(random_state = RANDOM_STATE, solver = 'lbfgs').fit(values, target)
+    lg_clf = linear_model.LogisticRegression(random_state = constants.RANDOM_STATE, solver = 'lbfgs').fit(values, target)
     models["logistic_regression"] = lg_clf
 
     # Creating Linear Discriminant model using default parameters
@@ -56,7 +57,7 @@ for dataset in datasets:
     models["kneighbors"] = neigh_clf
 
     # Creating CART model using default parameters
-    dectree_clf = tree.DecisionTreeClassifier(random_state = RANDOM_STATE).fit(values, target)
+    dectree_clf = tree.DecisionTreeClassifier(random_state = constants.RANDOM_STATE).fit(values, target)
     models["decision_tree"] = dectree_clf
 
     # Creating Gaussian Naive Bayes model using default parameters
@@ -84,7 +85,7 @@ for dataset in datasets:
                 rlabel_db = rlabel[5:]
             else:
                 rlabel_db = rlabel
-            print("[{}, {}] Scores {}".format(name, model, rlabel_db))
+            # print("[{}, {}] Scores {}".format(name, model, rlabel_db))
             result_labels.append(rlabel_db + "_mean")
             results.append(np.mean(cv_results[rlabel]))
             result_labels.append(rlabel_db + "_std")
