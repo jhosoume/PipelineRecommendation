@@ -76,18 +76,18 @@ class DBHelper:
         sql_create = """
             CREATE TABLE regressor (id INT PRIMARY KEY AUTO_INCREMENT,
                                     name VARCHAR(255) NOT NULL,
-                                    model VARCHAR(255) NOT NULL{}
+                                    classifier VARCHAR(255) NOT NULL,
+                                    score VARCHAR(255) NOT NULL,
+                                    model_id INT{}
                                    );
         """
-        measures = ["mean", "std"]
         for score in scores:
-            for measure in measures:
-                info = "{}_{}".format(score, measure)
-                sql_create = sql_create.format(""", {} DOUBLE{}""").format(info, {})
+            info = "{}".format(score)
+            sql_create = sql_create.format(""", {} DOUBLE{}""").format(info, {})
         sql_create = sql_create.format("")
         self.__cursor.execute(sql_create)
-        # Creating unique pair of regressor (name) and model
-        sql_unique = "ALTER TABLE regressor ADD UNIQUE INDEX (name, model);"
+        # Creating unique pair of regressor (name),classifier and score
+        sql_unique = "ALTER TABLE regressor ADD UNIQUE INDEX (name, classifier, score, model_id);"
         self.__cursor.execute(sql_unique)
 
     def drop_table(self, name = "metadata"):
@@ -130,6 +130,21 @@ class DBHelper:
         self.__con.commit()
         print(self.__cursor.rowcount, "record inserted.")
 
+    def add_regressor_record(self, types, values):
+        if (len(types) > 0 and len(types) != len(values)):
+            raise ValueError("List of types and values must be of same length")
+        sql_insert = """ INSERT INTO regressor ({}) VALUES ({});"""
+
+        # Including fields to be substituted by the values
+        to_subst = ""
+        for indx in range(len(values)):
+            to_subst += "%s, "
+        to_subst = to_subst[:-2] # Elimineting comma and empty space
+        # print(sql_insert.format(types, to_subst))
+        self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
+        self.__con.commit()
+        print(self.__cursor.rowcount, "record inserted.")
+
     def add_scores_record(self, types, values):
         if (len(types) > 0 and len(types) != len(values)):
             raise ValueError("List of types and values must be of same length")
@@ -161,6 +176,10 @@ class DBHelper:
         self.__cursor.execute("SELECT * FROM scores;")
         return self.__cursor.fetchall()
 
+    def get_all_regressors(self):
+        self.__cursor.execute("SELECT * FROM regressor;")
+        return self.__cursor.fetchall()
+
     def get_metadata_record(self, name):
         self.__cursor.execute("SELECT * FROM metadata WHERE name = %s", (name,))
         return self.__cursor.fetchall()
@@ -180,5 +199,10 @@ class DBHelper:
 
     def models_columns(self):
         self.__cursor.execute("SELECT * FROM models LIMIT 0")
+        self.__cursor.fetchall()
+        return self.__cursor.column_names
+
+    def regressor_columns(self):
+        self.__cursor.execute("SELECT * FROM regressor LIMIT 0")
         self.__cursor.fetchall()
         return self.__cursor.column_names

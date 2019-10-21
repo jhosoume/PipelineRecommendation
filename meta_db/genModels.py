@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
-from sklearn import tree, naive_bayes, ensemble
+from sklearn import tree, naive_bayes, ensemble, neural_network
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import SCORERS
 from sklearn import preprocessing
@@ -72,6 +72,9 @@ for dataset in datasets:
     gradient_boost_clf = ensemble.GradientBoostingClassifier().fit(values, target)
     models["gradient_boosting"] = gradient_boost_clf
 
+    # Creating Neual Network model using default parameters
+    neural_network_clf = ensemble.MLPClassifier().fit(values, target)
+    models["neural_network"] = neural_network_clf
 
     # Calculate mean and std for CV = 10
     for model in models.keys():
