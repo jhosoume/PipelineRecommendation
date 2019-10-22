@@ -6,5 +6,4 @@ REGRESSORS = ["neural_network", "ridge", "gradient_descent", "svm", "knn", "rand
               "gaussian_process", "decision_tree"]
 CLASSIFIERS_SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
                       "precision_macro", "f1_micro", "f1_macro", "fit_time", "score_time"]
-REGRESSORS_SCORES = ["max_error", "neg_mean_absolute_error", "r2", "neg_median_absolute_error",
-                     "fit_time", "score_time"]
+REGRESSORS_SCORES = ["max_error", "mean_absolute_error", "r2_score", "median_absolute_error"]
