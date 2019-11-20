@@ -6,6 +6,11 @@ dependencies:
     - pandas
     - matplotlib
     - mysql-connector-python
+    - lz4
+    - zstd
+    - blosc
+    - imbalanced-learn
     - pip:
         - openml
         - pymfe
+        - zstd

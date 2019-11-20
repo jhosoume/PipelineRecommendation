@@ -11,6 +11,8 @@ from sklearn import metrics
 from sklearn import preprocessing
 
 import constants
+from Default import Default
+from Random import Random
 from meta_db.db.DBHelper import DBHelper
 
 db = DBHelper()
@@ -35,6 +37,8 @@ reg_models["knn"] = neighbors.KNeighborsRegressor()
 reg_models["random_forest"] = ensemble.RandomForestRegressor()
 reg_models["gaussian_process"] = gaussian_process.GaussianProcessRegressor()
 reg_models["decision_tree"] = tree.DecisionTreeRegressor()
+reg_models["random"] = Random()
+reg_models["default"] = Default()
 
 mean_scores = []
 std_scores = []
@@ -71,6 +75,9 @@ for clf in constants.CLASSIFIERS:
                 for reg_score in SCORES:
                     result_labels.append(reg_score)
                     result = getattr(metrics, reg_score)(target[test_indx], model.predict(values[test_indx]))
+                    #if result > 100000 and reg_score == "mean_absolute_error":
+                    #    print("REPORTING")
+                    # import pdb; pdb.set_trace()
                     results.append(result)
                 pickle.dump(model, open("regressors/{}_{}_{}_{}.pickle".format(
                             reg, clf, score, count_models), "wb"))

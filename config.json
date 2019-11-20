@@ -1,8 +1,11 @@
 {
-    "mysql":{
+    "mysql": {
         "host":"localhost",
         "user":"pytester",
         "password":"tortoise",
-        "database":"paje"
+        "database":"paje2"
+    },
+    "dataset": {
+        "folder":"mock_datasets/"
     }
 }

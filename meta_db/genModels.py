@@ -10,8 +10,10 @@ from sklearn import tree, naive_bayes, ensemble, neural_network
 from sklearn.model_selection import cross_validate
 from sklearn.metrics import SCORERS
 from sklearn import preprocessing
+from scipy.io import arff as arff_io
 
 import constants
+from config import config
 
 from meta_db.db.DBHelper import DBHelper
 
@@ -20,16 +22,24 @@ np.random.seed(constants.RANDOM_STATE)
 SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
           "precision_macro", "f1_micro", "f1_macro"]
 
-datasets = [f for f in listdir("datasets/")
-                if ( isfile(join("datasets/", f)) and f.endswith("json"))]
+datasets = [f for f in listdir(config["dataset"]["folder"])
+                if ( isfile(join(config["dataset"]["folder"], f)) and
+                   ( f.endswith("json") or f.endswith("arff") ) )]
 
 db = DBHelper()
 le = preprocessing.LabelEncoder()
 
 for dataset in datasets:
     name = dataset[:-5]
-    data = pd.read_json("datasets/" + dataset)
+    if dataset.endswith("json"):
+        data = pd.read_json(config["dataset"]["folder"] + dataset)
+    elif dataset.endswith("arff"):
+        data = arff_io.loadarff(config["dataset"]["folder"] + dataset)
+        data = pd.DataFrame(data[0])
     target = data["class"].values
+    if target.dtype == np.object:
+        le.fit(target)
+        target = le.transform(target)
     values = data.drop("class", axis = 1)
     # Check if any is a string, some classifiers only deals with numeric data
     for dtype, key in zip(values.dtypes, values.keys()):
@@ -73,11 +83,13 @@ for dataset in datasets:
     models["gradient_boosting"] = gradient_boost_clf
 
     # Creating Neual Network model using default parameters
-    neural_network_clf = ensemble.MLPClassifier().fit(values, target)
+    neural_network_clf = neural_network.MLPClassifier().fit(values, target)
     models["neural_network"] = neural_network_clf
 
     # Calculate mean and std for CV = 10
     for model in models.keys():
+        if (name, model) in db.get_models_indx():
+            continue
         print("[{}] Calculating scores for model {}".format(name, model))
         cv_results = cross_validate(models[model], values, target, cv = 10, scoring = SCORES)
         results = []; result_labels = [];

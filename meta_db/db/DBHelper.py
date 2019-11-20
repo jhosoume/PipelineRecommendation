@@ -1,7 +1,8 @@
 import sys
 import mysql
 import pandas as pd
-from meta_db.config import config
+import itertools
+from config import config
 import constants
 
 class DBHelper:
@@ -111,9 +112,15 @@ class DBHelper:
             to_subst += "%s, "
         to_subst = to_subst[:-2] # Elimineting comma and empty space
         # print(sql_insert.format(valid_types, to_subst))
-        self.__cursor.execute(sql_insert.format(valid_types, to_subst), values)
-        self.__con.commit()
-        print(self.__cursor.rowcount, "record inserted.")
+        try:
+            self.__cursor.execute(sql_insert.format(valid_types, to_subst), values)
+            self.__con.commit()
+            print(self.__cursor.rowcount, "record inserted.")
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
+                print("Dataset features are already in the database, skipping...")
+            else:
+                raise
 
     def add_model_record(self, types, values):
         if (len(types) > 0 and len(types) != len(values)):
@@ -126,9 +133,15 @@ class DBHelper:
             to_subst += "%s, "
         to_subst = to_subst[:-2] # Elimineting comma and empty space
         # print(sql_insert.format(types, to_subst))
-        self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
-        self.__con.commit()
-        print(self.__cursor.rowcount, "record inserted.")
+        try:
+            self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
+            self.__con.commit()
+            print(self.__cursor.rowcount, "record inserted.")
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
+                print("Dataset features are already in the database, skipping...")
+            else:
+                raise err
 
     def add_regressor_record(self, types, values):
         if (len(types) > 0 and len(types) != len(values)):
@@ -141,9 +154,15 @@ class DBHelper:
             to_subst += "%s, "
         to_subst = to_subst[:-2] # Elimineting comma and empty space
         # print(sql_insert.format(types, to_subst))
-        self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
-        self.__con.commit()
-        print(self.__cursor.rowcount, "record inserted.")
+        try:
+            self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
+            self.__con.commit()
+            print(self.__cursor.rowcount, "record inserted.")
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
+                print("Dataset features are already in the database, skipping...")
+            else:
+                raise err
 
     def add_scores_record(self, types, values):
         if (len(types) > 0 and len(types) != len(values)):
@@ -156,9 +175,15 @@ class DBHelper:
             to_subst += "%s, "
         to_subst = to_subst[:-2] # Elimineting comma and empty space
         # print(sql_insert.format(types, to_subst))
-        self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
-        self.__con.commit()
-        print(self.__cursor.rowcount, "record inserted.")
+        try:
+            self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
+            self.__con.commit()
+            print(self.__cursor.rowcount, "record inserted.")
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
+                print("Dataset features are already in the database, skipping...")
+            else:
+                raise err
 
     def get_datasets_names(self):
         self.__cursor.execute("SELECT name FROM metadata;")
@@ -172,6 +197,10 @@ class DBHelper:
         self.__cursor.execute("SELECT * FROM models;")
         return self.__cursor.fetchall()
 
+    def get_models_indx(self):
+        self.__cursor.execute("SELECT name,model FROM models;")
+        return self.__cursor.fetchall()
+
     def get_all_scores(self):
         self.__cursor.execute("SELECT * FROM scores;")
         return self.__cursor.fetchall()
@@ -181,28 +210,33 @@ class DBHelper:
         return self.__cursor.fetchall()
 
     def get_metadata_record(self, name):
-        self.__cursor.execute("SELECT * FROM metadata WHERE name = %s", (name,))
+        self.__cursor.execute("SELECT * FROM metadata WHERE name = %s;", (name,))
         return self.__cursor.fetchall()
 
     def get_model_record_per_dataset(self, name):
-        self.__cursor.execute("SELECT * FROM models WHERE name = %s", (name,))
+        self.__cursor.execute("SELECT * FROM models WHERE name = %s;", (name,))
         return self.__cursor.fetchall()
 
     def get_model_record_per_model(self, model):
-        self.__cursor.execute("SELECT * FROM models WHERE model = %s", (model,))
+        self.__cursor.execute("SELECT * FROM models WHERE model = %s;", (model,))
         return self.__cursor.fetchall()
 
+    def get_metadata_datasets(self):
+        self.__cursor.execute("SELECT name FROM metadata;")
+        datasets = self.__cursor.fetchall()
+        return list(itertools.chain.from_iterable(datasets))
+
     def metadata_columns(self):
-        self.__cursor.execute("SELECT * FROM metadata LIMIT 0")
+        self.__cursor.execute("SELECT * FROM metadata LIMIT 0;")
         self.__cursor.fetchall()
         return self.__cursor.column_names
 
     def models_columns(self):
-        self.__cursor.execute("SELECT * FROM models LIMIT 0")
+        self.__cursor.execute("SELECT * FROM models LIMIT 0;")
         self.__cursor.fetchall()
         return self.__cursor.column_names
 
     def regressor_columns(self):
-        self.__cursor.execute("SELECT * FROM regressor LIMIT 0")
+        self.__cursor.execute("SELECT * FROM regressor LIMIT 0;")
         self.__cursor.fetchall()
         return self.__cursor.column_names
