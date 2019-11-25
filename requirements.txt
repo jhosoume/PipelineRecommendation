@@ -13,3 +13,4 @@ dependencies:
     - pip:
         - openml
         - pymfe
+        - NoiseFiltersPy

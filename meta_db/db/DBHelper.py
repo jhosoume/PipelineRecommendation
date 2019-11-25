@@ -12,7 +12,8 @@ class DBHelper:
             host = db_config['host'],
             user = db_config['user'],
             password = db_config['password'],
-            database = db_config['database']
+            database = db_config['database'],
+            use_pure = True
         )
         self.__cursor = self.__con.cursor()
         self.__feats = []
@@ -71,6 +72,40 @@ class DBHelper:
         # Creating unique pair of name (dataset) and model
         sql_unique = "ALTER TABLE models ADD UNIQUE INDEX (name, model);"
         self.__cursor.execute(sql_unique)
+
+    def create_combination_table(self):
+        sql_create = """
+            CREATE TABLE combinations (id INT PRIMARY KEY AUTO_INCREMENT,
+                                      classifier VARCHAR(255) NOT NULL,
+                                      num_preprocesses  INT,
+                                      preprocesses VARCHAR(255) NOT NULL
+                                      );
+        """
+        self.__cursor.execute(sql_create)
+        # Creating unique pair of name (dataset) and model
+        sql_unique = "ALTER TABLE combinations ADD UNIQUE INDEX (classifier, preprocesses);"
+        self.__cursor.execute(sql_unique)
+
+    def create_preperformance_table(self,
+        scores = constants.CLASSIFIERS_SCORES):
+        sql_create = """
+            CREATE TABLE preperformance (id INT PRIMARY KEY AUTO_INCREMENT,
+                                 name VARCHAR(255) NOT NULL,
+                                 combination_id INT,
+                                 FOREIGN KEY(combination_id) REFERENCES combinations(id){}
+                                 );
+        """
+        measures = ["mean", "std"]
+        for score in scores:
+            for measure in measures:
+                info = "{}_{}".format(score, measure)
+                sql_create = sql_create.format(""", {} DOUBLE{}""").format(info, {})
+        sql_create = sql_create.format("")
+        self.__cursor.execute(sql_create)
+        # Creating unique pair of name (dataset) and model
+        sql_unique = "ALTER TABLE preperformance ADD UNIQUE INDEX (name, combination_id);"
+        self.__cursor.execute(sql_unique)
+
 
     def create_regressor_table(self,
         scores = constants.REGRESSORS_SCORES):
@@ -160,7 +195,7 @@ class DBHelper:
             print(self.__cursor.rowcount, "record inserted.")
         except mysql.connector.Error as err:
             if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
-                print("Dataset features are already in the database, skipping...")
+                print("Regressor performance is already in the database, skipping...")
             else:
                 raise err
 
@@ -185,6 +220,48 @@ class DBHelper:
             else:
                 raise err
 
+    def add_combination_record(self, types, values):
+        if (len(types) > 0 and len(types) != len(values)):
+            raise ValueError("List of types and values must be of same length")
+        sql_insert = """ INSERT INTO combinations ({}) VALUES ({});"""
+
+        # Including fields to be substituted by the values
+        to_subst = ""
+        for indx in range(len(values)):
+            to_subst += "%s, "
+        to_subst = to_subst[:-2] # Elimineting comma and empty space
+
+        try:
+            self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
+            self.__con.commit()
+            print(self.__cursor.rowcount, "record inserted.")
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
+                print("Pre-processing combination is already in the database, skipping...")
+            else:
+                raise err
+
+    def add_preperformance_record(self, types, values):
+        if (len(types) > 0 and len(types) != len(values)):
+            raise ValueError("List of types and values must be of same length")
+        sql_insert = """ INSERT INTO preperformance ({}) VALUES ({});"""
+
+        # Including fields to be substituted by the values
+        to_subst = ""
+        for indx in range(len(values)):
+            to_subst += "%s, "
+        to_subst = to_subst[:-2] # Elimineting comma and empty space
+
+        try:
+            self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
+            self.__con.commit()
+            print(self.__cursor.rowcount, "record inserted.")
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
+                print("Pre-processing performance is already in the database, skipping...")
+            else:
+                raise err
+
     def get_datasets_names(self):
         self.__cursor.execute("SELECT name FROM metadata;")
         return self.__cursor.fetchall()
@@ -198,11 +275,15 @@ class DBHelper:
         return self.__cursor.fetchall()
 
     def get_models_indx(self):
-        self.__cursor.execute("SELECT name,model FROM models;")
+        self.__cursor.execute("SELECT name, model FROM models;")
         return self.__cursor.fetchall()
 
     def get_all_scores(self):
         self.__cursor.execute("SELECT * FROM scores;")
+        return self.__cursor.fetchall()
+
+    def get_all_combination(self):
+        self.__cursor.execute("SELECT * FROM combinations;")
         return self.__cursor.fetchall()
 
     def get_all_regressors(self):
@@ -221,10 +302,26 @@ class DBHelper:
         self.__cursor.execute("SELECT * FROM models WHERE model = %s;", (model,))
         return self.__cursor.fetchall()
 
+    def get_combination(self, classifier, preprocesses):
+        self.__cursor.execute("SELECT * FROM combinations \
+                               WHERE classifier = %s AND preprocesses = %s;",
+                                    (classifier, preprocesses))
+        result = self.__cursor.fetchall()
+        if len(result) > 0:
+            return result[0]
+        else:
+            self.add_combination_record(["classifier", "num_preprocesses", "preprocesses"],
+                                        [classifier, len(preprocesses.split()), preprocesses])
+            return self.get_combination(classifier, preprocesses)
+
     def get_metadata_datasets(self):
         self.__cursor.execute("SELECT name FROM metadata;")
         datasets = self.__cursor.fetchall()
         return list(itertools.chain.from_iterable(datasets))
+
+    def get_preperformance_done(self):
+        self.__cursor.execute("SELECT name, combination_id FROM preperformance;")
+        return self.__cursor.fetchall()
 
     def metadata_columns(self):
         self.__cursor.execute("SELECT * FROM metadata LIMIT 0;")
@@ -238,5 +335,10 @@ class DBHelper:
 
     def regressor_columns(self):
         self.__cursor.execute("SELECT * FROM regressor LIMIT 0;")
+        self.__cursor.fetchall()
+        return self.__cursor.column_names
+
+    def preperformance_columns(self):
+        self.__cursor.execute("SELECT * FROM preperformance LIMIT 0;")
         self.__cursor.fetchall()
         return self.__cursor.column_names
