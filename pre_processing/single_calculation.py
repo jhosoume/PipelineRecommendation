@@ -27,9 +27,6 @@ from meta_db.db.DBHelper import DBHelper
 
 np.random.seed(constants.RANDOM_STATE)
 
-SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
-          "precision_macro", "f1_micro", "f1_macro"]
-
 PRE_PROCESSES = {"imbalance": { "SMOTE": SMOTE(random_state = constants.RANDOM_STATE),
                                 "ADASYN": ADASYN(random_state = constants.RANDOM_STATE),
                               },
@@ -44,10 +41,9 @@ datasets = [f for f in listdir(config["dataset"]["folder"])
 
 db = DBHelper()
 le = preprocessing.LabelEncoder()
-keepOn = True
-# while(keepOn):
 for dataset in datasets:
     name = dataset[:-5]
+    print("[{}]".format(name))
     if dataset.endswith("json"):
         data = pd.read_json(config["dataset"]["folder"] + dataset)
     elif dataset.endswith("arff"):
@@ -64,20 +60,30 @@ for dataset in datasets:
             le.fit(values[key].values)
             values[key] = le.transform(values[key].values)
     values = values.values
-    models = {}
     for type in PRE_PROCESSES:
         if type == "imbalance":
             for pre_proc in PRE_PROCESSES[type]:
-                values, target = PRE_PROCESSES[type][pre_proc].fit_resample(values, target)
-                print("Using Preprocessing: {}".format(pre_proc))
-                model_generation.calculate(name, values, target, pre_proc)
+                print("\tUsing Preprocessing: {}".format(pre_proc))
+                try:
+                    new_values, new_target = PRE_PROCESSES[type][pre_proc].fit_resample(values, target)
+                except ValueError as err:
+                    print("\t\tCould not perform preprocessing. {}".format(err))
+                    continue
+                if len(target) == len(new_target) and len(values) == len(new_values):
+                    print("\t\tPreprocessing does not change distribuiton.")
+                    continue
+                model_generation.calculate(name, new_values, new_target, values, target, pre_proc)
         elif type == "noise_filter":
             for pre_proc in PRE_PROCESSES[type]:
-                filter = PRE_PROCESSES[type][pre_proc](values, target)
-                values = filter.cleanData
-                target = filter.cleanClasses
-                print("Using Preprocessing: {}".format(pre_proc))
-                model_generation.calculate(name, values, target, pre_proc)
-
-
-    print("- Finished with {}".format(name))
+                print("\tUsing Preprocessing: {}".format(pre_proc))
+                try:
+                    filter = PRE_PROCESSES[type][pre_proc](values, target)
+                except ValueError as err:
+                    print("\t\tCould not perform preprocessing. {}".format(err))
+                    continue
+                new_values = filter.cleanData
+                new_target = filter.cleanClasses
+                if len(target) == len(new_target) and len(values) == len(new_values):
+                    print("\t\tPreprocessing does not change distribuiton.")
+                    continue
+                model_generation.calculate(name, new_values, new_target, values, target, pre_proc)

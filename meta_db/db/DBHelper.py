@@ -5,6 +5,21 @@ import itertools
 from config import config
 import constants
 
+class NumpyMySQLConverter(mysql.connector.conversion.MySQLConverter):
+    """ A mysql.connector Converter that handles Numpy types """
+
+    def _float32_to_mysql(self, value):
+        return float(value)
+
+    def _float64_to_mysql(self, value):
+        return float(value)
+
+    def _int32_to_mysql(self, value):
+        return int(value)
+
+    def _int64_to_mysql(self, value):
+        return int(value)
+
 class DBHelper:
     def __init__(self):
         db_config = config['mysql']
@@ -15,6 +30,7 @@ class DBHelper:
             database = db_config['database'],
             use_pure = True
         )
+        self.__con.set_converter_class(NumpyMySQLConverter)
         self.__cursor = self.__con.cursor()
         self.__feats = []
 
@@ -282,8 +298,20 @@ class DBHelper:
         self.__cursor.execute("SELECT * FROM scores;")
         return self.__cursor.fetchall()
 
-    def get_all_combination(self):
+    def get_all_combinations(self):
         self.__cursor.execute("SELECT * FROM combinations;")
+        return self.__cursor.fetchall()
+
+    def get_combination(self, id):
+        self.__cursor.execute("SELECT * FROM combinations WHERE id = %s;", (id,))
+        return self.__cursor.fetchall()
+
+    def get_all_preperformance(self):
+        self.__cursor.execute("SELECT * FROM preperformance;")
+        return self.__cursor.fetchall()
+
+    def get_preperformance_combination(self, combination_id):
+        self.__cursor.execute("SELECT * FROM preperformance WHERE combination_id = %s;", (combination_id,))
         return self.__cursor.fetchall()
 
     def get_all_regressors(self):
@@ -293,6 +321,18 @@ class DBHelper:
     def get_metadata_record(self, name):
         self.__cursor.execute("SELECT * FROM metadata WHERE name = %s;", (name,))
         return self.__cursor.fetchall()
+
+    def get_combination_record(self, preprocesses):
+        self.__cursor.execute("SELECT * FROM combinations WHERE preprocesses = %s;", (preprocesses,))
+        return self.__cursor.fetchall()
+
+    def get_combination_per_indx(self, id):
+        self.__cursor.execute("SELECT * FROM combinations WHERE id = %s;", (id,))
+        comb = self.__cursor.fetchall()
+        if len(comb) > 0:
+            return comb[0]
+        else:
+            return comb
 
     def get_model_record_per_dataset(self, name):
         self.__cursor.execute("SELECT * FROM models WHERE name = %s;", (name,))
@@ -330,6 +370,11 @@ class DBHelper:
 
     def models_columns(self):
         self.__cursor.execute("SELECT * FROM models LIMIT 0;")
+        self.__cursor.fetchall()
+        return self.__cursor.column_names
+
+    def combinations_columns(self):
+        self.__cursor.execute("SELECT * FROM combinations LIMIT 0;")
         self.__cursor.fetchall()
         return self.__cursor.column_names
 

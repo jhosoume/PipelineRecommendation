@@ -3,7 +3,7 @@
         "host":"localhost",
         "user":"pytester",
         "password":"tortoise",
-        "database":"paje2"
+        "database":"paje3"
     },
     "dataset": {
         "folder":"mock_datasets/"
