@@ -61,29 +61,5 @@ for dataset in datasets:
             values[key] = le.transform(values[key].values)
     values = values.values
     for type in PRE_PROCESSES:
-        if type == "imbalance":
-            for pre_proc in PRE_PROCESSES[type]:
-                print("\tUsing Preprocessing: {}".format(pre_proc))
-                try:
-                    new_values, new_target = PRE_PROCESSES[type][pre_proc].fit_resample(values, target)
-                except ValueError as err:
-                    print("\t\tCould not perform preprocessing. {}".format(err))
-                    continue
-                if len(target) == len(new_target) and len(values) == len(new_values):
-                    print("\t\tPreprocessing does not change distribuiton.")
-                    continue
-                model_generation.calculate(name, new_values, new_target, values, target, pre_proc)
-        elif type == "noise_filter":
-            for pre_proc in PRE_PROCESSES[type]:
-                print("\tUsing Preprocessing: {}".format(pre_proc))
-                try:
-                    filter = PRE_PROCESSES[type][pre_proc](values, target)
-                except ValueError as err:
-                    print("\t\tCould not perform preprocessing. {}".format(err))
-                    continue
-                new_values = filter.cleanData
-                new_target = filter.cleanClasses
-                if len(target) == len(new_target) and len(values) == len(new_values):
-                    print("\t\tPreprocessing does not change distribuiton.")
-                    continue
-                model_generation.calculate(name, new_values, new_target, values, target, pre_proc)
+        for preproc_name in PRE_PROCESSES[type]:
+            model_generation.calculate(name, values, target, PRE_PROCESSES[type][preproc_name], preproc_name, type)
