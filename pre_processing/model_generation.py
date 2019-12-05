@@ -120,7 +120,7 @@ def calculate(name, values, target, preprocess = None, preproc_name = "", prepro
                 stop_score = time.time()
                 cv_results["score_time"].append(stop_score - start_score)
             except Exception as err:
-                logging.debug("Could not execute fit of dataset {} with classifier {}.". format(name, model))
+                logging.debug("Could not execute fit of dataset {} with classifier {} and {}.". format(name, model, preproc_name))
                 logging.error(err)
                 continue
             for score in SCORES[:-2]:
@@ -140,8 +140,10 @@ def calculate(name, values, target, preprocess = None, preproc_name = "", prepro
             results.append(np.mean(cv_results[rlabel]))
             result_labels.append(rlabel_db + "_std")
             results.append(np.std(cv_results[rlabel]))
-        # results = np.array(results); result_labels = np.array(result_labels)
-        # not_nan = np.insert(~np.isnan(results[1:]), 0, True, axis = 0)
-        # results = results[not_nan].tolist()
+        partial_res = np.array(results[1:]); result_labels = np.array(result_labels)
+        if np.any(np.isnan(partial_res)):
+            not_nan = np.insert(~np.isnan(partial_res), 0, True, axis = 0)
+            results = np.array(results)[not_nan].tolist()
+            result_labels = result_labels[not_nan].tolist()
         db.add_preperformance_record(result_labels, results)
         print("- Finished with {}".format(name))
