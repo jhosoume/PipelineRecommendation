@@ -95,18 +95,23 @@ def calculate(name, values, target, preprocess = None, preproc_name = "", prepro
                     new_values, new_target = preprocess.fit_resample(values[train_indx], target[train_indx])
                 except ValueError as err:
                     print("\t\tCould not perform preprocessing. {}".format(err))
+                    logging.info("Could not perform preprocessing. [{}, {}, {}]".format(name, model, preproc_name))
+                    logging.error(err)
                     continue
             elif preproc_type == "noise_filter":
                 try:
                     filter = preprocess(values[train_indx], target[train_indx])
                 except ValueError as err:
                     print("\t\tCould not perform preprocessing. {}".format(err))
+                    logging.info("Could not perform preprocessing. [{}, {}, {}]".format(name, model, preproc_name))
+                    logging.error(err)
                     continue
                 new_values = filter.cleanData
                 new_target = filter.cleanClasses
 
             if len(target) == len(new_target) and len(values) == len(new_values):
                 print("\t\tPreprocessing does not change distribuiton.")
+                logging.info("Preprocessing does not change distribuiton.[{}, {}, {}]".format(name, model, preproc_name))
                 continue
 
             try:
