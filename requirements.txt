@@ -1,16 +1,12 @@
-name: paje_db
-dependencies:
-    - python=3.7
-    - numpy=1.16.*
-    - scikit-learn=0.21.*
-    - pandas
-    - matplotlib
-    - mysql-connector-python
-    - blosc
-    - zstd
-    - lz4
-    - imbalanced-learn
-    - pip:
-        - openml
-        - pymfe
-        - NoiseFiltersPy
+numpy==1.16.*
+scikit-learn==0.21.*
+pandas
+matplotlib
+mysql-connector-python
+blosc
+zstd
+lz4
+imbalanced-learn
+openml
+pymfe
+NoiseFiltersPy

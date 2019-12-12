@@ -93,13 +93,13 @@ def calculate(name, values, target, preprocess = None, preproc_name = "", prepro
             if preproc_type == "imbalance":
                 try:
                     new_values, new_target = preprocess.fit_resample(values[train_indx], target[train_indx])
-                except ValueError as err:
+                except (RuntimeError, ValueError) as err:
                     print("\t\tCould not perform preprocessing. {}".format(err))
                     continue
             elif preproc_type == "noise_filter":
                 try:
                     filter = preprocess(values[train_indx], target[train_indx])
-                except ValueError as err:
+                except (RuntimeError, ValueError) as err:
                     print("\t\tCould not perform preprocessing. {}".format(err))
                     continue
                 new_values = filter.cleanData
