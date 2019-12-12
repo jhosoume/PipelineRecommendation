@@ -1,0 +1,696 @@
+[983_cmc]
+	[983_cmc] Calculating scores for model svm
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model logistic_regression
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model linear_discriminant
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model kneighbors
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model decision_tree
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gaussian_nb
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model random_forest
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gradient_boosting
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model neural_network
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model svm
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model logistic_regression
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model linear_discriminant
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model kneighbors
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model decision_tree
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gaussian_nb
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model random_forest
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gradient_boosting
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model neural_network
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model svm
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model logistic_regression
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model linear_discriminant
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model kneighbors
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model decision_tree
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gaussian_nb
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model random_forest
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gradient_boosting
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model neural_network
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model svm
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model logistic_regression
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model linear_discriminant
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model kneighbors
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model decision_tree
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gaussian_nb
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model random_forest
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model gradient_boosting
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[983_cmc] Calculating scores for model neural_network
+		Using preprocessor AENN.
+	Already done! Skiping...
+[785_wind_correlations]
+	[785_wind_correlations] Calculating scores for model svm
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model logistic_regression
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model linear_discriminant
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model kneighbors
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model decision_tree
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gaussian_nb
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model random_forest
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gradient_boosting
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model neural_network
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model svm
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model logistic_regression
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model linear_discriminant
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model kneighbors
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model decision_tree
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gaussian_nb
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model random_forest
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gradient_boosting
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model neural_network
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model svm
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model logistic_regression
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model linear_discriminant
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model kneighbors
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model decision_tree
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gaussian_nb
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model random_forest
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gradient_boosting
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model neural_network
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model svm
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model logistic_regression
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model linear_discriminant
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model kneighbors
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model decision_tree
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gaussian_nb
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model random_forest
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model gradient_boosting
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[785_wind_correlations] Calculating scores for model neural_network
+		Using preprocessor AENN.
+	Already done! Skiping...
+[841_stock]
+	[841_stock] Calculating scores for model svm
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model logistic_regression
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model linear_discriminant
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model kneighbors
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model decision_tree
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gaussian_nb
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model random_forest
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gradient_boosting
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model neural_network
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model svm
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model logistic_regression
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model linear_discriminant
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model kneighbors
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model decision_tree
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gaussian_nb
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model random_forest
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gradient_boosting
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model neural_network
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model svm
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model logistic_regression
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model linear_discriminant
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model kneighbors
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model decision_tree
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gaussian_nb
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model random_forest
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gradient_boosting
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model neural_network
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model svm
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model logistic_regression
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model linear_discriminant
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model kneighbors
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model decision_tree
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gaussian_nb
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model random_forest
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model gradient_boosting
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[841_stock] Calculating scores for model neural_network
+		Using preprocessor AENN.
+	Already done! Skiping...
+[1524_vertebra-column]
+	[1524_vertebra-column] Calculating scores for model svm
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model logistic_regression
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model linear_discriminant
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model kneighbors
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model decision_tree
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gaussian_nb
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model random_forest
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gradient_boosting
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model neural_network
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model svm
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model logistic_regression
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model linear_discriminant
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model kneighbors
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model decision_tree
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gaussian_nb
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model random_forest
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gradient_boosting
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model neural_network
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model svm
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model logistic_regression
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model linear_discriminant
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model kneighbors
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model decision_tree
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gaussian_nb
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model random_forest
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gradient_boosting
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model neural_network
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model svm
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model logistic_regression
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model linear_discriminant
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model kneighbors
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model decision_tree
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gaussian_nb
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model random_forest
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model gradient_boosting
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[1524_vertebra-column] Calculating scores for model neural_network
+		Using preprocessor AENN.
+	Already done! Skiping...
+[815_chscase_vine1]
+	[815_chscase_vine1] Calculating scores for model svm
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model logistic_regression
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model linear_discriminant
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model kneighbors
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model decision_tree
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gaussian_nb
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model random_forest
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gradient_boosting
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model neural_network
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model svm
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model logistic_regression
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model linear_discriminant
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model kneighbors
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model decision_tree
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gaussian_nb
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model random_forest
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gradient_boosting
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model neural_network
+		Using preprocessor ADASYN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model svm
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model logistic_regression
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model linear_discriminant
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model kneighbors
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model decision_tree
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gaussian_nb
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model random_forest
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gradient_boosting
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model neural_network
+		Using preprocessor HARF.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model svm
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model logistic_regression
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model linear_discriminant
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model kneighbors
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model decision_tree
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gaussian_nb
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model random_forest
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model gradient_boosting
+		Using preprocessor AENN.
+	Already done! Skiping...
+	[815_chscase_vine1] Calculating scores for model neural_network
+		Using preprocessor AENN.
+	Already done! Skiping...
+[1004_synthetic_control]
+	[1004_synthetic_control] Calculating scores for model svm
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model logistic_regression
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model linear_discriminant
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model kneighbors
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model decision_tree
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model gaussian_nb
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model random_forest
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model gradient_boosting
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model neural_network
+		Using preprocessor SMOTE.
+	Already done! Skiping...
+	[1004_synthetic_control] Calculating scores for model svm
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model logistic_regression
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model linear_discriminant
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model kneighbors
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model decision_tree
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model gaussian_nb
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model random_forest
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model gradient_boosting
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model neural_network
+		Using preprocessor ADASYN.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+		Could not perform preprocessing. Not any neigbours belong to the majority class. This case will induce a NaN case with a division by zero. ADASYN is not suited for this specific dataset. Use SMOTE instead.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model svm
+		Using preprocessor HARF.
+1 record inserted.
+- Finished with 1004_synthetic_control
+	[1004_synthetic_control] Calculating scores for model logistic_regression
+		Using preprocessor HARF.
