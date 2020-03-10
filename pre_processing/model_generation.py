@@ -106,6 +106,9 @@ def calculate(name, values, target, preprocess = None, preproc_name = "", prepro
                     logging.info("Could not perform preprocessing. [{}, {}, {}]".format(name, model, preproc_name))
                     logging.error(err)
                     continue
+                except:
+                    print("\t\tCould not perform preprocessing!")
+                    continue
                 new_values = filter.cleanData
                 new_target = filter.cleanClasses
 
