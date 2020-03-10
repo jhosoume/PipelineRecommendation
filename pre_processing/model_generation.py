@@ -102,6 +102,9 @@ def calculate(name, values, target, preprocess = None, preproc_name = "", prepro
                 except (RuntimeError, ValueError) as err:
                     print("\t\tCould not perform preprocessing. {}".format(err))
                     continue
+                except:
+                    print("\t\tCould not perform preprocessing!")
+                    continue
                 new_values = filter.cleanData
                 new_target = filter.cleanClasses
 

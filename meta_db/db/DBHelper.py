@@ -28,11 +28,24 @@ class DBHelper:
             user = db_config['user'],
             password = db_config['password'],
             database = db_config['database'],
-            use_pure = True
+            use_pure = True,
+            connect_timeout = 31536000
         )
         self.__con.set_converter_class(NumpyMySQLConverter)
         self.__cursor = self.__con.cursor()
         self.__feats = []
+
+    def __restart(self):
+        self.__con = mysql.connector.connect(
+            host = db_config['host'],
+            user = db_config['user'],
+            password = db_config['password'],
+            database = db_config['database'],
+            use_pure = True,
+            connect_timeout = 31536000
+        )
+        self.__con.set_converter_class(NumpyMySQLConverter)
+        self.__cursor = self.__con.cursor()
 
     def __get_feats(self):
         if not self.__feats:
