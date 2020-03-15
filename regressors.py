@@ -19,7 +19,7 @@ db = DBHelper()
 
 SCORE_COLUMNS = ["name"] + constants.CLASSIFIERS
 
-SCORES = ["max_error", "mean_absolute_error", "r2_score", "median_absolute_error"]
+SCORES = ["max_error", "mean_absolute_error", "r2_score", "median_absolute_error", "mean_squared_error"]
 
 
 data = pd.DataFrame(db.get_all_metadata(), columns = db.metadata_columns()).drop("id", axis = 1)
@@ -49,7 +49,7 @@ for score in constants.CLASSIFIERS_SCORES:
 if not os.path.exists("regressors"):
     os.makedirs("regressors")
 
-divideFold = KFold(10)
+divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
 regressors = {}
 targets = {}

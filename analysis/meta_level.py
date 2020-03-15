@@ -36,7 +36,8 @@ for indx, clf in enumerate(constants.CLASSIFIERS):
     plt.grid(True, alpha = 0.5, linestyle = 'dotted')
     for axes in fig.get_axes():
         axes.label_outer()
-#
+plt.savefig("analysis/plots/meta_level/mae_accuracy.png", dpi = 100)
+
 # for score in constants.CLASSIFIERS_SCORES:
 #     box_plot(score = score + "_mean")
 #     plt.savefig("analysis/plots/meta_base/" + score + ".png", dpi = 100)

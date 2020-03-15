@@ -155,6 +155,26 @@ class DBHelper:
         sql_unique = "ALTER TABLE regressor ADD UNIQUE INDEX (name, classifier, score, model_id);"
         self.__cursor.execute(sql_unique)
 
+    def create_regressor_preperformance_table(self,
+        scores = constants.REGRESSORS_SCORES):
+        sql_create = """
+            CREATE TABLE regressor_preperformance (id INT PRIMARY KEY AUTO_INCREMENT,
+                                                   name VARCHAR(255) NOT NULL,
+                                                   score VARCHAR(255) NOT NULL,
+                                                   combination_id INT,
+                                                   FOREIGN KEY(combination_id) REFERENCES combinations(id),
+                                                   model_id INT{}
+                                                  );
+        """
+        for score in scores:
+            info = "{}".format(score)
+            sql_create = sql_create.format(""", {} DOUBLE{}""").format(info, {})
+        sql_create = sql_create.format("")
+        self.__cursor.execute(sql_create)
+        # Creating unique pair of regressor (name),classifier and score
+        sql_unique = "ALTER TABLE regressor_preperformance ADD UNIQUE INDEX (name, combination_id, score, model_id);"
+        self.__cursor.execute(sql_unique)
+
     def drop_table(self, name = "metadata"):
         self.__cursor.execute("DROP TABLE {};".format(name))
 
@@ -211,6 +231,27 @@ class DBHelper:
         if (len(types) > 0 and len(types) != len(values)):
             raise ValueError("List of types and values must be of same length")
         sql_insert = """ INSERT INTO regressor ({}) VALUES ({});"""
+
+        # Including fields to be substituted by the values
+        to_subst = ""
+        for indx in range(len(values)):
+            to_subst += "%s, "
+        to_subst = to_subst[:-2] # Elimineting comma and empty space
+        # print(sql_insert.format(types, to_subst))
+        try:
+            self.__cursor.execute(sql_insert.format(",".join(types), to_subst), values)
+            self.__con.commit()
+            print(self.__cursor.rowcount, "record inserted.")
+        except mysql.connector.Error as err:
+            if err.errno == mysql.connector.errorcode.ER_DUP_ENTRY:
+                print("Regressor performance is already in the database, skipping...")
+            else:
+                raise err
+
+    def add_regressor_preperformance_record(self, types, values):
+        if (len(types) > 0 and len(types) != len(values)):
+            raise ValueError("List of types and values must be of same length")
+        sql_insert = """ INSERT INTO regressor_preperformance ({}) VALUES ({});"""
 
         # Including fields to be substituted by the values
         to_subst = ""
@@ -331,6 +372,10 @@ class DBHelper:
         self.__cursor.execute("SELECT * FROM regressor;")
         return self.__cursor.fetchall()
 
+    def get_all_regressors_preperformance(self):
+        self.__cursor.execute("select name, score, max_error, mean_absolute_error, r2_score, median_absolute_error, classifier, preprocesses from regressor_preperformance, combinations where combination_id = combinations.id;")
+        return self.__cursor.fetchall()
+
     def get_metadata_record(self, name):
         self.__cursor.execute("SELECT * FROM metadata WHERE name = %s;", (name,))
         return self.__cursor.fetchall()
@@ -374,6 +419,10 @@ class DBHelper:
 
     def get_preperformance_done(self):
         self.__cursor.execute("SELECT name, combination_id FROM preperformance;")
+        return self.__cursor.fetchall()
+
+    def get_preperformance_per_combination(self):
+        self.__cursor.execute("SELECT * FROM preperformance WHERE;")
         return self.__cursor.fetchall()
 
     def metadata_columns(self):
