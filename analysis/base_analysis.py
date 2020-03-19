@@ -76,10 +76,16 @@ def filter_dataset(database):
     return datasets_filtered
 
 datasets = pd.Series(filter_dataset(data))
+results = {}
 
 for baseline in ["random", "default"]:
-    for regressor_type in list(reg_models.keys())[:-2]:
+    results[baseline] = {}
+    for regressor_type in constants.REGRESSORS[:-2]:
+        # results[baseline][regressor_type] = {}
+        kfold = 0
+        results[baseline][regressor_type] = []
         for train_indx, test_indx in divideFold.split(datasets):
+            # results[baseline][regressor_type][kfold] = []
             targets = data[data.name.isin(list(datasets.iloc[train_indx]))]
             models = {}
             baseline_models = {}
@@ -93,46 +99,44 @@ for baseline in ["random", "default"]:
                     models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
                     baseline_models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
             tests = data[data.name.isin(list(datasets.iloc[test_indx]))]
-            reg_results = {}
-            for reg in models:
-                ref_results[reg] = models[reg].predict()
+            for test_dataset in tests.name.unique():
+                dataset_info = tests.query(
+                    "name == '{}'".format(test_dataset)
+                )
+                meta_data = dataset_info.iloc[0].drop(
+                        ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
+                    ).values.reshape(1, -1)
+                true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
+                reg_results = {}
+                baseline_results = {}
+                for model in models:
+                    reg_results[model] = models[model].predict(meta_data)
+                    baseline_results[model] = baseline_models[model].predict(meta_data)
+                max_predicted = max(reg_results.keys(), key=(lambda key: reg_results[key]))
+                pp_pred, clf_pred = max_predicted.split("+")
+                max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
+                pp_base, clf_base = max_baseline.split("+")
+                score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
+                score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
+                # results[baseline][regressor_type][kfold].append(float(score_pred) - float(score_baseline))
+                results[baseline][regressor_type].append(float(score_pred) - float(score_baseline))
+                # if results[baseline][regressor_type][kfold][-1] == 0:
+                #     import pdb; pdb.set_trace()
+            kfold += 1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-def histogram(score = "accuracy_mean"):
-    pp_clf_count = {"{}+{}".format(comb.preprocesses, comb.classifier):0 for indx, comb in combinations.iterrows()}
-    for clf in models.classifier.unique():
-        pp_clf_count["None+{}".format(clf)] = 0
-
-    for dataset in models.name.unique():
-        result_dataset = data.query("name == '{}'".format(dataset))
-        max_result = result_dataset[result_dataset[score] == result_dataset[score].max()]
-        for indx, result in max_result.iterrows():
-            pp_clf_count["{}+{}".format(result.preprocesses, result.classifier)] += 1
-
+def histogram(baseline = 'default'):
     # fig = plt.figure(figsize = (12, 4))
     fig = plt.figure()
+    fig.suptitle(baseline, fontsize = 12, fontweight = 'bold')
     ax = fig.add_subplot(111)
-    ax.bar(pp_clf_count.keys(), pp_clf_count.values())
-    plt.xlabel("PreProcesse + Classifier", fontsize = 12, fontweight = 'bold')
-    plt.ylabel(score.replace("_", " ").capitalize(), fontsize = 12, fontweight = 'bold')
+    ax.bar(results[baseline].keys(), [np.sum(values) for values in results[baseline].values()])
+    plt.xlabel("Regressor", fontsize = 12, fontweight = 'bold')
+    plt.ylabel("Gain", fontsize = 12, fontweight = 'bold')
     plt.xticks(rotation=90)
+    plt.ylim([-4, 5])
     plt.grid(True, alpha = 0.5, linestyle = 'dotted')
     plt.gcf().subplots_adjust(bottom=0.60)
 
-for score in constants.CLASSIFIERS_SCORES:
-    histogram(score = score + "_mean")
-    plt.savefig("analysis/plots/winnings/" + score + ".png", dpi = 100)
+for baseline in results.keys():
+    histogram(baseline)
+    plt.savefig("analysis/plots/base_analysis/" + baseline + ".png", dpi = 100)

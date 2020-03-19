@@ -17,7 +17,7 @@ if not os.path.exists("analysis/plots/meta_level"):
 
 # def box_plot(score = "accuracy_mean"):
 score = "accuracy"
-regressor_score = "mean_absolute_error"
+regressor_score = "mean_squared_error"
 fig = plt.figure(figsize = (24, 24))
 fig.suptitle(score, fontsize = 12, fontweight = 'bold')
 for indx, clf in enumerate(constants.CLASSIFIERS):
@@ -30,13 +30,13 @@ for indx, clf in enumerate(constants.CLASSIFIERS):
         data.append(reg_info)
     ax.boxplot(data, showmeans = True, meanline = True, showfliers = False,
                 labels = [name.replace("_", " ").capitalize() for name in constants.REGRESSORS])
-    plt.ylabel("Mean Absolute Error", fontsize = 12, fontweight = 'bold')
+    plt.ylabel("Mean Squared Error", fontsize = 12, fontweight = 'bold')
     plt.xlabel("Regressor", fontsize = 12, fontweight = 'bold')
     plt.tight_layout()
     plt.grid(True, alpha = 0.5, linestyle = 'dotted')
     for axes in fig.get_axes():
         axes.label_outer()
-plt.savefig("analysis/plots/meta_level/mae_accuracy.png", dpi = 100)
+plt.savefig("analysis/plots/meta_level/mse_accuracy.png", dpi = 100)
 
 # for score in constants.CLASSIFIERS_SCORES:
 #     box_plot(score = score + "_mean")

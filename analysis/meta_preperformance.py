@@ -30,14 +30,14 @@ def box_plot(preprocess):
             data.append(reg_info)
         ax.boxplot(data, showmeans = True, meanline = True, showfliers = False,
                     labels = [name.replace("_", " ").capitalize() for name in constants.REGRESSORS])
-        plt.ylabel("Mean Absolute Error", fontsize = 12, fontweight = 'bold')
+        plt.ylabel("Mean Squared Error", fontsize = 12, fontweight = 'bold')
         plt.ylim([0.0, 0.5])
         plt.xlabel("Regressor", fontsize = 12, fontweight = 'bold')
         plt.tight_layout()
         plt.grid(True, alpha = 0.5, linestyle = 'dotted')
         for axes in fig.get_axes():
             axes.label_outer()
-    plt.savefig("analysis/plots/meta_preperformance/mae_accuracy_{}.png".format(preprocess), dpi = 100)
+    plt.savefig("analysis/plots/meta_preperformance/mse_accuracy_{}.png".format(preprocess), dpi = 100)
 
 for preprocess in constants.PRE_PROCESSES:
      box_plot(preprocess)
