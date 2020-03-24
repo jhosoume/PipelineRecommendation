@@ -13,7 +13,7 @@ from sklearn.metrics import get_scorer
 from sklearn import preprocessing
 from scipy.io import arff as arff_io
 
-from NoiseFiltersPy.AENN import AENN
+from imblearn.over_sampling import ADASYN
 
 import constants
 import logging
@@ -80,8 +80,8 @@ MODELS["neural_network"] = neural_network_clf
 
 np.random.seed(constants.RANDOM_STATE)
 
-PRE_PROCESSOR = AENN()
-PRE_PROCESSOR_NAME = "AENN"
+PRE_PROCESSOR = ADASYN(random_state = constants.RANDOM_STATE)
+PRE_PROCESSOR_NAME = "ADASYN"
 
 datasets = [f for f in listdir(config["dataset"]["folder"])
                 if ( isfile(join(config["dataset"]["folder"], f)) and
@@ -92,7 +92,7 @@ divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 db = DBHelper()
 le = preprocessing.LabelEncoder()
 for dataset in datasets:
-    # dataset = "48_tae.arff"
+    dataset = "48_tae.arff"
     name = dataset[:-5]
     print("[{}]".format(name))
     if dataset.endswith("json"):
@@ -120,17 +120,12 @@ for dataset in datasets:
     iter = 0
     for train_indx, test_indx in divideFold.split(values):
         try:
-            filter = PRE_PROCESSOR(values[train_indx], target[train_indx])
+            new_values, new_target = PRE_PROCESSOR.fit_resample(values[train_indx], target[train_indx])
         except (RuntimeError, ValueError) as err:
             print("\t\tCould not perform preprocessing. {}".format(err))
             logging.info("Could not perform preprocessing. [{}, {}, {}]".format(name, model, PRE_PROCESSOR_NAME))
             logging.error(err)
             continue
-        except:
-            print("\t\tCould not perform preprocessing!")
-            continue
-        new_values = filter.cleanData
-        new_target = filter.cleanClasses
 
         for model in MODELS.keys():
             print("\t[{}] Calculating scores for model {} iter {}".format(name, model, iter))

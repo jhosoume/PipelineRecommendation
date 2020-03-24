@@ -13,7 +13,7 @@ from sklearn.metrics import get_scorer
 from sklearn import preprocessing
 from scipy.io import arff as arff_io
 
-from NoiseFiltersPy.AENN import AENN
+from NoiseFiltersPy.HARF import HARF
 
 import constants
 import logging
@@ -80,8 +80,8 @@ MODELS["neural_network"] = neural_network_clf
 
 np.random.seed(constants.RANDOM_STATE)
 
-PRE_PROCESSOR = AENN()
-PRE_PROCESSOR_NAME = "AENN"
+PRE_PROCESSOR = HARF(seed = constants.RANDOM_STATE)
+PRE_PROCESSOR_NAME = "HARF"
 
 datasets = [f for f in listdir(config["dataset"]["folder"])
                 if ( isfile(join(config["dataset"]["folder"], f)) and

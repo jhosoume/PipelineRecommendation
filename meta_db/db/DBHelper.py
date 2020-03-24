@@ -58,6 +58,15 @@ class DBHelper:
             self.__feats = [feature.replace(".", "_") for feature in ft[0]]
         return self.__feats
 
+    def start(self):
+        self.create_scores_table()
+        self.create_models_table()
+        self.create_metadata_table()
+        self.create_regressor_table()
+        self.create_combination_table()
+        self.create_preperformance_table()
+        self.create_regressor_preperformance_table()
+
     def create_metadata_table(self):
         sql_create = """
             CREATE TABLE metadata (id INT PRIMARY KEY AUTO_INCREMENT,
