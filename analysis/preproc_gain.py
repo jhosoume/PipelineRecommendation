@@ -120,12 +120,7 @@ for baseline in ["random", "default"]:
                 max_pred_pp = predicted_dataset[predicted_dataset[SCORE] == predicted_dataset[SCORE].max()].max()[SCORE]
                 baseline_dataset = dataset_info[dataset_info["preprocesses"] == pp_base]
                 max_base_pp = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
-                if (pp_pred == pp_base):
-                    results[baseline][regressor_type].append(0)
-                elif (max_pred_pp > max_base_pp):
-                    results[baseline][regressor_type].append(1)
-                else:
-                    results[baseline][regressor_type].append(-1)
+                results[baseline][regressor_type].append(max_pred_pp - max_base_pp)
             kfold += 1
 
 def histogram(baseline = 'default'):

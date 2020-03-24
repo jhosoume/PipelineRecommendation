@@ -3,7 +3,7 @@
         "host":"localhost",
         "user":"pytester",
         "password":"tortoise",
-        "database":"paje_eval"
+        "database":"paje_eval_test"
     },
     "dataset": {
         "folder":"mock_datasets/"
