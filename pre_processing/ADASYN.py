@@ -92,7 +92,7 @@ divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 db = DBHelper()
 le = preprocessing.LabelEncoder()
 for dataset in datasets:
-    dataset = "48_tae.arff"
+    # dataset = "48_tae.arff"
     name = dataset[:-5]
     print("[{}]".format(name))
     if dataset.endswith("json"):
