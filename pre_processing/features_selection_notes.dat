@@ -1,0 +1,117 @@
+++++++++++++++++++  CFS  +++++++++++++++++++++++++++++
+
+
+(Pdb) dataset
+'1541_volcanoes-d4.arff'
+
+-> selected_features = PRE_PROCESSOR.cfs(values[train_indx], target[train_indx])
+(Pdb) n
+-> new_values = values[:, selected_features][train_indx]
+(Pdb) selected_features
+array([ 2,  0,  1, -1, -1, -1])
+(Pdb) values
+array([[8.50000e+01, 6.70000e+02, 5.97241e-01],
+       [8.62000e+02, 7.10000e+02, 4.62056e-01],
+       [2.45000e+02, 8.60000e+01, 5.46176e-01],
+       ...,
+       [7.34000e+02, 1.00600e+03, 5.52424e-01],
+       [6.29000e+02, 1.00700e+03, 3.64033e-01],
+       [6.20000e+02, 1.00800e+03, 3.50748e-01]])
+(Pdb) values.shape
+(8654, 3)
+
+
+(Pdb) dataset
+'346_aids.arff'
+(Pdb) n
+> /home/jhosoume/unb/tcc/paje_automlDB/pre_processing/CFS.py(125)<module>()
+-> new_values = values[:, selected_features][train_indx]
+(Pdb) values.shape
+(50, 4)
+(Pdb) selected_features
+array([ 2,  3,  1,  0, -1, -1])
+
+(Pdb) dataset
+'446_prnn_crabs.arff'
+(Pdb) values.shape
+(200, 7)
+(Pdb) selected_features
+array([4, 2, 5, 6, 3, 0])
+
+(Pdb) dataset
+'721_pwLinear.arff'
+(Pdb) values.shape
+(200, 10)
+(Pdb) selected_feaures
+array([0, 4, 5, 6, 1, 2])
+
+
+
+++++++++   CIFE     ++++++++++++++++++++++++++++
+(Pdb) selected_features
+(array([2, 0, 1, 1]), array([ 4.11649676e-01,  1.79763739e-03,  6.04478573e-02, -1.00000000e+30]), array([0.41164968, 0.1778318 , 0.17619488, 0.17619488]))
+(Pdb) values.shape
+(8654, 3)
+(Pdb) dataset
+'1541_volcanoes-d4.arff'
+
+
+(Pdb) selected_features
+array([0, 1, 1])
+(Pdb) values
+array([[ 1. ,  5. ],
+       [ 3. ,  8. ],
+       [ 3. , 11. ],
+       [ 3. ,  9. ],
+       [ 5. ,  9.5],
+       [ 3.5, 10. ],
+       [ 3. , 12. ],
+       [ 4.5, 10. ],
+       [ 5. , 11.5],
+       [ 5. , 10. ],
+       [ 6. , 11. ],
+       [ 5. , 10. ],
+       [ 4. , 10.5],
+       [ 6. , 10. ],
+       [ 5. , 11. ],
+       [ 6.5, 11. ],
+       [ 4. , 11.5],
+       [ 6. , 12. ],
+       [ 3. , 12.5],
+       [ 6. , 13. ],
+       [ 5. , 11. ],
+       [ 8. , 11. ],
+       [ 4.5, 11. ],
+       [ 4. , 13. ],
+       [ 4. , 11. ],
+       [ 6.5, 13. ],
+       [ 4. , 12. ],
+       [ 5. , 14. ],
+       [ 3. , 10. ],
+       [ 5.5, 13. ],
+       [ 3. ,  8. ],
+       [ 2. ,  7.5],
+       [ 2. ,  8. ],
+       [ 2. ,  8. ],
+       [ 2. ,  7. ],
+       [ 3. , 10. ],
+       [ 2. ,  7. ],
+       [ 2. , 10. ],
+       [ 2. ,  8. ],
+       [ 2. , 10. ],
+       [ 2. ,  9. ],
+       [ 1.5, 10. ],
+       [ 1.5,  8. ],
+       [ 1.5, 11. ],
+       [ 1. , 10. ],
+       [ 1. ,  7. ],
+       [ 1. ,  5. ],
+       [ 1. ,  7. ],
+       [ 0.5,  8. ],
+       [ 0.5,  6. ],
+       [ 0. ,  7.5],
+       [ 0. ,  2.5]])
+(Pdb) values.shape
+(52, 2)
+(Pdb) dataset
+'713_vineyard.arff'

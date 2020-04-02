@@ -17,7 +17,7 @@ if not os.path.exists("analysis/plots/meta_preperformance"):
 
 def box_plot(preprocess):
     score = "accuracy"
-    regressor_score = "mean_absolute_error"
+    regressor_score = "mean_squared_error"
     fig = plt.figure(figsize = (24, 24))
     fig.suptitle(score, fontsize = 12, fontweight = 'bold')
     for indx, clf in enumerate(constants.CLASSIFIERS):

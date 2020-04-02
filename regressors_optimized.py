@@ -35,13 +35,12 @@ data.fillna(value = data_means, inplace = True)
 
 reg_models = {}
 
-# reg_models["neural_network"] = {}
-# reg_models["neural_network"]["model"] = neural_network.MLPRegressor()
-# reg_models["neural_network"]["params"] = {
-#     "hidden_layer_sizes": [50, 100, 150, 200],
-#     "activation": ["logistic", "tanh", "relu"],
-#     "solver": ["lbfgs", "sgd", "adam"]
-# }
+reg_models["neural_network"] = {}
+reg_models["neural_network"]["model"] = neural_network.MLPRegressor()
+reg_models["neural_network"]["params"] = {
+    "hidden_layer_sizes": [50, 100, 150],
+    "solver": ["sgd", "adam"]
+}
 
 
 reg_models["ridge"] = {}
@@ -62,21 +61,20 @@ reg_models["gradient_descent"]["params"] = {
 reg_models["svm"] = {}
 reg_models["svm"]["model"] = svm.SVR(gamma = "auto")
 reg_models["svm"]["params"] = {
-    "kernel": ["linear", "poly", "rbf", "sigmoid", "precomputed"],
+    "kernel": ["poly", "rbf"],
     "C": [0.5, 1.0, 1.2, 1.5]
 }
 
 reg_models["knn"] = {}
 reg_models["knn"]["model"] = neighbors.KNeighborsRegressor()
 reg_models["knn"]["params"] = {
-    "n_neighbors": [5, 8, 10, 15],
-    "algorithm": ["ball_tree", "kd_tree", "brute"]
+    "n_neighbors": [3, 5, 7, 15]
 }
 
 reg_models["random_forest"] = {}
 reg_models["random_forest"]["model"] = ensemble.RandomForestRegressor()
 reg_models["random_forest"]["params"] = {
-    "n_estimators": [5, 10, 12, 15]
+    "n_estimators": [100, 200, 500]
 }
 
 reg_models["gaussian_process"] = {}

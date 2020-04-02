@@ -78,7 +78,7 @@ def filter_dataset(database):
 datasets = pd.Series(filter_dataset(data))
 results = {}
 
-for baseline in ["random", "default"]:
+for baseline in ["default", "random"]:
     results[baseline] = {}
     for regressor_type in constants.REGRESSORS[:-2]:
         # results[baseline][regressor_type] = {}
@@ -115,6 +115,8 @@ for baseline in ["random", "default"]:
                 max_predicted = max(reg_results.keys(), key=(lambda key: reg_results[key]))
                 pp_pred, clf_pred = max_predicted.split("+")
                 max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
+                if (baseline == 'default'):
+                    max_baseline = "SMOTE+gradient_boosting"
                 pp_base, clf_base = max_baseline.split("+")
                 score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
                 score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
