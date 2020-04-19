@@ -382,7 +382,7 @@ class DBHelper:
         return self.__cursor.fetchall()
 
     def get_all_regressors_preperformance(self):
-        self.__cursor.execute("select name, score, max_error, mean_absolute_error, r2_score, median_absolute_error, classifier, preprocesses from regressor_preperformance, combinations where combination_id = combinations.id;")
+        self.__cursor.execute("select name, score, max_error, mean_absolute_error, mean_squared_error, r2_score, median_absolute_error, classifier, preprocesses from regressor_preperformance, combinations where combination_id = combinations.id;")
         return self.__cursor.fetchall()
 
     def get_metadata_record(self, name):

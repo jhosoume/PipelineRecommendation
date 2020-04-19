@@ -20,7 +20,8 @@ def box_plot(score = "accuracy_mean", preprocess = "SMOTE"):
     data = []
     for model in constants.CLASSIFIERS:
         combination_id = int(combinations[combinations.preprocesses == preprocess][combinations.classifier == model]["id"])
-        data.append(preperformance[preperformance.combination_id == combination_id][score])
+        data.append(preperformance[preperformance.combination_id == combination_id][score].dropna())
+    # import pdb; pdb.set_trace()
     fig = plt.figure(figsize = (12, 4))
     ax = fig.add_subplot(111)
     ax.boxplot(data, showmeans = True, meanline = True,
@@ -34,5 +35,7 @@ def box_plot(score = "accuracy_mean", preprocess = "SMOTE"):
 
 for score in constants.CLASSIFIERS_SCORES:
     for pre_proc in constants.PRE_PROCESSES:
+# score = "accuracy"
+# pre_proc = "ADASYN"
         box_plot(score = score + "_mean", preprocess = pre_proc)
         plt.savefig("analysis/plots/preperformance/" + score + "_" + pre_proc + ".png", dpi = 100)

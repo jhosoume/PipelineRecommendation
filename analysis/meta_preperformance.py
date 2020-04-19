@@ -8,7 +8,7 @@ from meta_db.db.DBHelper import DBHelper
 
 db = DBHelper()
 
-regressors = pd.DataFrame(db.get_all_regressors_preperformance(), columns = ["name", "score", "max_error", "mean_absolute_error", "r2_score", "median_absolute_error", "classifier", "preprocesses"] )
+regressors = pd.DataFrame(db.get_all_regressors_preperformance(), columns = ["name", "score", "max_error", "mean_absolute_error", "mean_squared_error", "r2_score", "median_absolute_error", "classifier", "preprocesses"] )
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
