@@ -9,7 +9,18 @@ from sklearn.model_selection import cross_validate, KFold, train_test_split
 from sklearn import metrics
 from sklearn import preprocessing
 
+from scipy.io import arff as arff_io
+from pymfe.mfe import MFE
+
+from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import ADASYN
+
+from NoiseFiltersPy.HARF import HARF
+from NoiseFiltersPy.AENN import AENN
+
+
 import constants
+from config import config
 from Default import Default
 from Random import Random
 from meta_db.db.DBHelper import DBHelper
@@ -23,6 +34,7 @@ pio.templates.default = "plotly_white"
 np.random.seed(constants.RANDOM_STATE)
 
 SCORE = "accuracy_mean"
+SCORE_RAW = "accuracy"
 
 grey_palette = ['rgb(208, 209, 211)',
                 'rgb(185, 191, 193)',
@@ -30,6 +42,53 @@ grey_palette = ['rgb(208, 209, 211)',
                 'rgb(44, 54, 60)',
                 'rgb(3, 3, 3)'
                ]
+
+pprocs = {
+    "ADASYN": ADASYN(random_state = constants.RANDOM_STATE).fit_resample,
+    "SMOTE": SMOTE(random_state = constants.RANDOM_STATE).fit_resample,
+    "HARF": HARF(seed = constants.RANDOM_STATE),
+    "AENN": AENN()
+}
+def preprocessor(name, values, target):
+    if name in ["ADASYN", "SMOTE"]:
+        return pprocs[name](values, target)
+    else:
+        filter = pprocs[name](values, target)
+        return (filter.cleanData, filter.cleanClasses)
+
+def real_scores(values, target):
+    clf_models = {}
+    svm_clf = svm.SVC(gamma = "auto").fit(values, target )
+    clf_models["svm"] = svm_clf # Actually not needed, the cv does the training again
+    lg_clf = linear_model.LogisticRegression(random_state = constants.RANDOM_STATE, solver = 'lbfgs').fit(values, target )
+    clf_models["logistic_regression"] = lg_clf
+    lineardisc_clf = discriminant_analysis.LinearDiscriminantAnalysis().fit(values, target )
+    clf_models["linear_discriminant"] = lineardisc_clf
+    neigh_clf = neighbors.KNeighborsClassifier().fit(values, target )
+    clf_models["kneighbors"] = neigh_clf
+    dectree_clf = tree.DecisionTreeClassifier(random_state = constants.RANDOM_STATE).fit(values, target )
+    clf_models["decision_tree"] = dectree_clf
+    gaussian_clf = naive_bayes.GaussianNB().fit(values, target )
+    clf_models["gaussian_nb"] = gaussian_clf
+    random_forest_clf = ensemble.RandomForestClassifier(n_estimators = 100).fit(values, target )
+    clf_models["random_forest"] = random_forest_clf
+    gradient_boost_clf = ensemble.GradientBoostingClassifier().fit(values, target )
+    clf_models["gradient_boosting"] = gradient_boost_clf
+    results = {}
+    for clf in clf_models.keys():
+        cv_results = cross_validate(clf_models[clf], values, target, cv = 10, scoring = SCORE_RAW)
+        results["None" + clf] = np.mean(cv_results["test_score"])
+
+    for pproc in pprocs.keys():
+        new_values, new_target = preprocessor(pproc, values, target)
+        for clf in clf_models.keys():
+            try:
+                cv_results = cross_validate(clf_models[clf], new_values, new_target, cv = 10, scoring = SCORE_RAW)
+            except ValueError:
+                cv_results = cross_validate(clf_models[clf], values, target, cv = 10, scoring = SCORE_RAW)
+            results[pproc + clf] = np.mean(cv_results["test_score"])
+    return results
+
 
 translator = {
     "svm": "SVM",
@@ -48,6 +107,46 @@ translator = {
 }
 
 db = DBHelper()
+mfe = MFE()
+le = preprocessing.LabelEncoder()
+
+
+def deal_dataset(name):
+    data = arff_io.loadarff(config["dataset"]["folder"] + name + ".arff")
+    data = pd.DataFrame(data[0])
+    target = data["class"].values
+    if target.dtype == np.object:
+        le.fit(target)
+        target = le.transform(target)
+    values = data.drop("class", axis = 1)
+    # Check if any is a string, some classifiers only deals with numeric data
+    for dtype, key in zip(values.dtypes, values.keys()):
+        if dtype == np.object:
+            le.fit(values[key].values)
+            values[key] = le.transform(values[key].values)
+    values = values.values
+    return values, target
+
+def calculate_metafeature(name, values, target):
+    mfe.fit(values, target)
+    try:
+        ft = mfe.extract()
+    except AttributeError:
+        mfe.fit(values.astype(float), target)
+        ft = mfe.extract()
+    labels = np.array(ft[0])
+    results = np.array(ft[1])
+    nan_columns = np.isnan(results)
+    not_nan = np.invert(nan_columns)
+    # Adding name to the list
+    labels = ["name"] + labels[not_nan].tolist()
+    results = [name] + results[not_nan].tolist()
+    for indx, result in enumerate(results):
+        if isinstance(result, complex):
+            results[indx] = result.real
+    results = np.array(results).reshape((1, len(results)))
+    results = pd.DataFrame(results, columns = labels)
+    return results
 
 metadata = pd.DataFrame(db.get_all_metadata(), columns = db.metadata_columns()).drop("id", axis = 1)
 models = pd.DataFrame(db.get_all_models(), columns = db.models_columns()).drop("id", axis = 1)
@@ -67,16 +166,6 @@ metadata_means = {feature: np.mean(metadata[feature]) for feature in metadata.co
 metadata.fillna(value = metadata_means, inplace = True)
 
 data = pd.merge(metadata, scores, on = "name")
-
-wins = {"{}+{}".format(pproc, clf):0 for pproc in ["None"] + constants.PRE_PROCESSES for clf in constants.CLASSIFIERS}
-for dataset in models.name.unique():
-    result_dataset = data.query("name == '{}'".format(dataset))
-    max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
-    # Note that results can be similar, so a dataset is included multiple times
-    for indx, result in max_result.iterrows():
-        wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
-default_max_baseline = max(wins, key = lambda key: wins[key])
-print("Default is:", default_max_baseline)
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
@@ -102,9 +191,6 @@ reg_models["decision_tree"] = lambda: tree.DecisionTreeRegressor(random_state = 
 reg_models["random"] = lambda: Random()
 reg_models["default"] = lambda: Default()
 
-results = {baseline: [{reg: 0 for reg in reg_models.keys()} for num in range(10)]
-            for baseline in ["random", "default"]}
-
 divideFold = KFold(10, random_state = constants.RANDOM_STATE)
 
 def filter_dataset(database):
@@ -120,87 +206,73 @@ datasets = pd.Series(filter_dataset(data))
 
 results = {}
 
+results["pp_wins"] = {}
+results["wins"] = {}
+
+TURNS = 5
+
 for regressor_type in constants.REGRESSORS[:-2]:
-    # results[baseline][regressor_type] = {}
-    import pdb; pdb.set_trace()
-    train_indx, test_indx = train_test_split(datasets, test_size = 0.1, random_state = constants.RANDOM_STATE)
-    # results[baseline][regressor_type][kfold] = []
-    targets = data[data.name.isin(list(datasets.iloc[train_indx]))]
-    models = {}
-    baseline_models = {}
+    results["pp_wins"][regressor_type] = [0] * TURNS
+    results["wins"][regressor_type] = [0] * TURNS
+
+    train_dt, test_dt = train_test_split(datasets, test_size = 0.1, random_state = constants.RANDOM_STATE)
+    targets = data[data.name.isin(train_dt)]
+    trained_reg = {}
+
     for clf in constants.CLASSIFIERS:
         for preprocess in (constants.PRE_PROCESSES + ['None']):
-            models["{}+{}".format(preprocess, clf)] = reg_models[regressor_type]()
-            baseline_models["{}+{}".format(preprocess, clf)] = reg_models[baseline]()
+            trained_reg["{}+{}".format(preprocess, clf)] = reg_models[regressor_type]()
             target = targets.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
             meta_target = target.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1).values
             label_target = target[SCORE].values
-            models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
-            baseline_models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
-    tests = data[data.name.isin(list(datasets.iloc[test_indx]))]
+            trained_reg["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
+
+    tests = data[data.name.isin(test_dt)]
     for test_dataset in tests.name.unique():
+        dt_values, dt_target = deal_dataset(test_dataset)
+
+
         dataset_info = tests.query(
             "name == '{}'".format(test_dataset)
         )
         meta_data = dataset_info.iloc[0].drop(
                 ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
-            ).values.reshape(1, -1)
-        true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
-        reg_results = {}
-        baseline_results = {}
-        for model in models:
-            reg_results[model] = models[model].predict(meta_data)
-            baseline_results[model] = baseline_models[model].predict(meta_data)
-        max_predicted = max(reg_results.keys(), key=(lambda key: reg_results[key]))
-        pp_pred, clf_pred = max_predicted.split("+")
-        max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
-        if (baseline == 'default'):
-            max_baseline = default_max_baseline
-        pp_base, clf_base = max_baseline.split("+")
-        score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
-        score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
-        results[baseline][regressor_type].append(float(score_pred) - float(score_baseline))
-
-    results[baseline]["true_max"] = []
-    for train_indx, test_indx in divideFold.split(datasets):
-        baseline_models = {}
-        for clf in constants.CLASSIFIERS:
-            for preprocess in (constants.PRE_PROCESSES + ['None']):
-                baseline_models["{}+{}".format(preprocess, clf)] = reg_models[baseline]()
-                target = targets.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
-                meta_target = target.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1).values
-                label_target = target[SCORE].values
-                baseline_models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
-
-        tests = data[data.name.isin(list(datasets.iloc[test_indx]))]
-        for test_dataset in tests.name.unique():
-            dataset_info = tests.query(
-                "name == '{}'".format(test_dataset)
             )
-            meta_data = dataset_info.iloc[0].drop(
-                    ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
-                ).values.reshape(1, -1)
-            true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()].iloc[0][SCORE]
-            baseline_results = {}
-            for model in models:
-                baseline_results[model] = baseline_models[model].predict(meta_data)
-            max_baseline = max(baseline_results, key=(lambda key: baseline_results[key]))
-            if (baseline == 'default'):
-                max_baseline = default_max_baseline
-            pp_base, clf_base = max_baseline.split("+")
-            score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
-            results[baseline]["true_max"].append(float(true_max) - float(score_baseline))
+        meta_data = dataset_info.iloc[0].drop(
+                ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
+            ).values.reshape(1, -1)
+        for turn in range(TURNS):
 
-non_normalized_results = results.copy()
+            reg_results = {}
+            for model in trained_reg:
+                reg_results[model] = trained_reg[model].predict(meta_data)
+            max_predicted = max(reg_results.keys(), key = (lambda key: reg_results[key]))
+            pp_pred, clf_pred = max_predicted.split("+")
+            if turn == 0:
+                true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
+                pp_maxes = [entry.preprocesses for indx, entry in true_max.iterrows()]
+                score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
+                results["wins"][regressor_type][turn] += 1 if (float(score_pred) >= float(true_max.iloc[0][SCORE])) else 0
+            else:
+                true_max = max(clf_scores.keys(), key = (lambda pp_clf: reg_results[pp_clf]))
+                pp_maxes, clf_max = true_max.split("+")
+                results["wins"][regressor_type][turn] += 1 if (max_predicted == true_max) else 0
 
-for baseline in results.keys():
-    max = np.sum(results[baseline]["true_max"])
-    del results[baseline]["true_max"]
-    for reg in results[baseline]:
-        results[baseline][reg] = np.sum(results[baseline][reg])
-        results[baseline][reg] /= max
-        results[baseline][reg] *= 100
+            results["pp_wins"][regressor_type][turn] += 1 if (pp_pred in pp_maxes) else 0
 
+            if pp_pred == "None":
+                break
+            else:
+                dt_values, dt_target = preprocessor(pp_pred, dt_values, dt_target)
+                meta_data = calculate_metafeature(test_dataset, dt_values, dt_target)
+                import pdb; pdb.set_trace()
+                for col in dataset_info.columns.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores]):
+                    if col not in meta_data.columns:
+                        print(col)
+                meta_data = meta_data.iloc[0].drop(["name"]).values.reshape(1, -1)
+                clf_scores = real_scores(dt_values, dt_target)
+
+import pdb; pdb.set_trace()
 
 
 for baseline in results:
