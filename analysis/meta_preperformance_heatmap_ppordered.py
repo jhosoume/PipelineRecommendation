@@ -38,9 +38,9 @@ translator = {
 }
 
 x_axis = [translator[reg] for reg in constants.REGRESSORS]
-y_axis = ["{}+{}".format(pp, translator[clf]) for clf in constants.CLASSIFIERS for pp in (["None"] + constants.PRE_PROCESSES)]
+y_axis = ["{}+{}".format(pp, translator[clf]) for pp in (["None"] + constants.PRE_PROCESSES) for clf in constants.CLASSIFIERS]
 
-pp_clfs =  [(pp, clf) for clf in constants.CLASSIFIERS for pp in (["None"] + constants.PRE_PROCESSES)]
+pp_clfs =  [(pp, clf)  for pp in (["None"] + constants.PRE_PROCESSES) for clf in constants.CLASSIFIERS]
 
 score = "accuracy"
 regressor_score = "mean_squared_error"
@@ -75,7 +75,7 @@ fig = ff.create_annotated_heatmap(data.tolist(), annotation_text = text,
                                   colorscale='Greys', hoverinfo='z')
 
 fig.show()
-fig.write_image("analysis/plots/meta_preperformance/" + score + "_heatmap.png",
+fig.write_image("analysis/plots/meta_preperformance/" + score + "_heatmap_ppordered.png",
                 width = 1000, height = 1200, scale = 1)
 
 

@@ -54,7 +54,7 @@ text = []
 for line in range(len(x_axis)):
     line_text = []
     for col in range(len(y_axis)):
-        line_text.append( "{} {} {}".format(
+        line_text.append( "{:1.2f} {} {:1.2f}".format(
                                     np.around(data[line, col], decimals = 2),
                                     u'\xb1',
                                     np.around(data_std[line, col], decimals = 2) ) )

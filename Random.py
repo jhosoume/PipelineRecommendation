@@ -1,4 +1,7 @@
 import random
+import constants
+
+random.seed(constants.RANDOM_STATE)
 
 class Random:
     def __init__(self):

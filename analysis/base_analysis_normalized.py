@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
 from sklearn import tree, naive_bayes, ensemble, neural_network, gaussian_process
@@ -14,11 +14,40 @@ from Default import Default
 from Random import Random
 from meta_db.db.DBHelper import DBHelper
 
-SCORE = "accuracy_mean"
+import plotly.io as pio
+import plotly.express as px
+import plotly.graph_objects as go
 
-db = DBHelper()
+pio.templates.default = "plotly_white"
 
 np.random.seed(constants.RANDOM_STATE)
+
+SCORE = "accuracy_mean"
+
+grey_palette = ['rgb(208, 209, 211)',
+                'rgb(185, 191, 193)',
+                'rgb(137, 149, 147)',
+                'rgb(44, 54, 60)',
+                'rgb(3, 3, 3)'
+               ]
+
+translator = {
+    "svm": "SVM",
+    "logistic_regression": "LG",
+    "linear_discriminant": "LD",
+    "kneighbors": "kNN",
+    "decision_tree": "DT",
+    "gaussian_nb": "GNB",
+    "random_forest": "RF",
+    "gradient_boosting": "GB",
+    "neural_network": "NN",
+    "knn": "kNN",
+    "Svm": "SVM",
+    "random": "Random",
+    "default": "Default"
+}
+
+db = DBHelper()
 
 metadata = pd.DataFrame(db.get_all_metadata(), columns = db.metadata_columns()).drop("id", axis = 1)
 models = pd.DataFrame(db.get_all_models(), columns = db.models_columns()).drop("id", axis = 1)
@@ -47,6 +76,7 @@ for dataset in models.name.unique():
     for indx, result in max_result.iterrows():
         wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
 default_max_baseline = max(wins, key = lambda key: wins[key])
+print("Default is:", default_max_baseline)
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
@@ -75,7 +105,7 @@ reg_models["default"] = lambda: Default()
 results = {baseline: [{reg: 0 for reg in reg_models.keys()} for num in range(10)]
             for baseline in ["random", "default"]}
 
-divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
+divideFold = KFold(10, random_state = constants.RANDOM_STATE)
 
 def filter_dataset(database):
     datasets_filtered = []
@@ -133,10 +163,7 @@ for baseline in ["default", "random"]:
                 pp_base, clf_base = max_baseline.split("+")
                 score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
                 score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
-                # results[baseline][regressor_type][kfold].append(float(score_pred) - float(score_baseline))
                 results[baseline][regressor_type].append(float(score_pred) - float(score_baseline))
-                # if results[baseline][regressor_type][kfold][-1] == 0:
-                #     import pdb; pdb.set_trace()
             kfold += 1
 
     results[baseline]["true_max"] = []
@@ -158,30 +185,103 @@ for baseline in ["default", "random"]:
             meta_data = dataset_info.iloc[0].drop(
                     ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
                 ).values.reshape(1, -1)
-            true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()].iloc[0]["accuracy_mean"]
+            true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()].iloc[0][SCORE]
             baseline_results = {}
             for model in models:
                 baseline_results[model] = baseline_models[model].predict(meta_data)
-            max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
+            max_baseline = max(baseline_results, key=(lambda key: baseline_results[key]))
             if (baseline == 'default'):
                 max_baseline = default_max_baseline
             pp_base, clf_base = max_baseline.split("+")
             score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
             results[baseline]["true_max"].append(float(true_max) - float(score_baseline))
 
-def histogram(baseline = 'default'):
-    # fig = plt.figure(figsize = (12, 4))
-    fig = plt.figure()
-    fig.suptitle(baseline, fontsize = 12, fontweight = 'bold')
-    ax = fig.add_subplot(111)
-    ax.bar(results[baseline].keys(), [np.sum(values) for values in results[baseline].values()])
-    plt.xlabel("Regressor", fontsize = 12, fontweight = 'bold')
-    plt.ylabel("Gain", fontsize = 12, fontweight = 'bold')
-    plt.xticks(rotation=90)
-    plt.ylim([-4, 5])
-    plt.grid(True, alpha = 0.5, linestyle = 'dotted')
-    plt.gcf().subplots_adjust(bottom=0.60)
+non_normalized_results = results.copy()
 
 for baseline in results.keys():
-    histogram(baseline)
-    plt.savefig("analysis/plots/base_analysis/" + baseline + ".png", dpi = 100)
+    max = np.sum(results[baseline]["true_max"])
+    del results[baseline]["true_max"]
+    for reg in results[baseline]:
+        results[baseline][reg] = np.sum(results[baseline][reg])
+        results[baseline][reg] /= max
+        results[baseline][reg] *= 100
+
+
+
+for baseline in results:
+    bar = go.Bar(
+        name = translator[baseline],
+        x = list(map(lambda reg: translator[reg], results[baseline].keys())),
+        y = list(results[baseline].values()),
+        marker_color = grey_palette[2]
+    )
+
+    # bar = go.Bar(
+    #     name = translator[baseline],
+    #     x = list(map(lambda reg: translator[reg], non_normalized_results[baseline].keys())),
+    #     y = list([np.sum(values) for values in non_normalized_results.values()]),
+    #     marker_color = grey_palette[1]
+    # )
+
+    fig = go.Figure(data = bar)
+
+    fig.update_layout(
+        title = translator[baseline],
+        xaxis_title = "Regressor",
+        yaxis_title = "Gain (%) "
+    )
+
+    fig.update_yaxes(
+        showgrid = True,
+        linewidth = 1,
+        linecolor = "black",
+        ticks = "inside",
+        mirror = True,
+        range = [-50, 100]
+    )
+
+    fig.update_xaxes(
+        showgrid = True,
+        linewidth = 1,
+        linecolor = "black",
+        ticks = "inside",
+        tickson = "boundaries",
+        mirror = True
+    )
+
+    fig.update_yaxes(
+        zeroline = True,
+        zerolinewidth = 2,
+        zerolinecolor = "black",
+    )
+
+    # fig.update_layout(legend_orientation="h")
+    # fig.update_layout(
+    #     legend = dict(
+    #                    x = 0,
+    #                    y = 1.1,
+    #                    traceorder= "normal",
+    #                    # bordercolor= "Black",
+    #                    # borderwidth= 0.5
+    #     )
+    # )
+    fig.write_image("analysis/plots/base_analysis/" + baseline + "normalized.png")
+
+    fig.show()
+
+# def histogram(baseline = 'default'):
+#     # fig = plt.figure(figsize = (12, 4))
+#     fig = plt.figure()
+#     fig.suptitle(baseline, fontsize = 12, fontweight = 'bold')
+#     ax = fig.add_subplot(111)
+#     ax.bar(results[baseline].keys(), [np.sum(values) for values in results[baseline].values()])
+#     plt.xlabel("Regressor", fontsize = 12, fontweight = 'bold')
+#     plt.ylabel("Gain", fontsize = 12, fontweight = 'bold')
+#     plt.xticks(rotation=90)
+#     plt.ylim([-4, 5])
+#     plt.grid(True, alpha = 0.5, linestyle = 'dotted')
+#     plt.gcf().subplots_adjust(bottom=0.60)
+#
+# for baseline in results.keys():
+#     histogram(baseline)
+#     plt.savefig("analysis/plots/base_analysis/" + baseline + ".png", dpi = 100)

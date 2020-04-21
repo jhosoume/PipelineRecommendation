@@ -5,7 +5,7 @@ import numpy as np
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
 from sklearn import tree, naive_bayes, ensemble, neural_network, gaussian_process
-from sklearn.model_selection import cross_validate, KFold
+from sklearn.model_selection import cross_validate, KFold, train_test_split
 from sklearn import metrics
 from sklearn import preprocessing
 
@@ -14,13 +14,11 @@ from Default import Default
 from Random import Random
 from meta_db.db.DBHelper import DBHelper
 
-
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
 
 pio.templates.default = "plotly_white"
-constants.RANDOM_STATE = 74
 
 np.random.seed(constants.RANDOM_STATE)
 
@@ -82,8 +80,8 @@ print("Default is:", default_max_baseline)
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
-if not os.path.exists("analysis/plots/preproc_gain"):
-    os.makedirs("analysis/plots/preproc_gain")
+if not os.path.exists("analysis/plots/base_analysis"):
+    os.makedirs("analysis/plots/base_analysis")
 
 mean_scores = []
 std_scores = []
@@ -107,7 +105,7 @@ reg_models["default"] = lambda: Default()
 results = {baseline: [{reg: 0 for reg in reg_models.keys()} for num in range(10)]
             for baseline in ["random", "default"]}
 
-divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
+divideFold = KFold(10, random_state = constants.RANDOM_STATE)
 
 def filter_dataset(database):
     datasets_filtered = []
@@ -119,54 +117,49 @@ def filter_dataset(database):
     return datasets_filtered
 
 datasets = pd.Series(filter_dataset(data))
+
 results = {}
 
-for baseline in ["default", "random"]:
-    results[baseline] = {}
-    for regressor_type in constants.REGRESSORS[:-2]:
-        # results[baseline][regressor_type] = {}
-        kfold = 0
-        results[baseline][regressor_type] = []
-        for train_indx, test_indx in divideFold.split(datasets):
-            # results[baseline][regressor_type][kfold] = []
-            targets = data[data.name.isin(list(datasets.iloc[train_indx]))]
-            models = {}
-            baseline_models = {}
-            for clf in constants.CLASSIFIERS:
-                for preprocess in (constants.PRE_PROCESSES + ['None']):
-                    models["{}+{}".format(preprocess, clf)] = reg_models[regressor_type]()
-                    baseline_models["{}+{}".format(preprocess, clf)] = reg_models[baseline]()
-                    target = targets.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
-                    meta_target = target.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1).values
-                    label_target = target[SCORE].values
-                    models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
-                    baseline_models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
-            tests = data[data.name.isin(list(datasets.iloc[test_indx]))]
-            for test_dataset in tests.name.unique():
-                dataset_info = tests.query(
-                    "name == '{}'".format(test_dataset)
-                )
-                meta_data = dataset_info.iloc[0].drop(
-                        ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
-                    ).values.reshape(1, -1)
-                true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
-                reg_results = {}
-                baseline_results = {}
-                for model in models:
-                    reg_results[model] = models[model].predict(meta_data)
-                    baseline_results[model] = baseline_models[model].predict(meta_data)
-                max_predicted = max(reg_results.keys(), key=(lambda key: reg_results[key]))
-                pp_pred, clf_pred = max_predicted.split("+")
-                max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
-                if baseline == "default":
-                    max_baseline = default_max_baseline
-                pp_base, clf_base = max_baseline.split("+")
-                predicted_dataset = dataset_info[dataset_info["preprocesses"] == pp_pred]
-                max_pred_pp = predicted_dataset[predicted_dataset[SCORE] == predicted_dataset[SCORE].max()].max()[SCORE]
-                baseline_dataset = dataset_info[dataset_info["preprocesses"] == pp_base]
-                max_base_pp = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
-                results[baseline][regressor_type].append(max_pred_pp - max_base_pp)
-            kfold += 1
+for regressor_type in constants.REGRESSORS[:-2]:
+    # results[baseline][regressor_type] = {}
+    import pdb; pdb.set_trace()
+    train_indx, test_indx = train_test_split(datasets, test_size = 0.1, random_state = constants.RANDOM_STATE)
+    # results[baseline][regressor_type][kfold] = []
+    targets = data[data.name.isin(list(datasets.iloc[train_indx]))]
+    models = {}
+    baseline_models = {}
+    for clf in constants.CLASSIFIERS:
+        for preprocess in (constants.PRE_PROCESSES + ['None']):
+            models["{}+{}".format(preprocess, clf)] = reg_models[regressor_type]()
+            baseline_models["{}+{}".format(preprocess, clf)] = reg_models[baseline]()
+            target = targets.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
+            meta_target = target.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1).values
+            label_target = target[SCORE].values
+            models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
+            baseline_models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
+    tests = data[data.name.isin(list(datasets.iloc[test_indx]))]
+    for test_dataset in tests.name.unique():
+        dataset_info = tests.query(
+            "name == '{}'".format(test_dataset)
+        )
+        meta_data = dataset_info.iloc[0].drop(
+                ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
+            ).values.reshape(1, -1)
+        true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
+        reg_results = {}
+        baseline_results = {}
+        for model in models:
+            reg_results[model] = models[model].predict(meta_data)
+            baseline_results[model] = baseline_models[model].predict(meta_data)
+        max_predicted = max(reg_results.keys(), key=(lambda key: reg_results[key]))
+        pp_pred, clf_pred = max_predicted.split("+")
+        max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
+        if (baseline == 'default'):
+            max_baseline = default_max_baseline
+        pp_base, clf_base = max_baseline.split("+")
+        score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
+        score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
+        results[baseline][regressor_type].append(float(score_pred) - float(score_baseline))
 
     results[baseline]["true_max"] = []
     for train_indx, test_indx in divideFold.split(datasets):
@@ -195,9 +188,10 @@ for baseline in ["default", "random"]:
             if (baseline == 'default'):
                 max_baseline = default_max_baseline
             pp_base, clf_base = max_baseline.split("+")
-            baseline_dataset = dataset_info[dataset_info["preprocesses"] == pp_base]
-            max_base_pp = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
-            results[baseline]["true_max"].append(float(true_max) - max_base_pp)
+            score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
+            results[baseline]["true_max"].append(float(true_max) - float(score_baseline))
+
+non_normalized_results = results.copy()
 
 for baseline in results.keys():
     max = np.sum(results[baseline]["true_max"])
@@ -206,6 +200,8 @@ for baseline in results.keys():
         results[baseline][reg] = np.sum(results[baseline][reg])
         results[baseline][reg] /= max
         results[baseline][reg] *= 100
+
+
 
 for baseline in results:
     bar = go.Bar(
@@ -264,7 +260,7 @@ for baseline in results:
     #                    # borderwidth= 0.5
     #     )
     # )
-    fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.png")
+    fig.write_image("analysis/plots/base_analysis/" + baseline + "normalized.png")
 
     fig.show()
 
@@ -275,7 +271,7 @@ for baseline in results:
 #     ax = fig.add_subplot(111)
 #     ax.bar(results[baseline].keys(), [np.sum(values) for values in results[baseline].values()])
 #     plt.xlabel("Regressor", fontsize = 12, fontweight = 'bold')
-#     plt.ylabel("PP Gain", fontsize = 12, fontweight = 'bold')
+#     plt.ylabel("Gain", fontsize = 12, fontweight = 'bold')
 #     plt.xticks(rotation=90)
 #     plt.ylim([-4, 5])
 #     plt.grid(True, alpha = 0.5, linestyle = 'dotted')
@@ -283,4 +279,4 @@ for baseline in results:
 #
 # for baseline in results.keys():
 #     histogram(baseline)
-#     plt.savefig("analysis/plots/preproc_gain/" + baseline + ".png", dpi = 100)
+#     plt.savefig("analysis/plots/base_analysis/" + baseline + ".png", dpi = 100)
