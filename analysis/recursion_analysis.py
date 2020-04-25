@@ -77,7 +77,7 @@ def real_scores(values, target):
     results = {}
     for clf in clf_models.keys():
         cv_results = cross_validate(clf_models[clf], values, target, cv = 10, scoring = SCORE_RAW)
-        results["None" + clf] = np.mean(cv_results["test_score"])
+        results["None+{}".format(clf)] = np.mean(cv_results["test_score"])
 
     for pproc in pprocs.keys():
         new_values, new_target = preprocessor(pproc, values, target)
@@ -86,7 +86,7 @@ def real_scores(values, target):
                 cv_results = cross_validate(clf_models[clf], new_values, new_target, cv = 10, scoring = SCORE_RAW)
             except ValueError:
                 cv_results = cross_validate(clf_models[clf], values, target, cv = 10, scoring = SCORE_RAW)
-            results[pproc + clf] = np.mean(cv_results["test_score"])
+            results["{}+{}".format(pproc, clf)] = np.mean(cv_results["test_score"])
     return results
 
 
@@ -130,10 +130,10 @@ def deal_dataset(name):
 def calculate_metafeature(name, values, target):
     mfe.fit(values, target)
     try:
-        ft = mfe.extract()
+        ft = mfe.extract(supress_warnings = True)
     except AttributeError:
         mfe.fit(values.astype(float), target)
-        ft = mfe.extract()
+        ft = mfe.extract(supress_warnings = True)
     labels = np.array(ft[0])
     results = np.array(ft[1])
     nan_columns = np.isnan(results)
@@ -144,8 +144,13 @@ def calculate_metafeature(name, values, target):
     for indx, result in enumerate(results):
         if isinstance(result, complex):
             results[indx] = result.real
+    cols =  []
+    for type in labels:
+        if type == "int":
+            type = "intt"
+        cols.append(type.replace(".", "_"))
     results = np.array(results).reshape((1, len(results)))
-    results = pd.DataFrame(results, columns = labels)
+    results = pd.DataFrame(results, columns = cols)
     return results
 
 metadata = pd.DataFrame(db.get_all_metadata(), columns = db.metadata_columns()).drop("id", axis = 1)
@@ -166,6 +171,8 @@ metadata_means = {feature: np.mean(metadata[feature]) for feature in metadata.co
 metadata.fillna(value = metadata_means, inplace = True)
 
 data = pd.merge(metadata, scores, on = "name")
+
+meta_means = {feature: np.mean(metadata[feature]) for feature in metadata.columns if feature != "name"}
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
@@ -207,6 +214,7 @@ datasets = pd.Series(filter_dataset(data))
 results = {}
 
 results["pp_wins"] = {}
+results["clf_wins"] = {}
 results["wins"] = {}
 
 TURNS = 5
@@ -229,6 +237,7 @@ for regressor_type in constants.REGRESSORS[:-2]:
 
     tests = data[data.name.isin(test_dt)]
     for test_dataset in tests.name.unique():
+        print(test_dataset)
         dt_values, dt_target = deal_dataset(test_dataset)
 
 
@@ -237,42 +246,49 @@ for regressor_type in constants.REGRESSORS[:-2]:
         )
         meta_data = dataset_info.iloc[0].drop(
                 ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
-            )
-        meta_data = dataset_info.iloc[0].drop(
-                ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
             ).values.reshape(1, -1)
-        for turn in range(TURNS):
 
+        for turn in range(TURNS):
+            print("MAKING TURNS")
             reg_results = {}
             for model in trained_reg:
                 reg_results[model] = trained_reg[model].predict(meta_data)
             max_predicted = max(reg_results.keys(), key = (lambda key: reg_results[key]))
             pp_pred, clf_pred = max_predicted.split("+")
             if turn == 0:
+                print("TURN 0")
                 true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
                 pp_maxes = [entry.preprocesses for indx, entry in true_max.iterrows()]
                 score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
                 results["wins"][regressor_type][turn] += 1 if (float(score_pred) >= float(true_max.iloc[0][SCORE])) else 0
             else:
-                true_max = max(clf_scores.keys(), key = (lambda pp_clf: reg_results[pp_clf]))
+                print("RECURSION TURN")
+                true_max = max(clf_scores, key = (lambda pp_clf: reg_results[pp_clf]))
                 pp_maxes, clf_max = true_max.split("+")
                 results["wins"][regressor_type][turn] += 1 if (max_predicted == true_max) else 0
 
+            if not isinstance(pp_maxes, list):
+                pp_maxes = [pp_maxes]
+
             results["pp_wins"][regressor_type][turn] += 1 if (pp_pred in pp_maxes) else 0
 
-            if pp_pred == "None":
+            if (pp_pred == "None") or not (pp_pred in pp_maxes):
+                print("END PP")
                 break
             else:
                 dt_values, dt_target = preprocessor(pp_pred, dt_values, dt_target)
                 meta_data = calculate_metafeature(test_dataset, dt_values, dt_target)
-                import pdb; pdb.set_trace()
-                for col in dataset_info.columns.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores]):
+                print("HERE!")
+                meta_results = []
+                for indx, col in enumerate(dataset_info.columns.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores])):
                     if col not in meta_data.columns:
-                        print(col)
-                meta_data = meta_data.iloc[0].drop(["name"]).values.reshape(1, -1)
+                        meta_results.append(meta_means[col])
+                    else:
+                        meta_results.append(float(meta_data[col]))
+                meta_data = np.array(meta_results).reshape(1, -1)
                 clf_scores = real_scores(dt_values, dt_target)
-
-import pdb; pdb.set_trace()
+            print("END TURN")
+        print("END END")
 
 
 for baseline in results:
