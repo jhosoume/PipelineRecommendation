@@ -1,0 +1,2 @@
+{'pp_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [4, 2, 0, 0, 0], 'random_forest': [5, 3, 3, 3, 3], 'decision_tree': [4, 0, 0, 0, 0]}, 'clf_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [6, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]}, 'wins': {'svm': [2, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [3, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]}}
+

@@ -66,4 +66,4 @@ fig = ff.create_annotated_heatmap(data.tolist(), annotation_text = text,
                                   colorscale='Greys', hoverinfo='z')
 
 fig.show()
-fig.write_image("analysis/plots/preperformance/" + score + "_heatmap_transposed.png")
+fig.write_image("analysis/plots/preperformance/" + score + "_heatmap_transposed.eps")

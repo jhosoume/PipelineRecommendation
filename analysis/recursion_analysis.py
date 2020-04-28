@@ -80,7 +80,13 @@ def real_scores(values, target):
         results["None+{}".format(clf)] = np.mean(cv_results["test_score"])
 
     for pproc in pprocs.keys():
-        new_values, new_target = preprocessor(pproc, values, target)
+        try:
+            new_values, new_target = preprocessor(pproc, values, target)
+        except:
+            for clf in clf_models.keys():
+                results["{}+{}".format(pproc, clf)] = 0
+            continue
+
         for clf in clf_models.keys():
             try:
                 cv_results = cross_validate(clf_models[clf], new_values, new_target, cv = 10, scoring = SCORE_RAW)
@@ -221,6 +227,7 @@ TURNS = 5
 
 for regressor_type in constants.REGRESSORS[:-2]:
     results["pp_wins"][regressor_type] = [0] * TURNS
+    results["clf_wins"][regressor_type] = [0] * TURNS
     results["wins"][regressor_type] = [0] * TURNS
 
     train_dt, test_dt = train_test_split(datasets, test_size = 0.1, random_state = constants.RANDOM_STATE)
@@ -259,25 +266,31 @@ for regressor_type in constants.REGRESSORS[:-2]:
                 print("TURN 0")
                 true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
                 pp_maxes = [entry.preprocesses for indx, entry in true_max.iterrows()]
+                clf_maxes = [entry.classifier for indx, entry in true_max.iterrows()]
                 score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
                 results["wins"][regressor_type][turn] += 1 if (float(score_pred) >= float(true_max.iloc[0][SCORE])) else 0
             else:
                 print("RECURSION TURN")
                 true_max = max(clf_scores, key = (lambda pp_clf: reg_results[pp_clf]))
-                pp_maxes, clf_max = true_max.split("+")
+                pp_maxes, clf_maxes = true_max.split("+")
                 results["wins"][regressor_type][turn] += 1 if (max_predicted == true_max) else 0
 
             if not isinstance(pp_maxes, list):
                 pp_maxes = [pp_maxes]
+                clf_maxes = [clf_maxes]
 
             results["pp_wins"][regressor_type][turn] += 1 if (pp_pred in pp_maxes) else 0
+            results["clf_wins"][regressor_type][turn] += 1 if (clf_pred in clf_maxes) else 0
 
             if (pp_pred == "None") or not (pp_pred in pp_maxes):
                 print("END PP")
                 break
             else:
-                dt_values, dt_target = preprocessor(pp_pred, dt_values, dt_target)
-                meta_data = calculate_metafeature(test_dataset, dt_values, dt_target)
+                try:
+                    dt_values, dt_target = preprocessor(pp_pred, dt_values, dt_target)
+                    meta_data = calculate_metafeature(test_dataset, dt_values, dt_target)
+                except:
+                    break
                 print("HERE!")
                 meta_results = []
                 for indx, col in enumerate(dataset_info.columns.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores])):
@@ -290,67 +303,70 @@ for regressor_type in constants.REGRESSORS[:-2]:
             print("END TURN")
         print("END END")
 
+print(results)
+import pdb; pdb.set_trace()
 
-for baseline in results:
-    bar = go.Bar(
-        name = translator[baseline],
-        x = list(map(lambda reg: translator[reg], results[baseline].keys())),
-        y = list(results[baseline].values()),
-        marker_color = grey_palette[2]
-    )
 
-    # bar = go.Bar(
-    #     name = translator[baseline],
-    #     x = list(map(lambda reg: translator[reg], non_normalized_results[baseline].keys())),
-    #     y = list([np.sum(values) for values in non_normalized_results.values()]),
-    #     marker_color = grey_palette[1]
-    # )
-
-    fig = go.Figure(data = bar)
-
-    fig.update_layout(
-        title = translator[baseline],
-        xaxis_title = "Regressor",
-        yaxis_title = "Gain (%) "
-    )
-
-    fig.update_yaxes(
-        showgrid = True,
-        linewidth = 1,
-        linecolor = "black",
-        ticks = "inside",
-        mirror = True,
-        range = [-50, 100]
-    )
-
-    fig.update_xaxes(
-        showgrid = True,
-        linewidth = 1,
-        linecolor = "black",
-        ticks = "inside",
-        tickson = "boundaries",
-        mirror = True
-    )
-
-    fig.update_yaxes(
-        zeroline = True,
-        zerolinewidth = 2,
-        zerolinecolor = "black",
-    )
-
-    # fig.update_layout(legend_orientation="h")
-    # fig.update_layout(
-    #     legend = dict(
-    #                    x = 0,
-    #                    y = 1.1,
-    #                    traceorder= "normal",
-    #                    # bordercolor= "Black",
-    #                    # borderwidth= 0.5
-    #     )
-    # )
-    fig.write_image("analysis/plots/base_analysis/" + baseline + "normalized.png")
-
-    fig.show()
+# for baseline in results:
+#     bar = go.Bar(
+#         name = translator[baseline],
+#         x = list(map(lambda reg: translator[reg], results[baseline].keys())),
+#         y = list(results[baseline].values()),
+#         marker_color = grey_palette[2]
+#     )
+#
+#     # bar = go.Bar(
+#     #     name = translator[baseline],
+#     #     x = list(map(lambda reg: translator[reg], non_normalized_results[baseline].keys())),
+#     #     y = list([np.sum(values) for values in non_normalized_results.values()]),
+#     #     marker_color = grey_palette[1]
+#     # )
+#
+#     fig = go.Figure(data = bar)
+#
+#     fig.update_layout(
+#         title = translator[baseline],
+#         xaxis_title = "Regressor",
+#         yaxis_title = "Gain (%) "
+#     )
+#
+#     fig.update_yaxes(
+#         showgrid = True,
+#         linewidth = 1,
+#         linecolor = "black",
+#         ticks = "inside",
+#         mirror = True,
+#         range = [-50, 100]
+#     )
+#
+#     fig.update_xaxes(
+#         showgrid = True,
+#         linewidth = 1,
+#         linecolor = "black",
+#         ticks = "inside",
+#         tickson = "boundaries",
+#         mirror = True
+#     )
+#
+#     fig.update_yaxes(
+#         zeroline = True,
+#         zerolinewidth = 2,
+#         zerolinecolor = "black",
+#     )
+#
+#     # fig.update_layout(legend_orientation="h")
+#     # fig.update_layout(
+#     #     legend = dict(
+#     #                    x = 0,
+#     #                    y = 1.1,
+#     #                    traceorder= "normal",
+#     #                    # bordercolor= "Black",
+#     #                    # borderwidth= 0.5
+#     #     )
+#     # )
+#     fig.write_image("analysis/plots/base_analysis/" + baseline + "normalized.png")
+#
+#     fig.show()
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))

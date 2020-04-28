@@ -148,7 +148,7 @@ def histogram(score = "accuracy_mean"):
         )
     )
     # fig = px.bar(x = list(pp_clf_count.keys()), y = list(pp_clf_count.values()))
-    fig.write_image("analysis/plots/winnings/" + score + ".png")
+    fig.write_image("analysis/plots/winnings/" + score + ".eps")
 
 
 for score in constants.CLASSIFIERS_SCORES:

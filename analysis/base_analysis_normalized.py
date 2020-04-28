@@ -102,8 +102,6 @@ reg_models["decision_tree"] = lambda: tree.DecisionTreeRegressor(random_state = 
 reg_models["random"] = lambda: Random()
 reg_models["default"] = lambda: Default()
 
-results = {baseline: [{reg: 0 for reg in reg_models.keys()} for num in range(10)]
-            for baseline in ["random", "default"]}
 
 divideFold = KFold(10, random_state = constants.RANDOM_STATE)
 
@@ -118,8 +116,6 @@ def filter_dataset(database):
 
 datasets = pd.Series(filter_dataset(data))
 results = {}
-
-
 
 for baseline in ["default", "random"]:
     results[baseline] = {}
@@ -196,6 +192,7 @@ for baseline in ["default", "random"]:
             score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
             results[baseline]["true_max"].append(float(true_max) - float(score_baseline))
 
+
 non_normalized_results = results.copy()
 
 for baseline in results.keys():
@@ -265,7 +262,7 @@ for baseline in results:
     #                    # borderwidth= 0.5
     #     )
     # )
-    fig.write_image("analysis/plots/base_analysis/" + baseline + "normalized.png")
+    fig.write_image("analysis/plots/base_analysis/" + baseline + "normalized.eps")
 
     fig.show()
 

@@ -264,7 +264,7 @@ for baseline in results:
     #                    # borderwidth= 0.5
     #     )
     # )
-    fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.png")
+    fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.eps")
 
     fig.show()
 

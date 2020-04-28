@@ -138,4 +138,4 @@ def histogram(baseline = 'default'):
 
 for baseline in results.keys():
     histogram(baseline)
-    plt.savefig("analysis/plots/preproc_gain/" + baseline + ".png", dpi = 100)
+    plt.savefig("analysis/plots/preproc_gain/" + baseline + ".png", dpi = 300)
