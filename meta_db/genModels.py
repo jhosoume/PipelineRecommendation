@@ -20,7 +20,9 @@ from meta_db.db.DBHelper import DBHelper
 np.random.seed(constants.RANDOM_STATE)
 
 SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
-          "precision_macro", "f1_micro", "f1_macro"]
+          "precision_macro", "f1_micro", "f1_macro", "balanced_accuracy", "average_precision", "roc_auc"]
+
+SCORES = constants.CLASSIFIERS_SCORES
 
 datasets = [f for f in listdir(config["dataset"]["folder"])
                 if ( isfile(join(config["dataset"]["folder"], f)) and

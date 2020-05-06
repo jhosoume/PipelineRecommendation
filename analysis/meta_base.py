@@ -15,7 +15,7 @@ if not os.path.exists("analysis/plots"):
 if not os.path.exists("analysis/plots/meta_base"):
     os.makedirs("analysis/plots/meta_base")
 
-def box_plot(score = "accuracy_mean"):
+def box_plot(score = "f1_macro_mean"):
     data = []
     for model in constants.CLASSIFIERS:
         data.append(models[models.model == model][score])

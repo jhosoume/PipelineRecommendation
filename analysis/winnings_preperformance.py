@@ -110,7 +110,12 @@ def histogram(score = "accuracy_mean"):
     fig.update_layout(barmode = 'group')
     fig.update_layout(
         xaxis_title = "Classifier",
-        yaxis_title = "Number of Wins"
+        yaxis_title = "Number of Wins",
+        uniformtext_minsize = 16,
+        font = dict(
+            size = 18,
+            color = "black"
+        )
     )
 
     fig.update_yaxes(
@@ -119,7 +124,14 @@ def histogram(score = "accuracy_mean"):
         linecolor = "black",
         ticks = "inside",
         mirror = True,
-        range = [-1, 60]
+        range = [-1, 70],
+        tickfont= dict(
+            size= 16,
+            color = 'black'
+        ),
+        titlefont = dict(
+            size = 18
+        )
     )
 
     fig.update_xaxes(
@@ -128,7 +140,14 @@ def histogram(score = "accuracy_mean"):
         linecolor = "black",
         ticks = "inside",
         tickson = "boundaries",
-        mirror = True
+        mirror = True,
+        tickfont= dict(
+            size= 16,
+            color = 'black'
+        ),
+        titlefont = dict(
+            size = 18
+        )
     )
 
     fig.update_yaxes(
@@ -141,7 +160,7 @@ def histogram(score = "accuracy_mean"):
     fig.update_layout(
         legend = dict(
                        x = 0,
-                       y = 1.1,
+                       y = 1.15,
                        traceorder= "normal",
                        # bordercolor= "Black",
                        # borderwidth= 0.5
@@ -149,6 +168,9 @@ def histogram(score = "accuracy_mean"):
     )
     # fig = px.bar(x = list(pp_clf_count.keys()), y = list(pp_clf_count.values()))
     fig.write_image("analysis/plots/winnings/" + score + ".eps")
+    fig.write_image("analysis/plots/winnings/" + score + ".png")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/winnings/" + score + ".eps")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/winnings/" + score + ".png")
 
 
 for score in constants.CLASSIFIERS_SCORES:

@@ -22,17 +22,19 @@ from config import config
 
 from meta_db.db.DBHelper import DBHelper
 
-SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
-          "precision_macro", "f1_micro", "f1_macro", "fit_time", "score_time"]
+SCORES = constants.CLASSIFIERS_SCORES
 
 SCORERS = {
-    "recall_micro":    lambda y_true, y_pred: metrics.recall_score(y_true, y_pred, average = "micro"),
-    "recall_macro":    lambda y_true, y_pred: metrics.recall_score(y_true, y_pred, average = "macro"),
-    "accuracy":        lambda y_true, y_pred: metrics.accuracy_score(y_true, y_pred),
-    "precision_micro": lambda y_true, y_pred: metrics.precision_score(y_true, y_pred, average = "micro"),
-    "precision_macro": lambda y_true, y_pred: metrics.precision_score(y_true, y_pred, average = "macro"),
-    "f1_micro":        lambda y_true, y_pred: metrics.f1_score(y_true, y_pred, average = "micro"),
-    "f1_macro":        lambda y_true, y_pred: metrics.f1_score(y_true, y_pred, average = "macro")
+    "recall_micro":       lambda y_true, y_pred: metrics.recall_score(y_true, y_pred, average = "micro"),
+    "recall_macro":       lambda y_true, y_pred: metrics.recall_score(y_true, y_pred, average = "macro"),
+    "accuracy":           lambda y_true, y_pred: metrics.accuracy_score(y_true, y_pred),
+    "precision_micro":    lambda y_true, y_pred: metrics.precision_score(y_true, y_pred, average = "micro"),
+    "precision_macro":    lambda y_true, y_pred: metrics.precision_score(y_true, y_pred, average = "macro"),
+    "f1_micro":           lambda y_true, y_pred: metrics.f1_score(y_true, y_pred, average = "micro"),
+    "f1_macro":           lambda y_true, y_pred: metrics.f1_score(y_true, y_pred, average = "macro"),
+    "balanced_accuracy":  lambda y_true, y_pred: metrics.balanced_accuracy_score(y_true, y_pred),
+    "average_precision":  lambda y_true, y_pred: metrics.average_precision_score(y_true, y_pred),
+    "roc_auc":            lambda y_true, y_pred: metrics.roc_auc_score(y_true, y_pred, average = "macro")
 }
 
 MODELS = {}

@@ -34,7 +34,7 @@ if not os.path.exists("analysis/plots"):
 if not os.path.exists("analysis/plots/preperformance"):
     os.makedirs("analysis/plots/preperformance")
 
-score = "accuracy_mean"
+score = "f1_macro_mean"
 
 x_axis = list(map(lambda clf: translator[clf], constants.CLASSIFIERS))
 y_axis = ['None'] + constants.PRE_PROCESSES
@@ -64,6 +64,10 @@ for line in range(len(x_axis)):
 fig = ff.create_annotated_heatmap(data.tolist(), annotation_text = text,
                                   y = x_axis, x = y_axis,
                                   colorscale='Greys', hoverinfo='z')
+fig.update_layout(uniformtext_minsize = 15)
 
 fig.show()
 fig.write_image("analysis/plots/preperformance/" + score + "_heatmap_transposed.eps")
+fig.write_image("analysis/plots/preperformance/" + score + "_heatmap_transposed.png")
+fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/meta_base_analysis/" + score + "_heatmap_transposed.eps")
+fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/meta_base_analysis/" + score + "_heatmap_transposed.png")

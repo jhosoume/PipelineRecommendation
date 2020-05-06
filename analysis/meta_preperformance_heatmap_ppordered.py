@@ -73,6 +73,7 @@ for line in range(len(y_axis)):
 fig = ff.create_annotated_heatmap(data.tolist(), annotation_text = text,
                                   x = x_axis, y = y_axis,
                                   colorscale='Greys', hoverinfo='z')
+fig.update_layout(font = {size = 18, color = '‎#000000'})
 
 fig.show()
 fig.write_image("analysis/plots/meta_preperformance/" + score + "_heatmap_ppordered.eps",

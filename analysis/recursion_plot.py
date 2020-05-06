@@ -14,6 +14,10 @@ pio.templates.default = "plotly_white"
 
 db = DBHelper()
 
+# Por regressor
+# Número de hits absoluto
+
+
 translator = {
     "svm": "SVM",
     "logistic_regression": "LG",
@@ -48,23 +52,23 @@ results = {'pp_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [4, 2, 0, 0, 0], 'random_f
 initial = 10
 num_dt = {reg:[0] * len(results["pp_wins"][reg]) for reg in results["pp_wins"].keys()}
 
-for reg in results["pp_wins"].keys():
-    div = initial
-    for round in range(len(results["pp_wins"][reg])):
-        num_dt[reg][round] = div
-        if div == 0:
-            break
-        store_round = results["pp_wins"][reg][round]
-        results["pp_wins"][reg][round] /= (div/100)
-        div = store_round
-
-for res in list(results.keys())[1:]:
-    for reg in results[res].keys():
-        for round in range(len(results[res][reg])):
-            div = num_dt[reg][round]
-            if div == 0:
-                break
-            results[res][reg][round] /= (div/100)
+# for reg in results["pp_wins"].keys():
+#     div = initial
+#     for round in range(len(results["pp_wins"][reg])):
+#         num_dt[reg][round] = div
+#         if div == 0:
+#             break
+#         store_round = results["pp_wins"][reg][round]
+#         results["pp_wins"][reg][round] /= (div/100)
+#         div = store_round
+#
+# for res in list(results.keys())[1:]:
+#     for reg in results[res].keys():
+#         for round in range(len(results[res][reg])):
+#             div = num_dt[reg][round]
+#             if div == 0:
+#                 break
+#             results[res][reg][round] /= (div/100)
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
@@ -77,15 +81,15 @@ for round in range(len(results["pp_wins"]["svm"])):
     for indx, res in enumerate(results.keys()):
         bar = go.Bar(
             name = translator_res[res],
-            x = list(map(lambda clf: translator[clf], results[res].keys())),
-            y = [results[res][clf][round] for clf in results[res]],
+            x = list(map(lambda reg: translator[reg], results[res].keys())),
+            y = [results[res][reg][round] for reg in results[res]],
             marker_color = grey_palette[indx]
         )
         data_plot.append(bar)
     fig = go.Figure(data = data_plot)
     fig.update_layout(barmode = 'group')
     fig.update_layout(
-        xaxis_title = "Classifier",
+        xaxis_title = "Regressor",
         yaxis_title = "Number of Hits"
     )
 
@@ -95,7 +99,7 @@ for round in range(len(results["pp_wins"]["svm"])):
         linecolor = "black",
         ticks = "inside",
         mirror = True,
-        range = [0, 100]
+        range = [0, 10]
     )
 
     fig.update_xaxes(

@@ -78,6 +78,7 @@ for clf in constants.CLASSIFIERS:
         title = translator[clf],
         xaxis_title = "Regressor",
         yaxis_title = "Mean Square Error",
+        uniformtext_minsize = 16
     )
 
     fig.update_yaxes(
@@ -86,7 +87,14 @@ for clf in constants.CLASSIFIERS:
         linecolor = "black",
         ticks = "inside",
         mirror = True,
-        range = [0, 0.15]
+        range = [0, 0.15],
+        tickfont= dict(
+            size= 18,
+            color = 'black'
+        ),
+        titlefont = dict(
+            size = 20
+        )
     )
 
     fig.update_xaxes(
@@ -95,7 +103,14 @@ for clf in constants.CLASSIFIERS:
         linecolor = "black",
         ticks = "inside",
         tickson = "boundaries",
-        mirror = True
+        mirror = True,
+        tickfont = dict(
+            size = 18,
+            color = 'black'
+        ),
+        titlefont = dict(
+            size = 20
+        )
     )
 
     fig.update_yaxes(
@@ -103,8 +118,11 @@ for clf in constants.CLASSIFIERS:
         zerolinewidth = 1.1,
         zerolinecolor = "black",
     )
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/meta_level_analysis/{}_{}.eps".format(clf, score))
     fig.write_image("analysis/plots/meta_preperformance/clf_group/{}_{}.eps".format(clf, score))
-    fig.show()
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/meta_level_analysis/{}_{}.png".format(clf, score))
+    fig.write_image("analysis/plots/meta_preperformance/clf_group/{}_{}.png".format(clf, score))
+    # fig.show()
 
 for pp in (["None"] + constants.PRE_PROCESSES):
     pp_data = all_regs.query("preprocesses == '{}' and score == '{}'".format(pp, score))
@@ -146,7 +164,7 @@ for pp in (["None"] + constants.PRE_PROCESSES):
         zerolinecolor = "black",
     )
     fig.write_image("analysis/plots/meta_preperformance/pp_group/{}_{}.eps".format(pp, score))
-    fig.show()
+    # fig.show()
 
 all_data = all_regs.query("score == '{}'".format(score))
 all_data = all_data[["name", regressor_score]]
@@ -185,7 +203,8 @@ fig.update_yaxes(
     zerolinecolor = "black",
 )
 fig.write_image("analysis/plots/meta_preperformance/all_group/{}.eps".format(score))
-fig.show()
+fig.write_image("analysis/plots/meta_preperformance/all_group/{}.png".format(score))
+# fig.show()
 # data = np.zeros((len(y_axis), len(x_axis)))
 # data_std = np.zeros((len(y_axis), len(x_axis)))
 #

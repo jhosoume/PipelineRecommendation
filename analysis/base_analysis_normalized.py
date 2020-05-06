@@ -22,7 +22,7 @@ pio.templates.default = "plotly_white"
 
 np.random.seed(constants.RANDOM_STATE)
 
-SCORE = "accuracy_mean"
+SCORE = "recall_macro_mean"
 
 grey_palette = ['rgb(208, 209, 211)',
                 'rgb(185, 191, 193)',
@@ -210,7 +210,8 @@ for baseline in results:
         name = translator[baseline],
         x = list(map(lambda reg: translator[reg], results[baseline].keys())),
         y = list(results[baseline].values()),
-        marker_color = grey_palette[2]
+        marker_color = grey_palette[2],
+        width = [0.5] * len (results[baseline].values())
     )
 
     # bar = go.Bar(
@@ -234,7 +235,14 @@ for baseline in results:
         linecolor = "black",
         ticks = "inside",
         mirror = True,
-        range = [-50, 100]
+        range = [-50, 100],
+        tickfont= dict(
+            size= 16,
+            color = 'black'
+        ),
+        titlefont = dict(
+            size = 18
+        )
     )
 
     fig.update_xaxes(
@@ -243,7 +251,14 @@ for baseline in results:
         linecolor = "black",
         ticks = "inside",
         tickson = "boundaries",
-        mirror = True
+        mirror = True,
+        tickfont= dict(
+            size= 16,
+            color = 'black'
+        ),
+        titlefont = dict(
+            size = 18
+        )
     )
 
     fig.update_yaxes(
@@ -262,7 +277,11 @@ for baseline in results:
     #                    # borderwidth= 0.5
     #     )
     # )
-    fig.write_image("analysis/plots/base_analysis/" + baseline + "normalized.eps")
+    fig.write_image("analysis/plots/base_analysis/" + baseline + "_" + SCORE + "normalized.eps")
+    fig.write_image("analysis/plots/base_analysis/" + baseline + "_" + SCORE + "normalized.png")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline  + "_" + SCORE + "normalized.eps")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "normalized.png")
+
 
     fig.show()
 
