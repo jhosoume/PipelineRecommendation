@@ -1,5 +1,6 @@
 numpy==1.16.*
 scikit-learn==0.22.*
+imbalanced-learn
 pandas
 matplotlib
 mysql
