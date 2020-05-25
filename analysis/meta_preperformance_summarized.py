@@ -60,7 +60,7 @@ y_axis = ["{}+{}".format(pp, translator[clf]) for pp in (["None"] + constants.PR
 
 pp_clfs =  [(pp, clf)  for pp in (["None"] + constants.PRE_PROCESSES) for clf in constants.CLASSIFIERS]
 
-score = "accuracy"
+score = "balanced_accuracy"
 regressor_score = "mean_squared_error"
 
 

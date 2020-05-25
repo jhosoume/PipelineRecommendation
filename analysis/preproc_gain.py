@@ -24,7 +24,7 @@ constants.RANDOM_STATE = 74
 
 np.random.seed(constants.RANDOM_STATE)
 
-SCORE = "f1_macro_mean"
+SCORE = "accuracy_mean"
 
 grey_palette = ['rgb(208, 209, 211)',
                 'rgb(185, 191, 193)',
@@ -283,8 +283,6 @@ for baseline in results:
     fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.png")
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "normalized.png")
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "normalized.eps")
-
-    fig.show()
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))

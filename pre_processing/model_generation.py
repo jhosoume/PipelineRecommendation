@@ -20,7 +20,8 @@ from config import config
 
 from meta_db.db.DBHelper import DBHelper
 
-SCORES = constants.CLASSIFIERS_SCORES
+SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
+          "precision_macro", "f1_micro", "f1_macro", "balanced_accuracy", "average_precision", "roc_auc"]
 
 SCORERS = {
     "recall_micro":       lambda y_true, y_pred: metrics.recall_score(y_true, y_pred, average = "micro"),

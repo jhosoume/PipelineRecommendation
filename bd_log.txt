@@ -2,4 +2,5 @@
     * Has all necessary data (pp + clf and regressors) => pc
     * paje_preprocess => including performance of classfiers -> should be add to pc (RC1)
 
-06/05 New database for RC5 (adding one mode json config) -> creating db: bal_acc
+06/05 New database for RC5 (adding one mode json config) -> creating db: bal_acc 
+* bal_acc has all data from temp in RC6

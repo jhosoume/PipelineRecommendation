@@ -4,9 +4,18 @@ CLASSIFIERS = ["svm", "logistic_regression", "linear_discriminant", "kneighbors"
                #"neural_network"]
 REGRESSORS = ["svm", "knn", "random_forest", "decision_tree", "random", "default"]
 CLASSIFIERS_SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
-                      "precision_macro", "f1_micro", "f1_macro", "fit_time", "score_time",
-                      "balanced_accuracy", "average_precision", "roc_auc"]
+                      "precision_macro", "f1_micro", "f1_macro",
+                      "balanced_accuracy",
+                      "fit_time", "score_time"]
+
 REGRESSORS_SCORES = ["max_error", "mean_absolute_error", "r2_score", "median_absolute_error",
                       "mean_squared_error"]
 
-PRE_PROCESSES = ["SMOTE", "ADASYN", "HARF", "AENN"]
+# PRE_PROCESSES = ["SMOTE", "RandomUnder", "HARF", "AENN"]
+
+PRE_PROCESSES = ["SMOTE", "RandomUnder", "HARF", "ENN"]
+
+# PRE_PROCESSES = ["SMOTE", "ADASYN", "HARF", "AENN"]
+
+# CLASSIFIERS_SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
+#                       "precision_macro", "f1_micro", "f1_macro", "fit_time", "score_time"]

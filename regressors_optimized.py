@@ -6,7 +6,7 @@ import pickle
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
 from sklearn import tree, naive_bayes, ensemble, neural_network, gaussian_process
-from sklearn.model_selection import cross_validate, KFold, GridSearchCV
+from sklearn.model_selection import cross_validate, KFold, GridSearchCV, RandomizedSearchCV
 from sklearn import metrics
 from sklearn import preprocessing
 from sklearn.utils import check_array
@@ -15,6 +15,8 @@ import constants
 from Default import Default
 from Random import Random
 from meta_db.db.DBHelper import DBHelper
+
+from optimizations.helpers import *
 
 db = DBHelper()
 
@@ -69,23 +71,23 @@ reg_models = {}
 
 
 reg_models["svm"] = {}
-reg_models["svm"]["model"] = svm.SVR()
+reg_models["svm"]["model"] = svm.SVR(gamma = "auto")
 reg_models["svm"]["params"] = {
-    "kernel": ["poly", "rbf"],
-    "C": [0.5, 1.0, 1.2, 1.5],
-    "gamma": [0.1, 0.3, 0.5, 0.7, 0.9, 1.0]
+    "kernel": ["rbf"],
+    "C": [0.1, 0.3, 0.5, 0.7, 1.0, 5, 10, 50, 100],
 }
+
 
 reg_models["knn"] = {}
 reg_models["knn"]["model"] = neighbors.KNeighborsRegressor()
 reg_models["knn"]["params"] = {
-    "n_neighbors": [3, 5, 7, 15]
+    "n_neighbors": [3, 5, 7, 13, 15, 30]
 }
 
 reg_models["random_forest"] = {}
 reg_models["random_forest"]["model"] = ensemble.RandomForestRegressor()
 reg_models["random_forest"]["params"] = {
-    "n_estimators": [100, 200, 500]
+    "n_estimators": [100, 200, 500, 600, 700, 800, 1000]
 }
 
 # reg_models["gaussian_process"] = {}
@@ -99,7 +101,7 @@ reg_models["decision_tree"] = {}
 reg_models["decision_tree"]["model"] = tree.DecisionTreeRegressor()
 reg_models["decision_tree"]["params"] = {
     "splitter": ["best", "random"],
-    "min_samples_split": [2, 3, 4]
+    "min_samples_split": [2, 3, 4, 7, 10]
 }
 
 mean_scores = []
@@ -113,31 +115,34 @@ if not os.path.exists("regressors"):
 
 divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
+
+# add cross cross_validate
 regressors = {}
 targets = {}
+results = {}
+score = CLF_SCORE
+print("SCORE = {}".format(score))
 for clf in constants.CLASSIFIERS:
+    results[clf] = {}
     for preprocess in ['None'] + constants.PRE_PROCESSES:
+        results[clf][preprocess] = {}
         regressors[clf] = {}
         regressors[clf][preprocess] = {}
         # Getting target value per classifier and preprocessor
         targets[clf] = {}
         targets[clf][preprocess] = data.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
-        score = CLF_SCORE
         regressors[clf][preprocess][score] = {}
-        values = check_array(targets[clf][preprocess].drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1).round(10).clip(-1e11,1e11).to_numpy().astype(np.float64))
+        values = check_array(targets[clf][preprocess].drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1).to_numpy().astype(np.float64))
         target = targets[clf][preprocess][score + "_mean"].astype(np.float64).to_numpy(dtype = 'float64')
-        # import pdb; pdb.set_trace()
         for reg in reg_models.keys():
-            opt_reg = GridSearchCV(reg_models[reg]["model"], reg_models[reg]["params"], cv = 5, error_score = 0, scoring = 'neg_mean_squared_error')
-            model =  opt_reg.fit(values, target)
-            # model =  opt_reg.fit(values[100:200], target[100:200])
-            # model =  opt_reg.fit(values[20:25], target[20:25])
-            print("Best parameters set [{}] found on development set:".format(reg))
-            print(model.best_params_, "\n")
-            print("Grid scores on development set:")
-            means = model.cv_results_['mean_test_score']
-            stds = model.cv_results_['std_test_score']
-            for mean, std, params in zip(means, stds, clf.cv_results_['params']):
-                print("%0.3f (+/-%0.03f) for %r"
-                      % (mean, std * 2, params))
-            import pdb; pdb.set_trace()
+            results[clf][preprocess][reg] = {}
+            results[clf][preprocess][reg]["name"] = reg
+            results[clf][preprocess][reg]["params"] = []
+            for train_indx, test_indx in divideFold.split(values):
+                opt_reg = GridSearchCV(reg_models[reg]["model"], reg_models[reg]["params"], cv = 5, n_jobs = -1, scoring = "neg_root_mean_squared_error", verbose = 2) # holdout 2/3 para treino e 1/3 para teste
+                model =  opt_reg.fit(values[train_indx], target[train_indx])
+                print("[pp: {}, clf: {}] Best parameters set [{}] found on development set:".format(preprocess, clf, reg))
+                print(model.best_params_, "\n")
+                results[clf][preprocess][reg]["params"].append(model.best_params_)
+
+save_opt(results, score)

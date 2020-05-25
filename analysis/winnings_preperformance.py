@@ -23,7 +23,6 @@ translator = {
     "gaussian_nb": "GNB",
     "random_forest": "RF",
     "gradient_boosting": "GB"
-
 }
 
 
@@ -53,7 +52,7 @@ if not os.path.exists("analysis/plots/winnings"):
     os.makedirs("analysis/plots/winnings")
 
 
-def histogram(score = "accuracy_mean"):
+def histogram(score = "balanced_accuracy_mean"):
     pp_clf_count = {"{}+{}".format(comb.preprocesses, comb.classifier):0 for indx, comb in combinations.iterrows()}
     count = {}
     invert_count = {}
@@ -113,7 +112,7 @@ def histogram(score = "accuracy_mean"):
         yaxis_title = "Number of Wins",
         uniformtext_minsize = 16,
         font = dict(
-            size = 18,
+            size = 16,
             color = "black"
         )
     )

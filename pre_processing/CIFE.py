@@ -35,7 +35,7 @@ SCORERS = {
     "f1_macro":           lambda y_true, y_pred: metrics.f1_score(y_true, y_pred, average = "macro"),
     "balanced_accuracy":  lambda y_true, y_pred: metrics.balanced_accuracy_score(y_true, y_pred),
     "average_precision":  lambda y_true, y_pred: metrics.average_precision_score(y_true, y_pred),
-    "roc_auc":            lambda y_true, y_pred: metrics.roc_auc_score(y_true, y_pred, average = "macro")
+    "roc_auc_ovr":        lambda y_true, y_pred: metrics.roc_auc_score(y_true, y_pred, average = "macro", multi_class = "ovr")
 }
 
 
@@ -173,6 +173,8 @@ for dataset in datasets:
                 rlabel_db = rlabel[5:]
             else:
                 rlabel_db = rlabel
+            if rlabel_db == "roc_auc":
+                rlabel_db = "roc_auc_ovr"
             result_labels.append(rlabel_db + "_mean")
             results.append(np.mean(cv_results[model][rlabel]))
             result_labels.append(rlabel_db + "_std")

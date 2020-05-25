@@ -20,9 +20,9 @@ from meta_db.db.DBHelper import DBHelper
 np.random.seed(constants.RANDOM_STATE)
 
 SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
-          "precision_macro", "f1_micro", "f1_macro", "balanced_accuracy", "average_precision", "roc_auc"]
+          "precision_macro", "f1_micro", "f1_macro", "balanced_accuracy"]
 
-SCORES = constants.CLASSIFIERS_SCORES
+# SCORES = constants.CLASSIFIERS_SCORES
 
 datasets = [f for f in listdir(config["dataset"]["folder"])
                 if ( isfile(join(config["dataset"]["folder"], f)) and
@@ -102,6 +102,8 @@ for dataset in datasets:
                 rlabel_db = rlabel[5:]
             else:
                 rlabel_db = rlabel
+            if rlabel_db == "roc_auc":
+                rlabel_db = "roc_auc_ovr"
             # print("[{}, {}] Scores {}".format(name, model, rlabel_db))
             result_labels.append(rlabel_db + "_mean")
             results.append(np.mean(cv_results[rlabel]))

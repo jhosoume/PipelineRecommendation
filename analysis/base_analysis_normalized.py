@@ -22,7 +22,7 @@ pio.templates.default = "plotly_white"
 
 np.random.seed(constants.RANDOM_STATE)
 
-SCORE = "recall_macro_mean"
+SCORE = "balanced_accuracy_mean"
 
 grey_palette = ['rgb(208, 209, 211)',
                 'rgb(185, 191, 193)',
@@ -74,7 +74,9 @@ for dataset in models.name.unique():
     max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
     # Note that results can be similar, so a dataset is included multiple times
     for indx, result in max_result.iterrows():
-        wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
+        if (result.preprocesses in constants.PRE_PROCESSES) and \
+           (result.classifier in constants.CLASSIFIERS):
+            wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
 default_max_baseline = max(wins, key = lambda key: wins[key])
 print("Default is:", default_max_baseline)
 
@@ -103,7 +105,7 @@ reg_models["random"] = lambda: Random()
 reg_models["default"] = lambda: Default()
 
 
-divideFold = KFold(10, random_state = constants.RANDOM_STATE)
+divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
 def filter_dataset(database):
     datasets_filtered = []
@@ -283,7 +285,6 @@ for baseline in results:
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "normalized.png")
 
 
-    fig.show()
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))
