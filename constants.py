@@ -1,6 +1,10 @@
 RANDOM_STATE = 7
 CLASSIFIERS = ["svm", "logistic_regression", "linear_discriminant", "kneighbors",
                "decision_tree", "gaussian_nb", "random_forest", "gradient_boosting"]
+# CLASSIFIERS = ["svm", "kneighbors",
+#                "decision_tree", "gaussian_nb", "random_forest", "gradient_boosting"]
+# CLASSIFIERS = ["svm", "kneighbors",
+#                "decision_tree", "gaussian_nb", "random_forest"]
                #"neural_network"]
 REGRESSORS = ["svm", "knn", "random_forest", "decision_tree", "random", "default"]
 CLASSIFIERS_SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",

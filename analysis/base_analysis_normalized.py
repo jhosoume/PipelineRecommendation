@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 # import matplotlib.pyplot as plt
+import json
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
 from sklearn import tree, naive_bayes, ensemble, neural_network, gaussian_process
@@ -17,6 +18,7 @@ from meta_db.db.DBHelper import DBHelper
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
+
 
 pio.templates.default = "plotly_white"
 
@@ -97,7 +99,7 @@ reg_models["neural_network"] = lambda: neural_network.MLPRegressor()
 reg_models["ridge"] = lambda: linear_model.Ridge()
 reg_models["gradient_descent"] = lambda: linear_model.SGDRegressor()
 reg_models["svm"] = lambda: svm.SVR(gamma = "auto")
-reg_models["knn"] = lambda: neighbors.KNeighborsRegressor()
+reg_models["knn"] = lambda: neighbors.KNeighborsRegressor(weights = "distance")
 reg_models["random_forest"] = lambda: ensemble.RandomForestRegressor(random_state = constants.RANDOM_STATE)
 reg_models["gaussian_process"] = lambda: gaussian_process.GaussianProcessRegressor()
 reg_models["decision_tree"] = lambda: tree.DecisionTreeRegressor(random_state = constants.RANDOM_STATE)
@@ -109,14 +111,19 @@ divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
 def filter_dataset(database):
     datasets_filtered = []
-    total_combinations = len(constants.CLASSIFIERS) * len(constants.PRE_PROCESSES + ['None'])
     for dataset in database.name.unique():
         split = database[database.name == dataset]
-        if len(split) == total_combinations:
+        keep = True
+        for clf in constants.CLASSIFIERS:
+            for pp in constants.PRE_PROCESSES + ['None']:
+                if len(split[split.classifier == clf][split.preprocesses == pp]) < 1:
+                    keep = False
+        if keep:
             datasets_filtered.append(dataset)
     return datasets_filtered
 
 datasets = pd.Series(filter_dataset(data))
+print("Num datasets:", len(datasets))
 results = {}
 
 for baseline in ["default", "random"]:
@@ -284,6 +291,9 @@ for baseline in results:
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline  + "_" + SCORE + "normalized.eps")
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "normalized.png")
 
+
+with open("analysis/plots/base_analysis/" + SCORE + "normalized.json", "w") as fd:
+    json.dump(results, fd, indent = 4)
 
 
 # def histogram(baseline = 'default'):

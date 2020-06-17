@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+import json
 # import matplotlib.pyplot as plt
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
@@ -20,11 +21,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 pio.templates.default = "plotly_white"
-constants.RANDOM_STATE = 74
 
 np.random.seed(constants.RANDOM_STATE)
 
-SCORE = "accuracy_mean"
+SCORE = "balanced_accuracy_mean"
 
 grey_palette = ['rgb(208, 209, 211)',
                 'rgb(185, 191, 193)',
@@ -76,7 +76,9 @@ for dataset in models.name.unique():
     max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
     # Note that results can be similar, so a dataset is included multiple times
     for indx, result in max_result.iterrows():
-        wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
+        if (result.preprocesses in constants.PRE_PROCESSES) and \
+           (result.classifier in constants.CLASSIFIERS):
+            wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
 default_max_baseline = max(wins, key = lambda key: wins[key])
 print("Default is:", default_max_baseline)
 
@@ -104,21 +106,23 @@ reg_models["decision_tree"] = lambda: tree.DecisionTreeRegressor(random_state = 
 reg_models["random"] = lambda: Random()
 reg_models["default"] = lambda: Default()
 
-results = {baseline: [{reg: 0 for reg in reg_models.keys()} for num in range(10)]
-            for baseline in ["random", "default"]}
-
 divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
 def filter_dataset(database):
     datasets_filtered = []
-    total_combinations = len(constants.CLASSIFIERS) * len(constants.PRE_PROCESSES + ['None'])
     for dataset in database.name.unique():
         split = database[database.name == dataset]
-        if len(split) == total_combinations:
+        keep = True
+        for clf in constants.CLASSIFIERS:
+            for pp in constants.PRE_PROCESSES + ['None']:
+                if len(split[split.classifier == clf][split.preprocesses == pp]) < 1:
+                    keep = False
+        if keep:
             datasets_filtered.append(dataset)
     return datasets_filtered
 
 datasets = pd.Series(filter_dataset(data))
+print("Num datasets:", len(datasets))
 results = {}
 
 for baseline in ["default", "random"]:
@@ -279,10 +283,13 @@ for baseline in results:
     #                    # borderwidth= 0.5
     #     )
     # )
-    fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.eps")
-    fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.png")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "normalized.png")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "normalized.eps")
+    fig.write_image("analysis/plots/preproc_gain/" + baseline + "_" + SCORE + "normalized.eps")
+    fig.write_image("analysis/plots/preproc_gain/" + baseline + "_" + SCORE + "normalized.png")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "_" + SCORE + "normalized.png")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "_" + SCORE + "normalized.eps")
+
+with open("analysis/plots/preproc_gain/" + SCORE + "normalized.json", "w") as fd:
+    json.dump(results, fd, indent = 4)
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))

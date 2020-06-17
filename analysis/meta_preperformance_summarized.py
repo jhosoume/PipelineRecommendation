@@ -164,6 +164,7 @@ for pp in (["None"] + constants.PRE_PROCESSES):
         zerolinecolor = "black",
     )
     fig.write_image("analysis/plots/meta_preperformance/pp_group/{}_{}.eps".format(pp, score))
+    fig.write_image("analysis/plots/meta_preperformance/pp_group/{}_{}.png".format(pp, score))
     # fig.show()
 
 all_data = all_regs.query("score == '{}'".format(score))

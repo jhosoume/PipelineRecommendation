@@ -53,13 +53,15 @@ if not os.path.exists("analysis/plots/winnings"):
 
 
 def histogram(score = "balanced_accuracy_mean"):
-    pp_clf_count = {"{}+{}".format(comb.preprocesses, comb.classifier):0 for indx, comb in combinations.iterrows()}
+    pp_clf_count = {"{}+{}".format(pp, clf):0 for pp in constants.PRE_PROCESSES for clf in constants.CLASSIFIERS}
     count = {}
     invert_count = {}
     classifiers = []
 
-    for clf in models.classifier.unique():
-        count[clf] = {comb.preprocesses:0 for indx, comb in combinations.iterrows()}
+    for clf in constants.CLASSIFIERS:
+        count[clf] = {}
+        for pp in constants.PRE_PROCESSES:
+            count[clf][pp] = 0
         count[clf]["None"] = 0
         pp_clf_count["None+{}".format(clf)] = 0
         classifiers.append(clf)
@@ -70,6 +72,9 @@ def histogram(score = "balanced_accuracy_mean"):
     mult = 0
     for dataset in models.name.unique():
         result_dataset = data.query("name == '{}'".format(dataset))
+        only_pp = result_dataset.preprocesses.isin(constants.PRE_PROCESSES + ["None"])
+        only_clf = result_dataset.classifier.isin(constants.CLASSIFIERS)
+        result_dataset = result_dataset[only_pp & only_clf]
         max_result = result_dataset[result_dataset[score] == result_dataset[score].max()]
         if len(max_result) > 1:
             mult += len(max_result) - 1
@@ -123,7 +128,7 @@ def histogram(score = "balanced_accuracy_mean"):
         linecolor = "black",
         ticks = "inside",
         mirror = True,
-        range = [-1, 70],
+        range = [-1, 80],
         tickfont= dict(
             size= 16,
             color = 'black'

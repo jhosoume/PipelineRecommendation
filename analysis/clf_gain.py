@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+import json
 # import matplotlib.pyplot as plt
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
@@ -20,11 +21,10 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 pio.templates.default = "plotly_white"
-constants.RANDOM_STATE = 74
 
 np.random.seed(constants.RANDOM_STATE)
 
-SCORE = "f1_macro_mean"
+SCORE = "balanced_accuracy_mean"
 
 grey_palette = ['rgb(208, 209, 211)',
                 'rgb(185, 191, 193)',
@@ -76,14 +76,16 @@ for dataset in models.name.unique():
     max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
     # Note that results can be similar, so a dataset is included multiple times
     for indx, result in max_result.iterrows():
-        wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
+        if (result.preprocesses in constants.PRE_PROCESSES) and \
+           (result.classifier in constants.CLASSIFIERS):
+            wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
 default_max_baseline = max(wins, key = lambda key: wins[key])
 print("Default is:", default_max_baseline)
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
-if not os.path.exists("analysis/plots/preproc_gain"):
-    os.makedirs("analysis/plots/preproc_gain")
+if not os.path.exists("analysis/plots/clf_gain"):
+    os.makedirs("analysis/plots/clf_gain")
 
 mean_scores = []
 std_scores = []
@@ -103,9 +105,6 @@ reg_models["gaussian_process"] = lambda: gaussian_process.GaussianProcessRegress
 reg_models["decision_tree"] = lambda: tree.DecisionTreeRegressor(random_state = constants.RANDOM_STATE)
 reg_models["random"] = lambda: Random()
 reg_models["default"] = lambda: Default()
-
-results = {baseline: [{reg: 0 for reg in reg_models.keys()} for num in range(10)]
-            for baseline in ["random", "default"]}
 
 divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
@@ -161,11 +160,11 @@ for baseline in ["default", "random"]:
                 if baseline == "default":
                     max_baseline = default_max_baseline
                 pp_base, clf_base = max_baseline.split("+")
-                predicted_dataset = dataset_info[dataset_info["preprocesses"] == pp_pred]
-                max_pred_pp = predicted_dataset[predicted_dataset[SCORE] == predicted_dataset[SCORE].max()].max()[SCORE]
-                baseline_dataset = dataset_info[dataset_info["preprocesses"] == pp_base]
-                max_base_pp = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
-                results[baseline][regressor_type].append(max_pred_pp - max_base_pp)
+                predicted_dataset = dataset_info[dataset_info["classifier"] == clf_pred]
+                max_pred_clf = predicted_dataset[predicted_dataset[SCORE] == predicted_dataset[SCORE].max()].max()[SCORE]
+                baseline_dataset = dataset_info[dataset_info["classifier"] == clf_base]
+                max_base_clf = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
+                results[baseline][regressor_type].append(max_pred_clf - max_base_clf)
             kfold += 1
 
     results[baseline]["true_max"] = []
@@ -195,9 +194,9 @@ for baseline in ["default", "random"]:
             if (baseline == 'default'):
                 max_baseline = default_max_baseline
             pp_base, clf_base = max_baseline.split("+")
-            baseline_dataset = dataset_info[dataset_info["preprocesses"] == pp_base]
-            max_base_pp = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
-            results[baseline]["true_max"].append(float(true_max) - max_base_pp)
+            baseline_dataset = dataset_info[dataset_info["classifier"] == clf_base]
+            max_base_clf = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
+            results[baseline]["true_max"].append(float(true_max) - max_base_clf)
 
 for baseline in results.keys():
     max = np.sum(results[baseline]["true_max"])
@@ -279,12 +278,10 @@ for baseline in results:
     #                    # borderwidth= 0.5
     #     )
     # )
-    fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.eps")
-    fig.write_image("analysis/plots/preproc_gain/" + baseline + "normalized.png")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "normalized.png")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "normalized.eps")
-
-    fig.show()
+    fig.write_image("analysis/plots/clf_gain/" + baseline + "normalized.eps")
+    fig.write_image("analysis/plots/clf_gain/" + baseline + "normalized.png")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/clf_winnings/" + baseline + "normalized.png")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/clf_winnings/" + baseline + "normalized.eps")
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))

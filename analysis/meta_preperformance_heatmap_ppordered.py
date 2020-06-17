@@ -42,7 +42,7 @@ y_axis = ["{}+{}".format(pp, translator[clf]) for pp in (["None"] + constants.PR
 
 pp_clfs =  [(pp, clf)  for pp in (["None"] + constants.PRE_PROCESSES) for clf in constants.CLASSIFIERS]
 
-score = "accuracy"
+score = "balanced_accuracy"
 regressor_score = "mean_squared_error"
 
 data = np.zeros((len(y_axis), len(x_axis)))
@@ -73,10 +73,12 @@ for line in range(len(y_axis)):
 fig = ff.create_annotated_heatmap(data.tolist(), annotation_text = text,
                                   x = x_axis, y = y_axis,
                                   colorscale='Greys', hoverinfo='z')
-fig.update_layout(font = {size = 18, color = '‎#000000'})
+# fig.update_layout(font = {size: 18, color: '‎#000000'})
 
 fig.show()
 fig.write_image("analysis/plots/meta_preperformance/" + score + "_heatmap_ppordered.eps",
+                width = 1000, height = 1200, scale = 1)
+fig.write_image("analysis/plots/meta_preperformance/" + score + "_heatmap_ppordered.png",
                 width = 1000, height = 1200, scale = 1)
 
 

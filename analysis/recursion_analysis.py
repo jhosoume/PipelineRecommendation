@@ -33,8 +33,8 @@ pio.templates.default = "plotly_white"
 
 np.random.seed(constants.RANDOM_STATE)
 
-SCORE = "accuracy_mean"
-SCORE_RAW = "accuracy"
+SCORE = "balanced_accuracy_mean"
+SCORE_RAW = "balanced_accuracy"
 
 grey_palette = ['rgb(208, 209, 211)',
                 'rgb(185, 191, 193)',
@@ -47,7 +47,7 @@ pprocs = {
     "ADASYN": ADASYN(random_state = constants.RANDOM_STATE).fit_resample,
     "SMOTE": SMOTE(random_state = constants.RANDOM_STATE).fit_resample,
     "HARF": HARF(seed = constants.RANDOM_STATE),
-    "AENN": AENN()
+    "ENN": ENN()
 }
 def preprocessor(name, values, target):
     if name in ["ADASYN", "SMOTE"]:

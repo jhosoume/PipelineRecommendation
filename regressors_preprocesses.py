@@ -17,8 +17,6 @@ from meta_db.db.DBHelper import DBHelper
 
 db = DBHelper()
 
-SCORE_COLUMNS = ["name"] + constants.CLASSIFIERS
-
 SCORES = ["max_error", "mean_absolute_error", "r2_score", "median_absolute_error", "mean_squared_error"]
 
 
@@ -93,4 +91,4 @@ for clf in constants.CLASSIFIERS:
                                 reg, clf, preprocess, score, count_models), "wb"))
                     count_models += 1
                     db.add_regressor_preperformance_record(result_labels, results)
-                print("- Finished with {} {} {}".format(reg, score, clf))
+                print("- Finished with {} {} {} {}".format(reg, score, clf, preprocess))

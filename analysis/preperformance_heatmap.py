@@ -34,7 +34,7 @@ if not os.path.exists("analysis/plots"):
 if not os.path.exists("analysis/plots/preperformance"):
     os.makedirs("analysis/plots/preperformance")
 
-score = "accuracy_mean"
+score = "balanced_accuracy_mean"
 
 y_axis = list(map(lambda clf: translator[clf], constants.CLASSIFIERS))
 x_axis = ['None'] + constants.PRE_PROCESSES
@@ -67,3 +67,4 @@ fig = ff.create_annotated_heatmap(data.tolist(), annotation_text = text,
 
 fig.show()
 fig.write_image("analysis/plots/preperformance/" + score + "_heatmap.eps")
+fig.write_image("analysis/plots/preperformance/" + score + "_heatmap.png")

@@ -1,10 +1,10 @@
 import random
 import constants
 
-random.seed(constants.RANDOM_STATE)
 
 class Random:
-    def __init__(self):
+    def __init__(self, random_seed = constants.RANDOM_STATE):
+        random.seed(random_seed)
         self.target = []
 
     def fit(self, values, target):
