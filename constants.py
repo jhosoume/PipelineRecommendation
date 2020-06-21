@@ -1,4 +1,4 @@
-RANDOM_STATE = 7
+RANDOM_STATE = 48
 CLASSIFIERS = ["svm", "logistic_regression", "linear_discriminant", "kneighbors",
                "decision_tree", "gaussian_nb", "random_forest", "gradient_boosting"]
 # CLASSIFIERS = ["svm", "kneighbors",

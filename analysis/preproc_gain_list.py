@@ -68,17 +68,17 @@ metadata.fillna(value = metadata_means, inplace = True)
 
 data = pd.merge(metadata, scores, on = "name")
 
-wins = {"{}+{}".format(pproc, clf):0 for pproc in ["None"] + constants.PRE_PROCESSES for clf in constants.CLASSIFIERS}
+data = data[data.preprocesses.isin(constants.PRE_PROCESSES + ["None"]) & data.classifier.isin(constants.CLASSIFIERS)]
+
+wins = {pproc:0 for pproc in ["None"] + constants.PRE_PROCESSES}
 for dataset in models.name.unique():
-    result_dataset = data.query("name == '{}'".format(dataset))
+    result_dataset = selected_data.query("name == '{}'".format(dataset))
     max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
     # Note that results can be similar, so a dataset is included multiple times
     for indx, result in max_result.iterrows():
-        if (result.preprocesses in constants.PRE_PROCESSES) and \
-           (result.classifier in constants.CLASSIFIERS):
-            wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
+        wins[result.preprocesses] += 1
 default_max_baseline = max(wins, key = lambda key: wins[key])
-print("Default is:", default_max_baseline)
+print("Default PP is:", default_max_baseline)
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
@@ -91,7 +91,7 @@ for score in constants.CLASSIFIERS_SCORES:
     mean_scores.append(score + "_mean")
     std_scores.append(score + "_std")
 
-REP = 10
+REP = 25
 
 def filter_dataset(database):
     datasets_filtered = []
@@ -131,6 +131,7 @@ for rep in range(REP):
     for baseline in ["default", "random"]:
         results[baseline] = {}
         for regressor_type in constants.REGRESSORS[:-2]:
+            regressor_type = "random_forest"
             # results[baseline][regressor_type] = {}
             kfold = 0
             results[baseline][regressor_type] = []
@@ -162,17 +163,29 @@ for rep in range(REP):
                     for model in models:
                         reg_results[model] = models[model].predict(meta_data)
                         baseline_results[model] = baseline_models[model].predict(meta_data)
+
+                    # PREDICTION
                     max_predicted = max(reg_results.keys(), key=(lambda key: reg_results[key]))
                     pp_pred, clf_pred = max_predicted.split("+")
-                    max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
-                    if baseline == "default":
-                        max_baseline = default_max_baseline
-                    pp_base, clf_base = max_baseline.split("+")
                     predicted_dataset = dataset_info[dataset_info["preprocesses"] == pp_pred]
                     max_pred_pp = predicted_dataset[predicted_dataset[SCORE] == predicted_dataset[SCORE].max()].max()[SCORE]
+
+                    # BASELINE
+                    max_baseline = max(baseline_results, key = (lambda key: baseline_results[key]))
+                    if baseline == "default":
+                        pp_base = default_max_baseline
+                    else:
+                        pp_base, clf_base = max_baseline.split("+")
                     baseline_dataset = dataset_info[dataset_info["preprocesses"] == pp_base]
                     max_base_pp = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
+
                     results[baseline][regressor_type].append(max_pred_pp - max_base_pp)
+                    print("------------------{}----------------------".format(regressor_type))
+                    print("Predicted Score : {}, True Score: {}, PP: {}".format(max(reg_results.values()), float(max_pred_pp), pp_pred))
+                    print("Baseline Score : {}, True Score: {}, PP: {}".format(max(baseline_results.values()), float(max_base_pp), pp_base))
+                    print("True Max Score : {}, PP: {}".format(float(true_max[SCORE].max()), true_max["preprocesses"]))
+                    print("Diff = {}".format(max_pred_pp - max_base_pp))
+                    print("----------------------------------------")
                 kfold += 1
 
         results[baseline]["true_max"] = []
@@ -198,13 +211,17 @@ for rep in range(REP):
                 baseline_results = {}
                 for model in models:
                     baseline_results[model] = baseline_models[model].predict(meta_data)
-                max_baseline = max(baseline_results, key=(lambda key: baseline_results[key]))
-                if (baseline == 'default'):
-                    max_baseline = default_max_baseline
-                pp_base, clf_base = max_baseline.split("+")
+                max_baseline = max(baseline_results, key = (lambda key: baseline_results[key]))
+                if baseline == "default":
+                    pp_base = default_max_baseline
+                else:
+                    pp_base, clf_base = max_baseline.split("+")
                 baseline_dataset = dataset_info[dataset_info["preprocesses"] == pp_base]
                 max_base_pp = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
                 results[baseline]["true_max"].append(float(true_max) - max_base_pp)
+
+    with open("analysis/plots/preproc_gain/" + SCORE + "_normalized_rep" + str(REP) + "_res_" + str(rep) + ".json", "w") as fd:
+        json.dump(results, fd, indent = 4)
 
     for baseline in results.keys():
         max_val = np.sum(results[baseline]["true_max"])
@@ -216,8 +233,8 @@ for rep in range(REP):
 
     all_results.append(results)
 
-with open("analysis/plots/preproc_gain/" + SCORE + "normalized_rep" + REP + ".json", "w") as fd:
-    json.dump(results, fd, indent = 4)
+with open("analysis/plots/preproc_gain/" + SCORE + "_normalized_rep" + str(REP) + ".json", "w") as fd:
+    json.dump(all_results, fd, indent = 4)
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))

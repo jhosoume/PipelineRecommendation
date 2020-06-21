@@ -69,7 +69,9 @@ for clf in constants.CLASSIFIERS:
     clf_data = clf_data[["name", regressor_score]]
     clf_data.name = clf_data.name.apply(lambda reg: translator[reg])
     # clf_data = clf_data.sort_values(by = ["name"])
-    clf_data.to_csv("analysis/plots/meta_preperformance/clf_group_csv/{}.csv".format(clf), index = False)
+    data = {reg:list(clf_data[clf_data.name == reg].mean_squared_error) for reg in clf_data.name.unique()}
+    dframe = pd.DataFrame(data)
+    dframe.to_csv("analysis/plots/meta_preperformance/clf_group_csv/{}.csv".format(clf), index = False, sep = "\t")
 
     boxp = px.box(clf_data, x="name", y="mean_squared_error", color_discrete_sequence = ["grey"])
 
@@ -131,6 +133,10 @@ for pp in (["None"] + constants.PRE_PROCESSES):
     # pp_data = pp_data.sort_values(by = ["name"])
     pp_data.to_csv("analysis/plots/meta_preperformance/pp_group_csv/{}.csv".format(pp), index = False)
 
+    data = {reg:list(pp_data[pp_data.name == reg].mean_squared_error) for reg in pp_data.name.unique()}
+    dframe = pd.DataFrame(data)
+    dframe.to_csv("analysis/plots/meta_preperformance/pp_group_csv/{}.csv".format(pp), index = False, sep = "\t")
+
     boxp = px.box(pp_data, x="name", y="mean_squared_error", color_discrete_sequence = ["grey"])
 
     fig = go.Figure(data = boxp)
@@ -170,8 +176,10 @@ for pp in (["None"] + constants.PRE_PROCESSES):
 all_data = all_regs.query("score == '{}'".format(score))
 all_data = all_data[["name", regressor_score]]
 all_data.name = all_data.name.apply(lambda reg: translator[reg])
-all_data.to_csv("analysis/plots/meta_preperformance/all_group_csv/all.csv", index = False)
 
+data = {reg:list(all_data[all_data.name == reg].mean_squared_error) for reg in all_data.name.unique()}
+dframe = pd.DataFrame(data)
+dframe.to_csv("analysis/plots/meta_preperformance/all_group_csv/all.csv", index = False, sep = "\t")
 boxp = px.box(all_data, x="name", y="mean_squared_error", color_discrete_sequence = ["grey"])
 
 fig = go.Figure(data = boxp)

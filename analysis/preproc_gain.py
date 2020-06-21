@@ -288,7 +288,7 @@ for baseline in results:
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "_" + SCORE + "normalized.png")
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "_" + SCORE + "normalized.eps")
 
-with open("analysis/plots/preproc_gain/" + SCORE + "normalized.json", "w") as fd:
+with open("analysis/plots/preproc_gain/" + SCORE + "_normalized.json", "w") as fd:
     json.dump(results, fd, indent = 4)
 
 # def histogram(baseline = 'default'):

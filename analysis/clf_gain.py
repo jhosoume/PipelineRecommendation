@@ -110,14 +110,19 @@ divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
 def filter_dataset(database):
     datasets_filtered = []
-    total_combinations = len(constants.CLASSIFIERS) * len(constants.PRE_PROCESSES + ['None'])
     for dataset in database.name.unique():
         split = database[database.name == dataset]
-        if len(split) == total_combinations:
+        keep = True
+        for clf in constants.CLASSIFIERS:
+            for pp in constants.PRE_PROCESSES + ['None']:
+                if len(split[split.classifier == clf][split.preprocesses == pp]) < 1:
+                    keep = False
+        if keep:
             datasets_filtered.append(dataset)
     return datasets_filtered
 
 datasets = pd.Series(filter_dataset(data))
+print("Num datasets:", len(datasets))
 results = {}
 
 for baseline in ["default", "random"]:
@@ -199,11 +204,11 @@ for baseline in ["default", "random"]:
             results[baseline]["true_max"].append(float(true_max) - max_base_clf)
 
 for baseline in results.keys():
-    max = np.sum(results[baseline]["true_max"])
+    max_value = np.sum(results[baseline]["true_max"])
     del results[baseline]["true_max"]
     for reg in results[baseline]:
         results[baseline][reg] = np.sum(results[baseline][reg])
-        results[baseline][reg] /= max
+        results[baseline][reg] /= max_value
         results[baseline][reg] *= 100
 
 for baseline in results:
@@ -282,6 +287,9 @@ for baseline in results:
     fig.write_image("analysis/plots/clf_gain/" + baseline + "normalized.png")
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/clf_winnings/" + baseline + "normalized.png")
     fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/clf_winnings/" + baseline + "normalized.eps")
+
+with open("analysis/plots/clf_gain/" + SCORE + "_normalized.json", "w") as fd:
+    json.dump(results, fd, indent = 4)
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))

@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 import numpy as np
-# import matplotlib.pyplot as plt
 import json
+# import matplotlib.pyplot as plt
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
 from sklearn import tree, naive_bayes, ensemble, neural_network, gaussian_process
@@ -15,10 +15,10 @@ from Default import Default
 from Random import Random
 from meta_db.db.DBHelper import DBHelper
 
+
 import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
-
 
 pio.templates.default = "plotly_white"
 
@@ -70,20 +70,20 @@ data = pd.merge(metadata, scores, on = "name")
 
 data = data[data.preprocesses.isin(constants.PRE_PROCESSES + ["None"]) & data.classifier.isin(constants.CLASSIFIERS)]
 
-wins = {"{}+{}".format(pproc, clf):0 for pproc in ["None"] + constants.PRE_PROCESSES for clf in constants.CLASSIFIERS}
+wins = {clf:0 for clf in constants.CLASSIFIERS}
 for dataset in models.name.unique():
     result_dataset = selected_data.query("name == '{}'".format(dataset))
     max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
     # Note that results can be similar, so a dataset is included multiple times
     for indx, result in max_result.iterrows():
-        wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
+        wins[result.classifier] += 1
 default_max_baseline = max(wins, key = lambda key: wins[key])
-print("Default is:", default_max_baseline)
+print("Default CLF is:", default_max_baseline)
 
 if not os.path.exists("analysis/plots"):
     os.makedirs("analysis/plots")
-if not os.path.exists("analysis/plots/base_analysis"):
-    os.makedirs("analysis/plots/base_analysis")
+if not os.path.exists("analysis/plots/clf_gain"):
+    os.makedirs("analysis/plots/clf_gain")
 
 mean_scores = []
 std_scores = []
@@ -93,7 +93,6 @@ for score in constants.CLASSIFIERS_SCORES:
 
 REP = 25
 
-# Function to get only datasets with all results (combinations)
 def filter_dataset(database):
     datasets_filtered = []
     for dataset in database.name.unique():
@@ -131,76 +130,62 @@ for rep in range(REP):
     results = {}
     for baseline in ["default", "random"]:
         results[baseline] = {}
-        # Loop through all regressors, except the baseline
-        for regressor_type in filter(lambda reg: not reg in ["random", "default"], constants.REGRESSORS):
+        for regressor_type in constants.REGRESSORS[:-2]:
             # results[baseline][regressor_type] = {}
             kfold = 0
             results[baseline][regressor_type] = []
-            # Divide datasets in train and test
             for train_indx, test_indx in divideFold.split(datasets):
                 # results[baseline][regressor_type][kfold] = []
-                # Only get pymfe calculated features for train datasets
                 targets = data[data.name.isin(list(datasets.iloc[train_indx]))]
                 models = {}
                 baseline_models = {}
-                # Train all regressors (for each type of regressor, create one trained for a pp and clf)
                 for clf in constants.CLASSIFIERS:
                     for preprocess in (constants.PRE_PROCESSES + ['None']):
                         models["{}+{}".format(preprocess, clf)] = reg_models[regressor_type]()
                         baseline_models["{}+{}".format(preprocess, clf)] = reg_models[baseline]()
-                        # Get scores for a specific combination
                         target = targets.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
                         meta_target = target.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1).values
                         label_target = target[SCORE].values
-                        # Fit baseline and regressor
                         models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
                         baseline_models["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
-                # Get only pymfe calculated features for tests datasets
                 tests = data[data.name.isin(list(datasets.iloc[test_indx]))]
-                # Loop for each one of the datasets
                 for test_dataset in tests.name.unique():
-                    # Get data specific for test dataset
                     dataset_info = tests.query(
                         "name == '{}'".format(test_dataset)
                     )
-                    # Get only one exemple, and shape it as one example
                     meta_data = dataset_info.iloc[0].drop(
                             ["name", "classifier", "preprocesses", *mean_scores, *std_scores]
                         ).values.reshape(1, -1)
-                    # Get true max value
-                    true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()].iloc[0]
+                    true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
                     reg_results = {}
                     baseline_results = {}
-                    # Get Predicitons for each regressor and baseline
                     for model in models:
                         reg_results[model] = models[model].predict(meta_data)
                         baseline_results[model] = baseline_models[model].predict(meta_data)
                     # PREDICTION
-                    # Get true value of the predicted combination
-                    max_predicted = max(reg_results.keys(), key = lambda key: reg_results[key])
+                    max_predicted = max(reg_results.keys(), key=(lambda key: reg_results[key]))
                     pp_pred, clf_pred = max_predicted.split("+")
-                    # Get real score for combination predicted as max
-                    score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
-                    # Dealing with the baseline
+                    predicted_dataset = dataset_info[dataset_info["classifier"] == clf_pred]
+                    max_pred_clf = predicted_dataset[predicted_dataset[SCORE] == predicted_dataset[SCORE].max()].max()[SCORE]
+
                     # BASELINE
-                    max_baseline = max(baseline_results.keys(), key= lambda key: baseline_results[key])
+                    max_baseline = max(baseline_results.keys(), key=(lambda key: baseline_results[key]))
                     if (baseline == 'default'):
-                        max_baseline = default_max_baseline
-                    pp_base, clf_base = max_baseline.split("+")
-                    score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
+                        clf_base = default_max_baseline
+                    else:
+                        pp_base, clf_base = max_baseline.split("+")
+                    baseline_dataset = dataset_info[dataset_info["classifier"] == clf_base]
+                    max_base_clf = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
 
-                    # Storing the result
-                    results[baseline][regressor_type].append(float(score_pred) - float(score_baseline))
-
+                    results[baseline][regressor_type].append(max_pred_clf - max_base_clf)
                     print("------------------{}----------------------".format(regressor_type))
-                    print("Predicted Score : {}, True Score: {}, PP: {}, CLF: {}".format(max(reg_results.values()), float(score_pred), pp_pred, clf_pred))
-                    print("Baseline Score : {}, True Score: {}, PP: {}, CLF: {}".format(max(baseline_results.values()), float(score_baseline), pp_base, clf_base))
-                    print("True Max Score : {}, PP: {}, CLF: {}".format(float(true_max[SCORE]), true_max["preprocesses"], true_max["classifier"]))
-                    print("Diff = {}".format(float(score_pred) - float(score_baseline)))
+                    print("Predicted Score : {}, True Score: {}, CLF: {}".format(max(reg_results.values()), float(max_pred_clf), clf_pred))
+                    print("Baseline Score : {}, True Score: {}, CLF: {}".format(max(baseline_results.values()), float(max_base_clf), clf_base))
+                    print("True Max Score : {}, CLF: {}".format(float(true_max[SCORE].max()), true_max["classifier"]))
+                    print("Diff = {}".format(max_pred_clf - max_base_clf))
                     print("----------------------------------------")
                 kfold += 1
 
-        # Loop only to calculate true max
         results[baseline]["true_max"] = []
         for train_indx, test_indx in divideFold.split(datasets):
             baseline_models = {}
@@ -224,32 +209,30 @@ for rep in range(REP):
                 baseline_results = {}
                 for model in models:
                     baseline_results[model] = baseline_models[model].predict(meta_data)
-                max_baseline = max(baseline_results, key=(lambda key: baseline_results[key]))
+                max_baseline = max(baseline_results, key= (lambda key: baseline_results[key]))
                 if (baseline == 'default'):
-                    max_baseline = default_max_baseline
-                pp_base, clf_base = max_baseline.split("+")
-                score_baseline = dataset_info[(dataset_info.preprocesses == pp_base) & (dataset_info.classifier == clf_base)][SCORE]
-                results[baseline]["true_max"].append(float(true_max) - float(score_baseline))
+                    clf_base = default_max_baseline
+                else:
+                    pp_base, clf_base = max_baseline.split("+")
+                baseline_dataset = dataset_info[dataset_info["classifier"] == clf_base]
+                max_base_clf = baseline_dataset[baseline_dataset[SCORE] == baseline_dataset[SCORE].max()].max()[SCORE]
+                results[baseline]["true_max"].append(float(true_max) - max_base_clf)
 
-
-    with open("analysis/plots/base_analysis/" + SCORE + "_normalized_rep" + str(REP) + "_res_" + str(rep) + ".json", "w") as fd:
+    with open("analysis/plots/clf_gain/" + SCORE + "_normalized_rep" + str(REP) + "_res_" + str(rep) + ".json", "w") as fd:
         json.dump(results, fd, indent = 4)
 
-    non_normalized_results = results.copy()
-
     for baseline in results.keys():
-        max_val = np.sum(results[baseline]["true_max"])
+        max_value = np.sum(results[baseline]["true_max"])
         del results[baseline]["true_max"]
         for reg in results[baseline]:
             results[baseline][reg] = np.sum(results[baseline][reg])
-            results[baseline][reg] /= max_val
+            results[baseline][reg] /= max_value
             results[baseline][reg] *= 100
 
     all_results.append(results)
 
-with open("analysis/plots/base_analysis/" + SCORE + "_normalized_rep_" + str(REP) + ".json", "w") as fd:
+with open("analysis/plots/clf_gain/" + SCORE + "_normalized_rep" + str(REP) + ".json", "w") as fd:
     json.dump(all_results, fd, indent = 4)
-
 
 # def histogram(baseline = 'default'):
 #     # fig = plt.figure(figsize = (12, 4))
@@ -258,7 +241,7 @@ with open("analysis/plots/base_analysis/" + SCORE + "_normalized_rep_" + str(REP
 #     ax = fig.add_subplot(111)
 #     ax.bar(results[baseline].keys(), [np.sum(values) for values in results[baseline].values()])
 #     plt.xlabel("Regressor", fontsize = 12, fontweight = 'bold')
-#     plt.ylabel("Gain", fontsize = 12, fontweight = 'bold')
+#     plt.ylabel("PP Gain", fontsize = 12, fontweight = 'bold')
 #     plt.xticks(rotation=90)
 #     plt.ylim([-4, 5])
 #     plt.grid(True, alpha = 0.5, linestyle = 'dotted')
@@ -266,4 +249,4 @@ with open("analysis/plots/base_analysis/" + SCORE + "_normalized_rep_" + str(REP
 #
 # for baseline in results.keys():
 #     histogram(baseline)
-#     plt.savefig("analysis/plots/base_analysis/" + baseline + ".png", dpi = 100)
+#     plt.savefig("analysis/plots/preproc_gain/" + baseline + ".png", dpi = 100)

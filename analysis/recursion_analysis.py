@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+import json
 # import matplotlib.pyplot as plt
 
 from sklearn import svm, linear_model, discriminant_analysis, neighbors
@@ -13,10 +14,10 @@ from scipy.io import arff as arff_io
 from pymfe.mfe import MFE
 
 from imblearn.over_sampling import SMOTE
-from imblearn.over_sampling import ADASYN
+from imblearn.under_sampling import RandomUnderSampler
 
 from NoiseFiltersPy.HARF import HARF
-from NoiseFiltersPy.AENN import AENN
+from NoiseFiltersPy.ENN import ENN
 
 
 import constants
@@ -44,13 +45,13 @@ grey_palette = ['rgb(208, 209, 211)',
                ]
 
 pprocs = {
-    "ADASYN": ADASYN(random_state = constants.RANDOM_STATE).fit_resample,
+    "RandomUnder": RandomUnderSampler(random_state = constants.RANDOM_STATE).fit_resample,
     "SMOTE": SMOTE(random_state = constants.RANDOM_STATE).fit_resample,
     "HARF": HARF(seed = constants.RANDOM_STATE),
     "ENN": ENN()
 }
 def preprocessor(name, values, target):
-    if name in ["ADASYN", "SMOTE"]:
+    if name in ["RandomUnder", "SMOTE"]:
         return pprocs[name](values, target)
     else:
         filter = pprocs[name](values, target)
@@ -204,14 +205,18 @@ reg_models["decision_tree"] = lambda: tree.DecisionTreeRegressor(random_state = 
 reg_models["random"] = lambda: Random()
 reg_models["default"] = lambda: Default()
 
-divideFold = KFold(10, random_state = constants.RANDOM_STATE)
+divideFold = KFold(10, random_state = constants.RANDOM_STATE, shuffle = True)
 
 def filter_dataset(database):
     datasets_filtered = []
-    total_combinations = len(constants.CLASSIFIERS) * len(constants.PRE_PROCESSES + ['None'])
     for dataset in database.name.unique():
         split = database[database.name == dataset]
-        if len(split) == total_combinations:
+        keep = True
+        for clf in constants.CLASSIFIERS:
+            for pp in constants.PRE_PROCESSES + ['None']:
+                if len(split[split.classifier == clf][split.preprocesses == pp]) < 1:
+                    keep = False
+        if keep:
             datasets_filtered.append(dataset)
     return datasets_filtered
 
@@ -304,7 +309,8 @@ for regressor_type in constants.REGRESSORS[:-2]:
         print("END END")
 
 print(results)
-import pdb; pdb.set_trace()
+with open("analysis/plots/recursion/" + SCORE + ".json", "w") as fd:
+    json.dump(results, fd, indent = 4)
 
 
 # for baseline in results:
