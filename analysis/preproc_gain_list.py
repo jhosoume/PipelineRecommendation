@@ -72,7 +72,7 @@ data = data[data.preprocesses.isin(constants.PRE_PROCESSES + ["None"]) & data.cl
 
 wins = {pproc:0 for pproc in ["None"] + constants.PRE_PROCESSES}
 for dataset in models.name.unique():
-    result_dataset = selected_data.query("name == '{}'".format(dataset))
+    result_dataset = data.query("name == '{}'".format(dataset))
     max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
     # Note that results can be similar, so a dataset is included multiple times
     for indx, result in max_result.iterrows():
@@ -131,7 +131,6 @@ for rep in range(REP):
     for baseline in ["default", "random"]:
         results[baseline] = {}
         for regressor_type in constants.REGRESSORS[:-2]:
-            regressor_type = "random_forest"
             # results[baseline][regressor_type] = {}
             kfold = 0
             results[baseline][regressor_type] = []
