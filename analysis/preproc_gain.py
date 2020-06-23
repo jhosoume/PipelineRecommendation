@@ -285,8 +285,8 @@ for baseline in results:
     # )
     fig.write_image("analysis/plots/preproc_gain/" + baseline + "_" + SCORE + "normalized.eps")
     fig.write_image("analysis/plots/preproc_gain/" + baseline + "_" + SCORE + "normalized.png")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "_" + SCORE + "normalized.png")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_winnings/" + baseline + "_" + SCORE + "normalized.eps")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_gain/" + baseline + "_" + SCORE + "normalized.png")
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/pp_gain/" + baseline + "_" + SCORE + "normalized.eps")
 
 with open("analysis/plots/preproc_gain/" + SCORE + "_normalized.json", "w") as fd:
     json.dump(results, fd, indent = 4)

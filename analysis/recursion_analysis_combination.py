@@ -314,8 +314,11 @@ for regressor_type in constants.REGRESSORS[:-2]:
         print("END END")
 
 print(results)
+print(num_datasets)
 with open("analysis/plots/recursion/" + SCORE + "_combination.json", "w") as fd:
     json.dump(results, fd, indent = 4)
+with open("analysis/plots/recursion/" + SCORE + "_combination_numdatasets.json", "w") as fd:
+    json.dump(num_datasets, fd, indent = 4)
 
 
 # for baseline in results:

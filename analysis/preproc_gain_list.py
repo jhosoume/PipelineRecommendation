@@ -232,7 +232,7 @@ for rep in range(REP):
 
     all_results.append(results)
 
-with open("analysis/plots/preproc_gain/" + SCORE + "_normalized_rep" + str(REP) + ".json", "w") as fd:
+with open("analysis/plots/preproc_gain/" + SCORE + "_normalized_rep_" + str(REP) + ".json", "w") as fd:
     json.dump(all_results, fd, indent = 4)
 
 # def histogram(baseline = 'default'):

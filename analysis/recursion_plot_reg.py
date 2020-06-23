@@ -45,10 +45,14 @@ grey_palette = ['rgb(208, 209, 211)',
                 'rgb(3, 3, 3)'
                ]
 
+# OLD
+# results = {'pp_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [4, 2, 0, 0, 0], 'random_forest': [5, 3, 3, 3, 3], 'decision_tree': [4, 0, 0, 0, 0]},
+#           'clf_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [6, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]},
+#               'wins': {'svm': [2, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [3, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]}}
 
-results = {'pp_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [4, 2, 0, 0, 0], 'random_forest': [5, 3, 3, 3, 3], 'decision_tree': [4, 0, 0, 0, 0]},
-          'clf_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [6, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]},
-              'wins': {'svm': [2, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [3, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]}}
+results = {'pp_wins':  {'svm': [13, 4, 4, 4, 4], 'knn': [11, 6, 6, 6, 6], 'random_forest': [10, 4, 4, 4, 4], 'decision_tree': [9, 0, 0, 0, 0]},
+           'clf_wins': {'svm': [15, 4, 4, 4, 4], 'knn': [15, 6, 6, 6, 6], 'random_forest': [18, 4, 4, 4, 4], 'decision_tree': [17, 0, 0, 0, 0]},
+           'wins':     {'svm': [4, 4, 4, 4, 4],  'knn': [8, 6, 6, 6, 6],  'random_forest': [5, 4, 4, 4, 4],  'decision_tree': [1, 0, 0, 0, 0]}}
 initial = 10
 num_dt = {reg:[0] * len(results["pp_wins"][reg]) for reg in results["pp_wins"].keys()}
 
