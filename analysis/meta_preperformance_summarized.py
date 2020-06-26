@@ -64,11 +64,15 @@ score = "balanced_accuracy"
 regressor_score = "mean_squared_error"
 
 
+data_regs = all_regs[all_regs.preprocesses.isin(constants.PRE_PROCESSES + ["None"])]
 for clf in constants.CLASSIFIERS:
-    clf_data = all_regs.query("classifier == '{}' and score == '{}'".format(clf, score))
+    clf_data = data_regs.query("classifier == '{}' and score == '{}'".format(clf, score))
     clf_data = clf_data[["name", regressor_score]]
     clf_data.name = clf_data.name.apply(lambda reg: translator[reg])
-    # clf_data = clf_data.sort_values(by = ["name"])
+    # Sorting
+    mapping = {reg: indx for indx, reg in enumerate(constants.REG_ORDER)}
+    key = clf_data["name"].map(mapping)
+    clf_data = clf_data.iloc[key.argsort()]
     data = {reg:list(clf_data[clf_data.name == reg].mean_squared_error) for reg in clf_data.name.unique()}
     dframe = pd.DataFrame(data)
     dframe.to_csv("analysis/plots/meta_preperformance/clf_group_csv/{}.csv".format(clf), index = False, sep = "\t")
@@ -126,10 +130,14 @@ for clf in constants.CLASSIFIERS:
     fig.write_image("analysis/plots/meta_preperformance/clf_group/{}_{}.png".format(clf, score))
     # fig.show()
 
+data_regs = all_regs[all_regs.classifier.isin(constants.CLASSIFIERS)]
 for pp in (["None"] + constants.PRE_PROCESSES):
-    pp_data = all_regs.query("preprocesses == '{}' and score == '{}'".format(pp, score))
+    pp_data = data_regs.query("preprocesses == '{}' and score == '{}'".format(pp, score))
     pp_data = pp_data[["name", regressor_score]]
     pp_data.name = pp_data.name.apply(lambda reg: translator[reg])
+    mapping = {reg: indx for indx, reg in enumerate(constants.REG_ORDER)}
+    key = pp_data["name"].map(mapping)
+    pp_data = pp_data.iloc[key.argsort()]
     # pp_data = pp_data.sort_values(by = ["name"])
     pp_data.to_csv("analysis/plots/meta_preperformance/pp_group_csv/{}.csv".format(pp), index = False)
 
@@ -173,9 +181,16 @@ for pp in (["None"] + constants.PRE_PROCESSES):
     fig.write_image("analysis/plots/meta_preperformance/pp_group/{}_{}.png".format(pp, score))
     # fig.show()
 
-all_data = all_regs.query("score == '{}'".format(score))
+data_regs = all_regs[
+                all_regs.preprocesses.isin(constants.PRE_PROCESSES + ["None"]) &
+                all_regs.classifier.isin(constants.CLASSIFIERS)]
+all_data = data_regs.query("score == '{}'".format(score))
 all_data = all_data[["name", regressor_score]]
 all_data.name = all_data.name.apply(lambda reg: translator[reg])
+
+mapping = {reg: indx for indx, reg in enumerate(constants.REG_ORDER)}
+key = all_data["name"].map(mapping)
+all_data = all_data.iloc[key.argsort()]
 
 data = {reg:list(all_data[all_data.name == reg].mean_squared_error) for reg in all_data.name.unique()}
 dframe = pd.DataFrame(data)

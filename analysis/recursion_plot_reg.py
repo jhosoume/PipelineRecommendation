@@ -103,7 +103,7 @@ for reg in results["pp_wins"]:
         linecolor = "black",
         ticks = "inside",
         mirror = True,
-        range = [0, 10]
+        range = [0, 30]
     )
 
     fig.update_xaxes(
@@ -134,3 +134,5 @@ for reg in results["pp_wins"]:
     # fig = px.bar(x = list(pp_clf_count.keys()), y = list(pp_clf_count.values()))
     fig.write_image("analysis/plots/recursion/reg.{}.eps".format(reg))
     fig.write_image("analysis/plots/recursion/reg.{}.png".format(reg))
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/recursion_analysis/reg.{}.eps".format(reg))
+    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/recursion_analysis/reg.{}.png".format(reg))

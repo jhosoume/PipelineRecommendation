@@ -11,9 +11,8 @@ import plotly.graph_objects as go
 REP = 30
 
 SCORE = "balanced_accuracy_mean"
-# DIST_FUNCTION = stats.sem
-# DIST_FUNCTION = stats.sem
-DIST_FUNCTION = lambda d: np.mean(np.abs( d - np.mean(d) ))
+DIST_FUNCTION = stats.sem
+# DIST_FUNCTION = lambda d: np.mean(np.abs( d - np.mean(d) ))
 
 pio.templates.default = "plotly_white"
 

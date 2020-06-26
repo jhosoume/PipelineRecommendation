@@ -32,6 +32,7 @@ data_means = {feature: np.mean(data[feature]) for feature in data.columns if fea
 data.fillna(value = data_means, inplace = True)
 
 reg_models = {}
+reg_models["gradient_boosting"] = ensemble.GradientBoostingRegressor()
 reg_models["neural_network"] = neural_network.MLPRegressor()
 reg_models["ridge"] = linear_model.Ridge()
 reg_models["gradient_descent"] = linear_model.SGDRegressor()
