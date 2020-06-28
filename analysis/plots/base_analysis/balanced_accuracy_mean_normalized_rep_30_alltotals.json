@@ -1,0 +1,14 @@
+{
+    "default": {
+        "svm": 391,
+        "knn": 391,
+        "random_forest": 391,
+        "decision_tree": 391
+    },
+    "random": {
+        "svm": 391,
+        "knn": 391,
+        "random_forest": 391,
+        "decision_tree": 391
+    }
+}

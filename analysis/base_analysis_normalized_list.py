@@ -91,7 +91,7 @@ for score in constants.CLASSIFIERS_SCORES:
     mean_scores.append(score + "_mean")
     std_scores.append(score + "_std")
 
-REP = 25
+REP = 30
 
 # Function to get only datasets with all results (combinations)
 def filter_dataset(database):
@@ -117,6 +117,7 @@ for rep in range(REP):
     divideFold = KFold(10, random_state = rand_state, shuffle = True)
 
     reg_models = {}
+    reg_models["gradient_boosting"] = lambda: ensemble.GradientBoostingRegressor()
     reg_models["neural_network"] = lambda: neural_network.MLPRegressor()
     reg_models["ridge"] = lambda: linear_model.Ridge()
     reg_models["gradient_descent"] = lambda: linear_model.SGDRegressor()
@@ -232,7 +233,7 @@ for rep in range(REP):
                 results[baseline]["true_max"].append(float(true_max) - float(score_baseline))
 
 
-    with open("analysis/plots/base_analysis/" + SCORE + "_normalized_rep" + str(REP) + "_res_" + str(rep) + ".json", "w") as fd:
+    with open("analysis/plots/base_analysis/" + SCORE + "_normalized_rep_" + str(REP) + "_res_" + str(rep) + ".json", "w") as fd:
         json.dump(results, fd, indent = 4)
 
     non_normalized_results = results.copy()

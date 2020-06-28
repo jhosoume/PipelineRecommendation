@@ -18,10 +18,7 @@ pio.templates.default = "plotly_white"
 
 
 grey_palette = ['rgb(208, 209, 211)',
-                'rgb(185, 191, 193)',
                 'rgb(137, 149, 147)',
-                'rgb(44, 54, 60)',
-                'rgb(3, 3, 3)'
                ]
 
 translator = {
@@ -41,12 +38,12 @@ translator = {
 }
 
 
-with open("analysis/plots/base_analysis/balanced_accuracy_mean_normalized_rep_{}.json".format(REP), "r") as fd:
+with open("analysis/plots/base_analysis/{}_normalized_rep_{}.json".format(SCORE, REP), "r") as fd:
     all_results = json.load(fd)
 
 results = { baseline:{
-                clf:{ measure: 0 for measure in ["mean", "dist"]}
-                for clf in all_results[0]["random"].keys()}
+                reg:{ measure: 0 for measure in ["mean", "dist"]}
+                for reg in all_results[0]["random"].keys()}
             for baseline in all_results[0].keys()
            }
 
@@ -55,7 +52,8 @@ for baseline in results.keys():
         results[baseline][reg]["mean"] = np.mean([res[baseline][reg] for res in all_results])
         results[baseline][reg]["dist"] = DIST_FUNCTION([res[baseline][reg] for res in all_results])
 
-for baseline in results:
+data_plot = []
+for indx, baseline in enumerate(results.keys()):
     bar = go.Bar(
         name = translator[baseline],
         x = list(map(lambda reg: translator[reg], results[baseline].keys())),
@@ -63,9 +61,9 @@ for baseline in results:
         error_y = dict(
             type = "data",
             array = [results[baseline][reg]["dist"] for reg in results[baseline].keys()]),
-        marker_color = grey_palette[2],
-        width = [0.5] * len (results[baseline].values())
+        marker_color = grey_palette[indx],
     )
+    data_plot.append(bar)
 
     # bar = go.Bar(
     #     name = translator[baseline],
@@ -74,63 +72,81 @@ for baseline in results:
     #     marker_color = grey_palette[1]
     # )
 
-    fig = go.Figure(data = bar)
+fig = go.Figure(data = data_plot)
 
-    fig.update_layout(
-        title = translator[baseline],
-        xaxis_title = "Regressor",
-        yaxis_title = "Gain (%) "
+fig.update_layout(barmode = 'group')
+fig.update_layout(
+    xaxis_title = "Regressor",
+    yaxis_title = "Gain (%) ",
+    uniformtext_minsize = 16,
+    font = dict(
+        size = 16,
+    ),
+    yaxis_title_standoff = 0    ,
+
+)
+
+fig.update_yaxes(
+    showgrid = True,
+    linewidth = 1,
+    linecolor = "black",
+    ticks = "inside",
+    mirror = True,
+    range = [-80, 100],
+    tickfont= dict(
+        size= 16,
+        color = 'black'
+    ),
+    titlefont = dict(
+        size = 18
     )
+)
 
-    fig.update_yaxes(
-        showgrid = True,
-        linewidth = 1,
-        linecolor = "black",
-        ticks = "inside",
-        mirror = True,
-        range = [-100, 100],
-        tickfont= dict(
-            size= 16,
-            color = 'black'
-        ),
-        titlefont = dict(
-            size = 18
-        )
+fig.update_xaxes(
+    showgrid = True,
+    linewidth = 1,
+    linecolor = "black",
+    ticks = "inside",
+    tickson = "boundaries",
+    mirror = True,
+    tickfont= dict(
+        size= 16,
+        color = 'black'
+    ),
+    titlefont = dict(
+        size = 18
+    ),
+
+)
+
+fig.update_yaxes(
+    zeroline = True,
+    zerolinewidth = 2,
+    zerolinecolor = "black",
+)
+
+fig.update_layout(legend_orientation="h")
+fig.update_layout(
+    legend = dict(
+                   x = 0.25,
+                   y = 1.11,
+                   traceorder= "normal",
+                   # bordercolor= "Black",
+                   # borderwidth= 0.5
     )
+)
 
-    fig.update_xaxes(
-        showgrid = True,
-        linewidth = 1,
-        linecolor = "black",
-        ticks = "inside",
-        tickson = "boundaries",
-        mirror = True,
-        tickfont= dict(
-            size= 16,
-            color = 'black'
-        ),
-        titlefont = dict(
-            size = 18
-        )
-    )
-
-    fig.update_yaxes(
-        zeroline = True,
-        zerolinewidth = 2,
-        zerolinecolor = "black",
-    )
-
-    # fig.update_layout(legend_orientation="h")
-    # fig.update_layout(
-    #     legend = dict(
-    #                    x = 0,
-    #                    y = 1.1,
-    #                    traceorder= "normal",
-    #                    # bordercolor= "Black",
-    #                    # borderwidth= 0.5
-    #     )
-    # )
-    fig.write_image("analysis/plots/base_analysis/" + baseline + "_" + SCORE + "_rep_normalized.eps")
-    fig.write_image("analysis/plots/base_analysis/" + baseline + "_" + SCORE + "_rep_normalized.png")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline  + "_" + SCORE + "_rep_normalized.eps")
-    fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "_rep_normalized.png")
+# fig.update_layout(legend_orientation="h")
+# fig.update_layout(
+#     legend = dict(
+#                    x = 0,
+#                    y = 1.1,
+#                    traceorder= "normal",
+#                    # bordercolor= "Black",
+#                    # borderwidth= 0.5
+#     )
+# )
+fig.write_image("analysis/plots/base_analysis/" + SCORE + "_rep_normalized.eps")
+fig.write_image("analysis/plots/base_analysis/" + SCORE + "_rep_normalized.png")
+fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline  + "_" + SCORE + "_rep_normalized.eps")
+fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "_rep_normalized.png")

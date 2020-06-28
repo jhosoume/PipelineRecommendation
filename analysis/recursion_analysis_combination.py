@@ -32,6 +32,8 @@ import plotly.graph_objects as go
 
 pio.templates.default = "plotly_white"
 
+
+constants.RANDOM_STATE = 73
 np.random.seed(constants.RANDOM_STATE)
 
 SCORE = "balanced_accuracy_mean"
@@ -194,6 +196,7 @@ for score in constants.CLASSIFIERS_SCORES:
 
 
 reg_models = {}
+reg_models["gradient_boosting"] = lambda: ensemble.GradientBoostingRegressor()
 reg_models["neural_network"] = lambda: neural_network.MLPRegressor()
 reg_models["ridge"] = lambda: linear_model.Ridge()
 reg_models["gradient_descent"] = lambda: linear_model.SGDRegressor()
@@ -315,9 +318,9 @@ for regressor_type in constants.REGRESSORS[:-2]:
 
 print(results)
 print(num_datasets)
-with open("analysis/plots/recursion/" + SCORE + "_combination.json", "w") as fd:
+with open("analysis/plots/recursion/" + SCORE + "_combination_{}.json".format(constants.RANDOM_STATE), "w") as fd:
     json.dump(results, fd, indent = 4)
-with open("analysis/plots/recursion/" + SCORE + "_combination_numdatasets.json", "w") as fd:
+with open("analysis/plots/recursion/" + SCORE + "_combination_numdatasets_{}.json".format(constants.RANDOM_STATE), "w") as fd:
     json.dump(num_datasets, fd, indent = 4)
 
 
