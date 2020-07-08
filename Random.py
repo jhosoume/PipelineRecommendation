@@ -1,5 +1,6 @@
 import random
 import constants
+import numpy as np
 
 
 class Random:
@@ -12,4 +13,4 @@ class Random:
         return self
 
     def predict(self, values):
-        return [random.choice(self.target) for i in range(len(values))]
+        return np.array([random.choice(self.target) for i in range(len(values))])

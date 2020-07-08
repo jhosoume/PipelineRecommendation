@@ -8,7 +8,7 @@ import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
 
-REP = 30
+REP = "reduced_30"
 
 SCORE = "balanced_accuracy_mean"
 DIST_FUNCTION = stats.sem

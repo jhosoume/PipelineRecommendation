@@ -1,0 +1,482 @@
+[
+    {
+        "default": {
+            "svm": 0,
+            "knn": 92,
+            "gradient_boosting": 128,
+            "random_forest": 126,
+            "decision_tree": 111
+        },
+        "random": {
+            "svm": 283,
+            "knn": 254,
+            "gradient_boosting": 267,
+            "random_forest": 274,
+            "decision_tree": 223
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 88,
+            "gradient_boosting": 122,
+            "random_forest": 134,
+            "decision_tree": 106
+        },
+        "random": {
+            "svm": 297,
+            "knn": 274,
+            "gradient_boosting": 264,
+            "random_forest": 271,
+            "decision_tree": 236
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 84,
+            "gradient_boosting": 141,
+            "random_forest": 140,
+            "decision_tree": 105
+        },
+        "random": {
+            "svm": 286,
+            "knn": 266,
+            "gradient_boosting": 284,
+            "random_forest": 293,
+            "decision_tree": 225
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 86,
+            "gradient_boosting": 127,
+            "random_forest": 151,
+            "decision_tree": 108
+        },
+        "random": {
+            "svm": 286,
+            "knn": 259,
+            "gradient_boosting": 282,
+            "random_forest": 274,
+            "decision_tree": 236
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 88,
+            "gradient_boosting": 136,
+            "random_forest": 143,
+            "decision_tree": 89
+        },
+        "random": {
+            "svm": 283,
+            "knn": 260,
+            "gradient_boosting": 268,
+            "random_forest": 275,
+            "decision_tree": 234
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 88,
+            "gradient_boosting": 135,
+            "random_forest": 139,
+            "decision_tree": 109
+        },
+        "random": {
+            "svm": 273,
+            "knn": 261,
+            "gradient_boosting": 265,
+            "random_forest": 288,
+            "decision_tree": 229
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 80,
+            "gradient_boosting": 135,
+            "random_forest": 130,
+            "decision_tree": 101
+        },
+        "random": {
+            "svm": 287,
+            "knn": 277,
+            "gradient_boosting": 284,
+            "random_forest": 283,
+            "decision_tree": 229
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 85,
+            "gradient_boosting": 139,
+            "random_forest": 131,
+            "decision_tree": 104
+        },
+        "random": {
+            "svm": 290,
+            "knn": 258,
+            "gradient_boosting": 286,
+            "random_forest": 293,
+            "decision_tree": 236
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 94,
+            "gradient_boosting": 141,
+            "random_forest": 145,
+            "decision_tree": 112
+        },
+        "random": {
+            "svm": 275,
+            "knn": 261,
+            "gradient_boosting": 284,
+            "random_forest": 286,
+            "decision_tree": 233
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 91,
+            "gradient_boosting": 125,
+            "random_forest": 138,
+            "decision_tree": 95
+        },
+        "random": {
+            "svm": 284,
+            "knn": 255,
+            "gradient_boosting": 274,
+            "random_forest": 273,
+            "decision_tree": 213
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 79,
+            "gradient_boosting": 138,
+            "random_forest": 131,
+            "decision_tree": 105
+        },
+        "random": {
+            "svm": 285,
+            "knn": 273,
+            "gradient_boosting": 275,
+            "random_forest": 263,
+            "decision_tree": 252
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 89,
+            "gradient_boosting": 132,
+            "random_forest": 131,
+            "decision_tree": 105
+        },
+        "random": {
+            "svm": 278,
+            "knn": 274,
+            "gradient_boosting": 283,
+            "random_forest": 284,
+            "decision_tree": 231
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 90,
+            "gradient_boosting": 139,
+            "random_forest": 141,
+            "decision_tree": 105
+        },
+        "random": {
+            "svm": 291,
+            "knn": 274,
+            "gradient_boosting": 279,
+            "random_forest": 283,
+            "decision_tree": 237
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 86,
+            "gradient_boosting": 137,
+            "random_forest": 135,
+            "decision_tree": 98
+        },
+        "random": {
+            "svm": 268,
+            "knn": 275,
+            "gradient_boosting": 291,
+            "random_forest": 285,
+            "decision_tree": 233
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 88,
+            "gradient_boosting": 136,
+            "random_forest": 143,
+            "decision_tree": 89
+        },
+        "random": {
+            "svm": 282,
+            "knn": 261,
+            "gradient_boosting": 281,
+            "random_forest": 288,
+            "decision_tree": 217
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 88,
+            "gradient_boosting": 135,
+            "random_forest": 139,
+            "decision_tree": 109
+        },
+        "random": {
+            "svm": 287,
+            "knn": 264,
+            "gradient_boosting": 274,
+            "random_forest": 280,
+            "decision_tree": 234
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 80,
+            "gradient_boosting": 135,
+            "random_forest": 130,
+            "decision_tree": 101
+        },
+        "random": {
+            "svm": 281,
+            "knn": 258,
+            "gradient_boosting": 295,
+            "random_forest": 273,
+            "decision_tree": 227
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 85,
+            "gradient_boosting": 139,
+            "random_forest": 131,
+            "decision_tree": 104
+        },
+        "random": {
+            "svm": 276,
+            "knn": 259,
+            "gradient_boosting": 277,
+            "random_forest": 278,
+            "decision_tree": 235
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 94,
+            "gradient_boosting": 141,
+            "random_forest": 145,
+            "decision_tree": 112
+        },
+        "random": {
+            "svm": 273,
+            "knn": 265,
+            "gradient_boosting": 282,
+            "random_forest": 293,
+            "decision_tree": 229
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 91,
+            "gradient_boosting": 125,
+            "random_forest": 138,
+            "decision_tree": 95
+        },
+        "random": {
+            "svm": 278,
+            "knn": 266,
+            "gradient_boosting": 278,
+            "random_forest": 277,
+            "decision_tree": 236
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 79,
+            "gradient_boosting": 138,
+            "random_forest": 131,
+            "decision_tree": 105
+        },
+        "random": {
+            "svm": 276,
+            "knn": 263,
+            "gradient_boosting": 281,
+            "random_forest": 278,
+            "decision_tree": 232
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 89,
+            "gradient_boosting": 132,
+            "random_forest": 131,
+            "decision_tree": 105
+        },
+        "random": {
+            "svm": 274,
+            "knn": 268,
+            "gradient_boosting": 267,
+            "random_forest": 269,
+            "decision_tree": 238
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 90,
+            "gradient_boosting": 139,
+            "random_forest": 141,
+            "decision_tree": 105
+        },
+        "random": {
+            "svm": 288,
+            "knn": 256,
+            "gradient_boosting": 275,
+            "random_forest": 291,
+            "decision_tree": 241
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 86,
+            "gradient_boosting": 137,
+            "random_forest": 135,
+            "decision_tree": 98
+        },
+        "random": {
+            "svm": 277,
+            "knn": 268,
+            "gradient_boosting": 280,
+            "random_forest": 278,
+            "decision_tree": 228
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 88,
+            "gradient_boosting": 136,
+            "random_forest": 143,
+            "decision_tree": 89
+        },
+        "random": {
+            "svm": 269,
+            "knn": 274,
+            "gradient_boosting": 277,
+            "random_forest": 285,
+            "decision_tree": 233
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 88,
+            "gradient_boosting": 135,
+            "random_forest": 139,
+            "decision_tree": 109
+        },
+        "random": {
+            "svm": 270,
+            "knn": 266,
+            "gradient_boosting": 277,
+            "random_forest": 283,
+            "decision_tree": 227
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 80,
+            "gradient_boosting": 135,
+            "random_forest": 130,
+            "decision_tree": 101
+        },
+        "random": {
+            "svm": 265,
+            "knn": 274,
+            "gradient_boosting": 274,
+            "random_forest": 267,
+            "decision_tree": 227
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 85,
+            "gradient_boosting": 139,
+            "random_forest": 131,
+            "decision_tree": 104
+        },
+        "random": {
+            "svm": 278,
+            "knn": 256,
+            "gradient_boosting": 268,
+            "random_forest": 286,
+            "decision_tree": 233
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 94,
+            "gradient_boosting": 141,
+            "random_forest": 145,
+            "decision_tree": 112
+        },
+        "random": {
+            "svm": 280,
+            "knn": 270,
+            "gradient_boosting": 278,
+            "random_forest": 288,
+            "decision_tree": 243
+        }
+    },
+    {
+        "default": {
+            "svm": 0,
+            "knn": 91,
+            "gradient_boosting": 125,
+            "random_forest": 138,
+            "decision_tree": 95
+        },
+        "random": {
+            "svm": 266,
+            "knn": 267,
+            "gradient_boosting": 259,
+            "random_forest": 292,
+            "decision_tree": 238
+        }
+    }
+]

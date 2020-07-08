@@ -8,7 +8,7 @@ import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
 
-REP = 30
+REP = "reduced_30"
 
 SCORE = "balanced_accuracy_mean"
 DIST_FUNCTION = stats.sem
@@ -39,11 +39,11 @@ translator = {
 }
 
 
-with open("analysis/plots/base_analysis/{}_normalized_rep_{}_totals.json".format(SCORE, REP), "r") as fd:
+with open("analysis/plots/base_analysis/data/{}_normalized_rep_{}_totals.json".format(SCORE, REP), "r") as fd:
     totals = json.load(fd)
-with open("analysis/plots/base_analysis/{}_normalized_rep_{}_draws.json".format(RSCORE, EP), "r") as fd:
+with open("analysis/plots/base_analysis/data/{}_normalized_rep_{}_draws.json".format(SCORE, REP), "r") as fd:
     draws = json.load(fd)
-with open("analysis/plots/base_analysis/{}_normalized_rep_{}_wins.json".format(RESCORE, P), "r") as fd:
+with open("analysis/plots/base_analysis/data/{}_normalized_rep_{}_wins.json".format(SCORE, REP), "r") as fd:
     wins = json.load(fd)
 
 results = { baseline:{
@@ -94,7 +94,7 @@ for baseline in results:
         font = dict(
             size = 16,
         ),
-        yaxis_title_standoff = 0    ,
+        yaxis_title_standoff = 0
     )
 
     fig.update_yaxes(

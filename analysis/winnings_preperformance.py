@@ -119,7 +119,8 @@ def histogram(score = "balanced_accuracy_mean"):
         font = dict(
             size = 16,
             color = "black"
-        )
+        ),
+        yaxis_title_standoff = 0 
     )
 
     fig.update_yaxes(

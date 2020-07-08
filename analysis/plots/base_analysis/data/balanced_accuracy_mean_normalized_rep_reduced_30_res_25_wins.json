@@ -1,0 +1,16 @@
+{
+    "default": {
+        "svm": 0,
+        "knn": 88,
+        "gradient_boosting": 135,
+        "random_forest": 139,
+        "decision_tree": 109
+    },
+    "random": {
+        "svm": 270,
+        "knn": 266,
+        "gradient_boosting": 277,
+        "random_forest": 283,
+        "decision_tree": 227
+    }
+}

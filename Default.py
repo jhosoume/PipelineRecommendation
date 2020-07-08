@@ -11,4 +11,4 @@ class Default:
         return self
 
     def predict(self, values):
-        return [self.mean for i in range(len(values))]
+        return np.array([self.mean for num in range(len(values))])

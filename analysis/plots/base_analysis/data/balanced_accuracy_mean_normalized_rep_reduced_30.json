@@ -1,0 +1,482 @@
+[
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -34.04089620319967,
+            "gradient_boosting": -13.718635621226275,
+            "random_forest": -5.372130664066091,
+            "decision_tree": -81.41105699031554
+        },
+        "random": {
+            "svm": 62.648008070314255,
+            "knn": 57.56172648236579,
+            "gradient_boosting": 62.154002492733106,
+            "random_forest": 65.06113531734012,
+            "decision_tree": 34.95987854045403
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -29.57849222723735,
+            "gradient_boosting": -13.97269848757999,
+            "random_forest": -3.368366348422317,
+            "decision_tree": -89.50927210647167
+        },
+        "random": {
+            "svm": 71.82718691648455,
+            "knn": 62.75293015778934,
+            "gradient_boosting": 65.42030088926764,
+            "random_forest": 75.0075341391205,
+            "decision_tree": 32.39855327854112
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -35.048841053634845,
+            "gradient_boosting": -14.63819686906834,
+            "random_forest": 0.19037793307607573,
+            "decision_tree": -89.03100786151774
+        },
+        "random": {
+            "svm": 64.70231538153234,
+            "knn": 46.638335996103216,
+            "gradient_boosting": 54.01777770829064,
+            "random_forest": 62.731479557850776,
+            "decision_tree": 31.498543443849808
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -30.026992320589237,
+            "gradient_boosting": -5.3325686299328146,
+            "random_forest": -4.399800324495262,
+            "decision_tree": -82.64203151420769
+        },
+        "random": {
+            "svm": 70.29121810615491,
+            "knn": 55.836242005866424,
+            "gradient_boosting": 69.97861328222761,
+            "random_forest": 69.45407316687091,
+            "decision_tree": 34.71071475976639
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -29.66400027380792,
+            "gradient_boosting": -1.5511385317988795,
+            "random_forest": -7.805528026954756,
+            "decision_tree": -78.87434900031535
+        },
+        "random": {
+            "svm": 63.44366421304392,
+            "knn": 52.157841468324925,
+            "gradient_boosting": 61.02760702150728,
+            "random_forest": 46.99743083795007,
+            "decision_tree": 36.729480822216885
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -28.44664612117327,
+            "gradient_boosting": -10.63720529066659,
+            "random_forest": -4.987886251827465,
+            "decision_tree": -69.32082874646417
+        },
+        "random": {
+            "svm": 53.54334188789556,
+            "knn": 49.32180990293259,
+            "gradient_boosting": 57.6524246034346,
+            "random_forest": 60.61643009588412,
+            "decision_tree": 48.22628874516817
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -23.106290269349696,
+            "gradient_boosting": -10.26947523718581,
+            "random_forest": 3.1304188667124535,
+            "decision_tree": -73.37497287505268
+        },
+        "random": {
+            "svm": 82.11534312607428,
+            "knn": 67.93363124612421,
+            "gradient_boosting": 68.43201015979773,
+            "random_forest": 69.26939157320592,
+            "decision_tree": 47.93109100377257
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -36.06260913143724,
+            "gradient_boosting": -14.29741741356957,
+            "random_forest": -6.952305396414242,
+            "decision_tree": -81.46641278925037
+        },
+        "random": {
+            "svm": 75.75134611955035,
+            "knn": 55.61266284355385,
+            "gradient_boosting": 61.28146366475378,
+            "random_forest": 66.38286683981237,
+            "decision_tree": 46.963423297730436
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -29.561559106010005,
+            "gradient_boosting": -6.608510984538743,
+            "random_forest": -3.0385534820605047,
+            "decision_tree": -85.34491414295908
+        },
+        "random": {
+            "svm": 67.15073364358284,
+            "knn": 54.01622718182711,
+            "gradient_boosting": 60.822377324257715,
+            "random_forest": 57.827406775623345,
+            "decision_tree": 35.620904892619905
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -32.95589793067399,
+            "gradient_boosting": -17.569486923950297,
+            "random_forest": -2.321556754083204,
+            "decision_tree": -86.30004517678177
+        },
+        "random": {
+            "svm": 62.486061917484314,
+            "knn": 46.04671528827468,
+            "gradient_boosting": 51.96269931882156,
+            "random_forest": 60.58117785393819,
+            "decision_tree": 36.813900006984916
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -37.34098793240571,
+            "gradient_boosting": -10.927747530536587,
+            "random_forest": -11.521511511865645,
+            "decision_tree": -77.95390077405985
+        },
+        "random": {
+            "svm": 58.96113588619093,
+            "knn": 45.651853888382895,
+            "gradient_boosting": 62.68108550135077,
+            "random_forest": 57.45273495231199,
+            "decision_tree": 34.453846300696156
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -35.21092092758591,
+            "gradient_boosting": -8.453528916099883,
+            "random_forest": -11.61099328856774,
+            "decision_tree": -73.24516165897923
+        },
+        "random": {
+            "svm": 69.77068917955047,
+            "knn": 62.92433403311286,
+            "gradient_boosting": 74.6676255212839,
+            "random_forest": 70.47157370479661,
+            "decision_tree": 54.56428044632096
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -20.079431004407507,
+            "gradient_boosting": -6.665585840434616,
+            "random_forest": -2.6299413402235188,
+            "decision_tree": -96.0229719468671
+        },
+        "random": {
+            "svm": 61.914438729080686,
+            "knn": 54.32877017793809,
+            "gradient_boosting": 63.01951743781425,
+            "random_forest": 55.650371637804255,
+            "decision_tree": 32.24674501442711
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -30.388106127116842,
+            "gradient_boosting": -10.216296227713016,
+            "random_forest": -9.000299501611453,
+            "decision_tree": -82.11495943792114
+        },
+        "random": {
+            "svm": 55.57824697683038,
+            "knn": 48.29819036021398,
+            "gradient_boosting": 56.51546619956886,
+            "random_forest": 56.26696011832922,
+            "decision_tree": 32.94579566847566
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -30.367308399450067,
+            "gradient_boosting": -12.622059618853813,
+            "random_forest": -5.255659426274635,
+            "decision_tree": -81.68011278398104
+        },
+        "random": {
+            "svm": 77.02421853350828,
+            "knn": 53.02593788549692,
+            "gradient_boosting": 58.440318694591895,
+            "random_forest": 64.24573665846354,
+            "decision_tree": 35.30259024159111
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -29.395797629843596,
+            "gradient_boosting": -12.332546178081694,
+            "random_forest": 1.1369135365213778,
+            "decision_tree": -83.94566428968602
+        },
+        "random": {
+            "svm": 57.795425685748505,
+            "knn": 50.36963426968066,
+            "gradient_boosting": 54.34786191765267,
+            "random_forest": 65.367754657746,
+            "decision_tree": 36.34698628159614
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -36.06260913143724,
+            "gradient_boosting": -14.29741741356957,
+            "random_forest": -6.952305396414242,
+            "decision_tree": -81.46641278925037
+        },
+        "random": {
+            "svm": 79.53284892425563,
+            "knn": 49.78287647107004,
+            "gradient_boosting": 63.09261534040472,
+            "random_forest": 58.616840867733444,
+            "decision_tree": 37.92312963088006
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -29.561559106010005,
+            "gradient_boosting": -6.608510984538743,
+            "random_forest": -3.0385534820605047,
+            "decision_tree": -85.34491414295908
+        },
+        "random": {
+            "svm": 66.7022001091905,
+            "knn": 54.98466729438511,
+            "gradient_boosting": 58.21141042063503,
+            "random_forest": 57.658061235989344,
+            "decision_tree": 24.16656441535454
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -32.95589793067399,
+            "gradient_boosting": -17.569486923950297,
+            "random_forest": -2.321556754083204,
+            "decision_tree": -86.30004517678177
+        },
+        "random": {
+            "svm": 53.681719046888674,
+            "knn": 54.782993925084156,
+            "gradient_boosting": 57.90037219388701,
+            "random_forest": 72.21498954204266,
+            "decision_tree": 33.515184786547266
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -37.34098793240571,
+            "gradient_boosting": -10.927747530536587,
+            "random_forest": -11.521511511865645,
+            "decision_tree": -77.95390077405985
+        },
+        "random": {
+            "svm": 69.43641236345057,
+            "knn": 62.561855872555775,
+            "gradient_boosting": 69.53117994272611,
+            "random_forest": 65.37861672960152,
+            "decision_tree": 52.28971495400525
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -35.21092092758591,
+            "gradient_boosting": -8.453528916099883,
+            "random_forest": -11.61099328856774,
+            "decision_tree": -73.24516165897923
+        },
+        "random": {
+            "svm": 59.9059126581524,
+            "knn": 46.455039938514375,
+            "gradient_boosting": 67.55892632808231,
+            "random_forest": 58.8458972547907,
+            "decision_tree": 45.881188427333846
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -20.079431004407507,
+            "gradient_boosting": -6.665585840434616,
+            "random_forest": -2.6299413402235188,
+            "decision_tree": -96.0229719468671
+        },
+        "random": {
+            "svm": 72.88735313925633,
+            "knn": 64.4164561694261,
+            "gradient_boosting": 69.06227691268475,
+            "random_forest": 59.02245697796291,
+            "decision_tree": 37.908563611565235
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -30.388106127116842,
+            "gradient_boosting": -10.216296227713016,
+            "random_forest": -9.000299501611453,
+            "decision_tree": -82.11495943792114
+        },
+        "random": {
+            "svm": 66.71447857475202,
+            "knn": 49.57993635126776,
+            "gradient_boosting": 63.21216239734174,
+            "random_forest": 58.5863509027879,
+            "decision_tree": 36.0134773707644
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -30.367308399450067,
+            "gradient_boosting": -12.622059618853813,
+            "random_forest": -5.255659426274635,
+            "decision_tree": -81.68011278398104
+        },
+        "random": {
+            "svm": 79.25652245304722,
+            "knn": 57.68082951170843,
+            "gradient_boosting": 62.926287611531905,
+            "random_forest": 66.08789336833637,
+            "decision_tree": 37.49983976060914
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -29.395797629843596,
+            "gradient_boosting": -12.332546178081694,
+            "random_forest": 1.1369135365213778,
+            "decision_tree": -83.94566428968602
+        },
+        "random": {
+            "svm": 60.50336656981812,
+            "knn": 47.37452559326513,
+            "gradient_boosting": 68.79948962949423,
+            "random_forest": 61.682360821354386,
+            "decision_tree": 33.8058709625738
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -36.06260913143724,
+            "gradient_boosting": -14.29741741356957,
+            "random_forest": -6.952305396414242,
+            "decision_tree": -81.46641278925037
+        },
+        "random": {
+            "svm": 73.26581640958449,
+            "knn": 58.52912034786281,
+            "gradient_boosting": 62.602849651523606,
+            "random_forest": 70.03690728977881,
+            "decision_tree": 41.5927449345803
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -29.561559106010005,
+            "gradient_boosting": -6.608510984538743,
+            "random_forest": -3.0385534820605047,
+            "decision_tree": -85.34491414295908
+        },
+        "random": {
+            "svm": 64.9659060947258,
+            "knn": 50.00079488810524,
+            "gradient_boosting": 55.147883064776195,
+            "random_forest": 65.76103067838088,
+            "decision_tree": 36.46606528608912
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -32.95589793067399,
+            "gradient_boosting": -17.569486923950297,
+            "random_forest": -2.321556754083204,
+            "decision_tree": -86.30004517678177
+        },
+        "random": {
+            "svm": 63.10432462864688,
+            "knn": 59.38417047151091,
+            "gradient_boosting": 66.05378463168663,
+            "random_forest": 59.79593781223716,
+            "decision_tree": 40.14090088889191
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -37.34098793240571,
+            "gradient_boosting": -10.927747530536587,
+            "random_forest": -11.521511511865645,
+            "decision_tree": -77.95390077405985
+        },
+        "random": {
+            "svm": 64.38604685044353,
+            "knn": 60.71392063638466,
+            "gradient_boosting": 68.80790977130428,
+            "random_forest": 67.52856244077499,
+            "decision_tree": 39.36321738143253
+        }
+    },
+    {
+        "default": {
+            "svm": 0.0,
+            "knn": -35.21092092758591,
+            "gradient_boosting": -8.453528916099883,
+            "random_forest": -11.61099328856774,
+            "decision_tree": -73.24516165897923
+        },
+        "random": {
+            "svm": 74.8549718118087,
+            "knn": 50.79987812297553,
+            "gradient_boosting": 73.7350456271585,
+            "random_forest": 58.46216757907199,
+            "decision_tree": 45.58763692103028
+        }
+    }
+]

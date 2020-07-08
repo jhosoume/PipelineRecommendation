@@ -111,7 +111,8 @@ for reg in results["pp_wins"]:
         font = dict(
             size = 16,
             color = "black"
-        )
+        ),
+        yaxis_title_standoff = 0
 
     )
 
