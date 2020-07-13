@@ -15,7 +15,7 @@ db = DBHelper()
 
 translator = {
     "svm": "SVM",
-    "logistic_regression": "LG",
+    "logistic_regression": "LR",
     "linear_discriminant": "LD",
     "kneighbors": "kNN",
     "decision_tree": "DT",
