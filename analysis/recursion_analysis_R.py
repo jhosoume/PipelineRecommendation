@@ -279,12 +279,12 @@ for regressor_type in constants.REGRESSORS[:-2]:
         print(test_dataset)
         dt_values, dt_target = deal_dataset(test_dataset)
 
-        meta_data = tests[tests.name == test_dataset].drop(
+        dataset_info = tests[tests.name == test_dataset]
+        meta_data = dataset_info.drop(
                 ["name", "classifier", "preprocesses", *mean_scores, *std_scores],
                 axis = 1
-            ).iloc[0].to_frame()
+            ).iloc[[0]]
 
-        import pdb; pdb.set_trace()
         for turn in range(TURNS):
             print("MAKING TURNS")
             reg_results = {}
