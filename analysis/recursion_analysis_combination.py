@@ -284,13 +284,14 @@ for regressor_type in constants.REGRESSORS[:-2]:
                 results["wins"][regressor_type][turn] += 1 if (float(score_pred) >= float(true_max.iloc[0][SCORE])) else 0
             else:
                 print("RECURSION TURN")
-                true_max = max(clf_scores, key = (lambda pp_clf: reg_results[pp_clf]))
-                pp_maxes, clf_maxes = true_max.split("+")
-                results["wins"][regressor_type][turn] += 1 if (max_predicted == true_max) else 0
-
-            if not isinstance(pp_maxes, list):
-                pp_maxes = [pp_maxes]
-                clf_maxes = [clf_maxes]
+                true_max = max(clf_scores, key = (lambda pp_clf: clf_scores[pp_clf]))
+                max_comb_value = clf_scores[true_max]
+                true_maxes = [comb for comb in clf_scores if clf_scores[comb] == max_comb_value]
+                pp_maxes = []; clf_maxes = []
+                for max in true_maxes:
+                    pp, clf = max.split("+")
+                    pp_maxes.append(pp); clf_maxes.append(clf)
+                results["wins"][regressor_type][turn] += 1 if (max_predicted in true_maxes) else 0
 
             results["pp_wins"][regressor_type][turn] += 1 if (pp_pred in pp_maxes) else 0
             results["clf_wins"][regressor_type][turn] += 1 if (clf_pred in clf_maxes) else 0

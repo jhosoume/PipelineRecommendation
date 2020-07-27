@@ -92,7 +92,7 @@ def real_scores(values, target):
     clf_models["logistic_regression"] = lg_clf
     lineardisc_clf = discriminant_analysis.LinearDiscriminantAnalysis().fit(values, target )
     clf_models["linear_discriminant"] = lineardisc_clf
-    neigh_clf = neighbors.KNeighborsClassifier().fit(values, target )
+    neigh_clf = neighbors.KNeighborsClassifier().fit(values, target)
     clf_models["kneighbors"] = neigh_clf
     dectree_clf = tree.DecisionTreeClassifier(random_state = RANDOM_STATE).fit(values, target )
     clf_models["decision_tree"] = dectree_clf
@@ -124,21 +124,9 @@ def real_scores(values, target):
     return results
 
 translator = {
-    "svm": "SVM",
-    "logistic_regression": "LG",
-    "linear_discriminant": "LD",
-    "kneighbors": "kNN",
-    "decision_tree": "DT",
     "gaussian_nb": "GNB",
     "random_forest": "RF",
     "randomForest": "RF",
-    "gradient_boosting": "GB",
-    "neural_network": "NN",
-    "knn": "kNN",
-    "dwnn": "DWNN",
-    "Svm": "SVM",
-    "ann": "ANN",
-    "cart": "CART",
     "random": "Random",
     "default": "Default"
 }
@@ -229,7 +217,7 @@ reg_models["cart"] = lambda: R_Model(rpart.rpart)
 reg_models["randomForest"] = lambda: R_Model(randomForest.randomForest)
 reg_models["svm"] = lambda: SVR()
 reg_models["dwnn"] = lambda: KNN()
-reg_models["random"] = lambda: Random(random_seed = rand_state)
+reg_models["random"] = lambda: Random(random_seed = RANDOM_STATE)
 reg_models["default"] = lambda: Default()
 
 # Function to get only datasets with all results (combinations)
@@ -258,89 +246,90 @@ num_datasets = {}
 
 TURNS = 5
 
-for regressor_type in constants.REGRESSORS[:-2]:
-    results["pp_wins"][regressor_type] = [0] * TURNS
-    results["clf_wins"][regressor_type] = [0] * TURNS
-    results["wins"][regressor_type] = [0] * TURNS
+regressor_type = "randomForest"
+results["pp_wins"][regressor_type] = [0] * TURNS
+results["clf_wins"][regressor_type] = [0] * TURNS
+results["wins"][regressor_type] = [0] * TURNS
 
-    num_datasets[regressor_type] = [0] * TURNS
+num_datasets[regressor_type] = [0] * TURNS
 
-    train_dt, test_dt = train_test_split(datasets, test_size = 0.1, random_state = RANDOM_STATE, shuffle = True)
-    targets = data[data.name.isin(train_dt)]
-    trained_reg = {}
+train_dt, test_dt = train_test_split(datasets, test_size = 0.1, random_state = RANDOM_STATE, shuffle = True)
+targets = data[data.name.isin(train_dt)]
+trained_reg = {}
 
-    for clf in constants.CLASSIFIERS:
-        for preprocess in (constants.PRE_PROCESSES + ['None']):
-            trained_reg["{}+{}".format(preprocess, clf)] = reg_models[regressor_type]()
-            target = targets.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
-            meta_target = target.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1)
-            label_target = target[SCORE].values
-            trained_reg["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
+for clf in constants.CLASSIFIERS:
+    for preprocess in (constants.PRE_PROCESSES + ['None']):
+        trained_reg["{}+{}".format(preprocess, clf)] = reg_models[regressor_type]()
+        target = targets.query("classifier == '{}' and preprocesses == '{}'".format(clf, preprocess))
+        meta_target = target.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores], axis = 1)
+        label_target = target[SCORE].values
+        trained_reg["{}+{}".format(preprocess, clf)].fit(meta_target, label_target)
 
-    tests = data[data.name.isin(test_dt)]
-    for test_dataset in tests.name.unique():
-        print(test_dataset)
-        dt_values, dt_target = deal_dataset(test_dataset)
+tests = data[data.name.isin(test_dt)]
+for test_dataset in tests.name.unique():
+    print(test_dataset)
+    dt_values, dt_target = deal_dataset(test_dataset)
 
-        dataset_info = tests[tests.name == test_dataset]
-        meta_data = dataset_info.drop(
-                ["name", "classifier", "preprocesses", *mean_scores, *std_scores],
-                axis = 1
-            ).iloc[[0]]
+    dataset_info = tests[tests.name == test_dataset]
+    meta_data = dataset_info.drop(
+            ["name", "classifier", "preprocesses", *mean_scores, *std_scores],
+            axis = 1
+        ).iloc[[0]]
 
-        for turn in range(TURNS):
-            num_datasets[regressor_type][turn] += 1
-            print("MAKING TURNS")
-            reg_results = {}
-            for model in trained_reg:
-                reg_results[model] = trained_reg[model].predict(meta_data)
-            max_predicted = max(reg_results.keys(), key = (lambda key: reg_results[key]))
-            pp_pred, clf_pred = max_predicted.split("+")
-            if turn == 0:
-                print("TURN 0")
-                true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
-                pp_maxes = [entry.preprocesses for indx, entry in true_max.iterrows()]
-                clf_maxes = [entry.classifier for indx, entry in true_max.iterrows()]
-                score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
-                results["wins"][regressor_type][turn] += 1 if (float(score_pred) >= float(true_max.iloc[0][SCORE])) else 0
-            else:
-                print("RECURSION TURN")
-                true_max = max(clf_scores, key = (lambda pp_clf: clf_scores[pp_clf]))
-                max_comb_value = clf_scores[true_max]
-                true_maxes = [comb for comb in clf_scores if clf_scores[comb] == max_comb_value]
-                pp_maxes = []; clf_maxes = []
-                for max in true_maxes:
-                    pp, clf = max.split("+")
-                    pp_maxes.append(pp); clf_maxes.append(clf)
-                results["wins"][regressor_type][turn] += 1 if (max_predicted in true_maxes) else 0
+    for turn in range(TURNS):
+        num_datasets[regressor_type][turn] += 1
+        print("MAKING TURNS")
+        reg_results = {}
+        for model in trained_reg:
+            reg_results[model] = trained_reg[model].predict(meta_data)
+        max_predicted = max(reg_results.keys(), key = (lambda key: reg_results[key]))
+        pp_pred, clf_pred = max_predicted.split("+")
+        if turn == 0:
+            print("TURN 0")
+            true_max = dataset_info[dataset_info[SCORE] == dataset_info[SCORE].max()]
+            pp_maxes = [entry.preprocesses for indx, entry in true_max.iterrows()]
+            clf_maxes = [entry.classifier for indx, entry in true_max.iterrows()]
+            score_pred = dataset_info[(dataset_info.preprocesses == pp_pred) & (dataset_info.classifier == clf_pred)][SCORE]
+            results["wins"][regressor_type][turn] += 1 if ((pp_pred in pp_maxes) and (clf_pred in clf_maxes)) else 0
+        else:
+            print("RECURSION TURN")
+            import pdb; pdb.set_trace()
+            true_max = max(clf_scores, key = (lambda pp_clf: clf_scores[pp_clf]))
+            max_comb_value = clf_scores[true_max]
+            true_maxes = [comb for comb in clf_scores if clf_scores[comb] == max_comb_value]
+            pp_maxes = []; clf_maxes = []
+            for max in true_maxes:
+                pp, clf = max.split("+")
+                pp_maxes.append(pp); clf_maxes.append(clf)
+            results["wins"][regressor_type][turn] += 1 if (max_predicted in true_maxes) else 0
 
-            results["pp_wins"][regressor_type][turn] += 1 if (pp_pred in pp_maxes) else 0
-            results["clf_wins"][regressor_type][turn] += 1 if (clf_pred in clf_maxes) else 0
+        results["pp_wins"][regressor_type][turn] += 1 if (pp_pred in pp_maxes) else 0
+        results["clf_wins"][regressor_type][turn] += 1 if (clf_pred in clf_maxes) else 0
 
-            if (pp_pred == "None") or not (pp_pred in pp_maxes):
-                print("END PP")
+        if (pp_pred == "None") or not (pp_pred in pp_maxes):
+            print("END PP")
+            break
+        else:
+            try:
+                dt_values, dt_target = preprocessor(pp_pred, dt_values, dt_target)
+                meta_data = calculate_metafeature(test_dataset, dt_values, dt_target)
+            except:
                 break
-            else:
-                try:
-                    dt_values, dt_target = preprocessor(pp_pred, dt_values, dt_target)
-                    meta_data = calculate_metafeature(test_dataset, dt_values, dt_target)
-                except:
-                    break
-                print("HERE!")
-                meta_results = {}
-                for indx, col in enumerate(dataset_info.columns.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores])):
-                    if col not in meta_data.columns:
-                        meta_results[col] = meta_means[col]
-                    else:
-                        meta_results[col] = float(meta_data[col])
-                meta_data = pd.DataFrame.from_dict([meta_results])
-                clf_scores = real_scores(dt_values, dt_target)
-            print("END TURN")
-        print("END END")
+            print("HERE!")
+            meta_results = {}
+            for indx, col in enumerate(dataset_info.columns.drop(["name", "classifier", "preprocesses", *mean_scores, *std_scores])):
+                if col not in meta_data.columns:
+                    meta_results[col] = meta_means[col]
+                else:
+                    meta_results[col] = float(meta_data[col])
+            meta_data = pd.DataFrame.from_dict([meta_results])
+            clf_scores = real_scores(dt_values, dt_target)
+        print("END TURN")
+    print("END END")
 
 print(results)
 print(num_datasets)
-with open("analysis/plots/recursion/" + SCORE + ".R.{}.json".format(RANDOM_STATE), "w") as fd:
+with open("analysis/plots/recursion/" + SCORE + ".rf.{}.json".format(RANDOM_STATE), "w") as fd:
     json.dump(results, fd, indent = 4)
-with open("analysis/plots/recursion/" + SCORE + "__numdatasets.R.{}.json".format(RANDOM_STATE), "w") as fd:
+with open("analysis/plots/recursion/" + SCORE + "__numdatasets.rf.{}.json".format(RANDOM_STATE), "w") as fd:
     json.dump(num_datasets, fd, indent = 4)

@@ -49,7 +49,7 @@ class R_Model:
                 formula = Formula("class ~" + "+ ".join(feature_names))
             else:
                 formula = Formula(formula)
-            self.trained = self.r_model(formula, data = train_R)
+        self.trained = self.r_model(formula, data = train_R)
         return self.trained
 
     def predict(self, test_data):
@@ -83,7 +83,22 @@ class KNN(R_Model):
         res = self.r_model(self.formula, self.train_R, test_R, kernel = self.kernel)
         return np.array(res[0])
 
+class SVR(R_Model):
+    def __init__(self):
+        R_Model.__init__(self, e1071.svm)
 
+    def fit(self, train_data, labels, formula = "class ~ .", feature_names = ""):
+        # train should be a dataframe and labels a numpy.array
+        train_data["class"] = labels
+        with localconverter(ro.default_converter + pandas2ri.converter):
+            train_R = r_from_pd_df = ro.conversion.py2rpy(train_data)
+        if type(formula) == type("string"):
+            if feature_names:
+                formula = Formula("class ~" + "+ ".join(feature_names))
+            else:
+                formula = Formula(formula)
+        self.trained = self.r_model(formula, data = train_R, scale = True, type = "eps-regression", kernel = "radial")
+        return self.trained
 
 # class ModelCollection:
 #     def __init__(self):

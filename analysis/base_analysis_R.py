@@ -170,6 +170,7 @@ for rep in range(REPETITIONS):
     reg_models["ann"] = lambda: R_Model(neuralnet.neuralnet)
     reg_models["cart"] = lambda: R_Model(rpart.rpart)
     reg_models["randomForest"] = lambda: R_Model(randomForest.randomForest)
+    reg_models["svm"] = lambda: SVR()
     reg_models["dwnn"] = lambda: KNN()
     reg_models["random"] = lambda: Random(random_seed = rand_state)
     reg_models["default"] = lambda: Default()

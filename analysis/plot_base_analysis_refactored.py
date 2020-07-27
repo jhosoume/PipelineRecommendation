@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 
 SCORE = "balanced_accuracy_mean"
 DIST_FUNCTION = stats.sem
-REP = 8
+REP = 30
 
 translator = {
     "svm": "SVM",
@@ -22,10 +22,14 @@ translator = {
     "decision_tree": "DT",
     "gaussian_nb": "GNB",
     "random_forest": "RF",
+    "randomForest": "RF",
     "gradient_boosting": "GB",
     "neural_network": "NN",
     "knn": "kNN",
+    "dwnn": "DWNN",
     "Svm": "SVM",
+    "ann": "ANN",
+    "cart": "CART",
     "random": "Random",
     "default": "Default"
 }
@@ -103,12 +107,11 @@ true_max["dataset"] = meta_base["name"]
 true_max["combination"] = meta_base[combinations_strings].idxmax(axis = 1)
 true_max["value"] = meta_base[combinations_strings].max(axis = 1)
 sum_true_max = true_max["value"].sum()
-import pdb; pdb.set_trace()
 
 # CALCULATIONS
 all_predictions = []
 for rep in range(REP):
-    predictions = pd.read_csv("analysis/plots/base_analysis/predictions_{}.csv".format(rep)).drop("Unnamed: 0", axis = 1)
+    predictions = pd.read_csv("analysis/plots/base_analysis/R_predictions/predictions_{}.csv".format(rep)).drop("Unnamed: 0", axis = 1)
     predictions["max_pred"] = predictions[combinations_strings].idxmax(axis = 1)
     predictions["real_max_pred"] = predictions.apply(lambda pred: float(meta_base[meta_base.name == pred.dataset][pred.max_pred]),axis = 1)
     result = {}
@@ -223,7 +226,7 @@ fig.update_layout(
 #                    # borderwidth= 0.5
 #     )
 # )
-fig.write_image("analysis/plots/base_analysis/" + SCORE + "_rep_normalized.eps")
-fig.write_image("analysis/plots/base_analysis/" + SCORE + "_rep_normalized.png")
-fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline  + "_" + SCORE + "_rep_normalized.eps")
-fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "_rep_normalized.png")
+fig.write_image("analysis/plots/base_analysis/" + SCORE + "_R.eps")
+fig.write_image("analysis/plots/base_analysis/" + SCORE + "_R.png")
+fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline  + "_" + SCORE + "_R.eps")
+fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "_R.png")
