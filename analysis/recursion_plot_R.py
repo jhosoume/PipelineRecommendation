@@ -17,6 +17,8 @@ db = DBHelper()
 
 SCORE = "balanced_accuracy_mean"
 
+RANDOM_SEED = 73
+
 # Por regressor
 # Número de hits absoluto
 
@@ -53,9 +55,9 @@ grey_palette = ['rgb(208, 209, 211)',
 #           'clf_wins': {'svm': [3, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [6, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]},
 #               'wins': {'svm': [2, 3, 3, 3, 3], 'knn': [2, 2, 0, 0, 0], 'random_forest': [3, 3, 3, 3, 3], 'decision_tree': [1, 0, 0, 0, 0]}}
 
-with open("analysis/plots/recursion/{}_R_numdatasets.json".format(SCORE), "r") as fd:
+with open("analysis/plots/recursion/{}_numdatasets.R.{}.json".format(SCORE, RANDOM_SEED), "r") as fd:
     totals = json.load(fd)
-with open("analysis/plots/recursion/{}.R.json".format(SCORE), "r") as fd:
+with open("analysis/plots/recursion/{}.R.{}.json".format(SCORE, RANDOM_SEED), "r") as fd:
     results = json.load(fd)
 
 num_dt = {reg:[0] * len(results["pp_wins"][reg]) for reg in results["pp_wins"].keys()}
@@ -105,7 +107,7 @@ for reg in results["pp_wins"]:
     fig = go.Figure(data = data_plot)
     fig.update_layout(barmode = 'group')
     fig.update_layout(
-        xaxis_title = "Regressor",
+        xaxis_title = "Round",
         yaxis_title = "Number of Hits",
         uniformtext_minsize = 16,
         font = dict(

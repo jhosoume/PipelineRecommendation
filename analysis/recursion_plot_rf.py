@@ -114,7 +114,7 @@ data_plot.append(scatter)
 fig = go.Figure(data = data_plot)
 fig.update_layout(barmode = 'group')
 fig.update_layout(
-    xaxis_title = "Regressor",
+    xaxis_title = "RandomForest",
     yaxis_title = "Number of Hits",
     uniformtext_minsize = 16,
     font = dict(

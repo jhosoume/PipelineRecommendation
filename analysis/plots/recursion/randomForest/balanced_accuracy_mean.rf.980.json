@@ -1,0 +1,29 @@
+{
+    "pp_wins": {
+        "randomForest": [
+            20,
+            5,
+            3,
+            3,
+            3
+        ]
+    },
+    "clf_wins": {
+        "randomForest": [
+            18,
+            7,
+            3,
+            3,
+            3
+        ]
+    },
+    "wins": {
+        "randomForest": [
+            11,
+            2,
+            3,
+            3,
+            3
+        ]
+    }
+}

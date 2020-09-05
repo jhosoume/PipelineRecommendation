@@ -293,13 +293,12 @@ for test_dataset in tests.name.unique():
             results["wins"][regressor_type][turn] += 1 if ((pp_pred in pp_maxes) and (clf_pred in clf_maxes)) else 0
         else:
             print("RECURSION TURN")
-            import pdb; pdb.set_trace()
             true_max = max(clf_scores, key = (lambda pp_clf: clf_scores[pp_clf]))
             max_comb_value = clf_scores[true_max]
             true_maxes = [comb for comb in clf_scores if clf_scores[comb] == max_comb_value]
             pp_maxes = []; clf_maxes = []
-            for max in true_maxes:
-                pp, clf = max.split("+")
+            for max_v in true_maxes:
+                pp, clf = max_v.split("+")
                 pp_maxes.append(pp); clf_maxes.append(clf)
             results["wins"][regressor_type][turn] += 1 if (max_predicted in true_maxes) else 0
 

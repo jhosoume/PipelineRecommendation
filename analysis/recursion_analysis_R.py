@@ -309,8 +309,8 @@ for regressor_type in constants.REGRESSORS[:-2]:
                 max_comb_value = clf_scores[true_max]
                 true_maxes = [comb for comb in clf_scores if clf_scores[comb] == max_comb_value]
                 pp_maxes = []; clf_maxes = []
-                for max in true_maxes:
-                    pp, clf = max.split("+")
+                for max_v in true_maxes:
+                    pp, clf = max_v.split("+")
                     pp_maxes.append(pp); clf_maxes.append(clf)
                 results["wins"][regressor_type][turn] += 1 if (max_predicted in true_maxes) else 0
 
