@@ -55,22 +55,22 @@ rpart = importr("rpart")
 neuralnet = importr("neuralnet")
 
 # # Test
-from sklearn.datasets import load_iris
-iris = load_iris()
-feature_names = [name.replace("(cm)", " ").strip().replace(" ", "_") for name in iris.feature_names]
-iris_df = pd.DataFrame(iris.data, columns = feature_names)
-iris_df["class"] = iris.target
-train_iris = iris_df[:120]
-test_iris = iris_df[120:]
-with localconverter(ro.default_converter + pandas2ri.converter):
-    train_iris_R = r_from_pd_df = ro.conversion.py2rpy(train_iris)
-    test_iris_R = r_from_pd_df = ro.conversion.py2rpy(test_iris)
-
-formula = Formula("class ~" + "+ ".join(feature_names))
-
-nn = neuralnet.neuralnet(formula, data = train_iris_R)
-result = np.array(ro.r.predict(nn, test_iris_R))
-
+# from sklearn.datasets import load_iris
+# iris = load_iris()
+# feature_names = [name.replace("(cm)", " ").strip().replace(" ", "_") for name in iris.feature_names]
+# iris_df = pd.DataFrame(iris.data, columns = feature_names)
+# iris_df["class"] = iris.target
+# train_iris = iris_df[:120]
+# test_iris = iris_df[120:]
+# with localconverter(ro.default_converter + pandas2ri.converter):
+#     train_iris_R = r_from_pd_df = ro.conversion.py2rpy(train_iris)
+#     test_iris_R = r_from_pd_df = ro.conversion.py2rpy(test_iris)
+#
+# formula = Formula("class ~" + "+ ".join(feature_names))
+#
+# nn = neuralnet.neuralnet(formula, data = train_iris_R)
+# result = np.array(ro.r.predict(nn, test_iris_R))
+#
 #____________________________________________________________#
 
 SCORE = "balanced_accuracy_mean"

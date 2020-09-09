@@ -65,7 +65,7 @@ for dataset in models.name.unique():
     max_result = result_dataset[result_dataset[SCORE] == result_dataset[SCORE].max()]
     # Note that results can be similar, so a dataset is included multiple times
     for indx, result in max_result.iterrows():
-        if (result.preprocesses in constants.PRE_PROCESSES) and \
+        if (result.preprocesses in ["None"] + constants.PRE_PROCESSES) and \
            (result.classifier in constants.CLASSIFIERS):
             wins["{}+{}".format(result.preprocesses, result.classifier)] += 1
 default_max_baseline = max(wins, key = lambda key: wins[key])

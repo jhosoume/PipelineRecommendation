@@ -27,4 +27,5 @@ PRE_PROCESSES = ["SMOTE", "RandomUnder", "HARF", "ENN"]
 # CLASSIFIERS_SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
 #                       "precision_macro", "f1_micro", "f1_macro", "fit_time", "score_time"]
 
-REG_ORDER = ["SVM", "kNN", "GB", "RF", "DT", "Random", "Default"]
+# REG_ORDER = ["SVM", "kNN", "GB", "RF", "DT", "Random", "Default"]
+REG_ORDER = ["ANN", "CART", "RF", "DWNN", "SVM", "DT", "Random", "Default"]

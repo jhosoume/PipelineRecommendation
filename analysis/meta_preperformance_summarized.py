@@ -47,10 +47,14 @@ translator = {
     "decision_tree": "DT",
     "gaussian_nb": "GNB",
     "random_forest": "RF",
+    "randomForest": "RF",
     "gradient_boosting": "GB",
     "neural_network": "NN",
     "knn": "kNN",
+    "dwnn": "DWNN",
     "Svm": "SVM",
+    "ann": "ANN",
+    "cart": "CART",
     "random": "Random",
     "default": "Default"
 }

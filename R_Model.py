@@ -40,6 +40,7 @@ class R_Model:
         self.r_model = r_model
 
     def fit(self, train_data, labels, formula = "class ~ .", feature_names = ""):
+        train_data = pd.DataFrame(train_data)
         # train should be a dataframe and labels a numpy.array
         train_data["class"] = labels
         with localconverter(ro.default_converter + pandas2ri.converter):
@@ -65,6 +66,7 @@ class KNN(R_Model):
 
     def fit(self, train_data, labels, formula = "class ~ .", feature_names = "", test_data = None, kernel = "gaussian"):
         # train should be a dataframe and labels a numpy.array
+        train_data = pd.DataFrame(train_data)
         train_data["class"] = labels
         with localconverter(ro.default_converter + pandas2ri.converter):
             self.train_R = r_from_pd_df = ro.conversion.py2rpy(train_data)
@@ -89,6 +91,7 @@ class SVR(R_Model):
 
     def fit(self, train_data, labels, formula = "class ~ .", feature_names = ""):
         # train should be a dataframe and labels a numpy.array
+        train_data = pd.DataFrame(train_data)
         train_data["class"] = labels
         with localconverter(ro.default_converter + pandas2ri.converter):
             train_R = r_from_pd_df = ro.conversion.py2rpy(train_data)
