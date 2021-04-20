@@ -10,6 +10,7 @@ import plotly.io as pio
 import plotly.express as px
 import plotly.graph_objects as go
 
+
 SCORE = "balanced_accuracy_mean"
 DIST_FUNCTION = stats.sem
 REP = 30
@@ -228,5 +229,3 @@ fig.update_layout(
 # )
 fig.write_image("analysis/plots/base_analysis/" + SCORE + "_R.eps")
 fig.write_image("analysis/plots/base_analysis/" + SCORE + "_R.png")
-fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline  + "_" + SCORE + "_R.eps")
-fig.write_image("/home/jhosoume/unb/tcc/ICDM/img/base_level_analysis/" + baseline + "_" + SCORE + "_R.png")

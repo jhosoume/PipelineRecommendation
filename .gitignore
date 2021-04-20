@@ -109,3 +109,7 @@ venv.bak/
 
 bkp/
 logs/
+
+venv/
+
+.vscode/

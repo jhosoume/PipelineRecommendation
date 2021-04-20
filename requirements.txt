@@ -1,10 +1,8 @@
-numpy==1.16.*
-scikit-learn==0.22.*
+numpy
+scikit-learn
 imbalanced-learn
 pandas
 matplotlib
-mysql
-mysql-connector-python
 blosc
 zstd
 lz4
