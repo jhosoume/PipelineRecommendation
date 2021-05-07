@@ -1,4 +1,5 @@
 import os
+import random
 import pandas as pd
 import numpy as np
 from sklearn import preprocessing
@@ -8,7 +9,8 @@ from sklearn.model_selection import train_test_split
 
 from scipy.io import arff as arff_io
 
-from tpot import TPOTClassifier
+import autosklearn.classification
+import autosklearn.pipeline.components.feature_preprocessing
 
 import constants
 from meta_db.db.DBHelper import DBHelper
@@ -31,30 +33,17 @@ translator = {
     "knn": "kNN",
     "Svm": "SVM",
     "random": "Random",
-    "default": "Default"
+    "default": "Default",
+    "KNeighborsClassifier": "kneighbors"
 }
 
-tpot_clf = {
-    "svc": "svm",
-    "logisticregression": "logistic_regression",
-    "lineardiscriminantanalysis": "linear_discriminant",
-    "kneighborsclassifier": "kneighbors",
-    "decisiontreeclassifier": "decision_tree",
-    "gaussiannb": "gaussian_nb",
-    "randomforestclassifier": "random_forest",
-    "gradientboostingclassifier": "gradient_boosting"
-
-}
-
-tpot_conf = {
-    "sklearn.svm.SVC": {"gamma": ["auto"]},
-    "sklearn.linear_model.LogisticRegression": {"solver": ["lbfgs"]},
-    "sklearn.discriminant_analysis.LinearDiscriminantAnalysis": {},
-    "sklearn.neighbors.KNeighborsClassifier": {},
-    "sklearn.tree.DecisionTreeClassifier": {},
-    "sklearn.naive_bayes.GaussianNB": {},
-    "sklearn.ensemble.RandomForestClassifier": {"n_estimators": [100]},
-    "sklearn.ensemble.GradientBoostingClassifier": {}
+autosklearn_clf = {
+    "libsvm_svc": "svm",
+    "k_nearest_neighbors": "kneighbors",
+    "decision_tree": "decision_tree",
+    "gaussian_nb": "gaussian_nb",
+    "random_forest": "random_forest",
+    "gradient_boosting": "gradient_boosting",
 }
 
 
@@ -108,19 +97,18 @@ def filter_dataset(database):
 
 datasets = pd.Series(filter_dataset(data))
 
-pipeline_opt = TPOTClassifier(
-    generations = 5,
-    population_size = 10,
-    cv = 5,
-    scoring = SCORE_,
-    config_dict = tpot_conf,
-    template = "Classifier",
-    memory = "auto"
+automl = autosklearn.classification.AutoSklearnClassifier(
+    time_left_for_this_task = 360,
+    per_run_time_limit = 90,
+    scoring_functions = [autosklearn.metrics.balanced_accuracy],
+    include_estimators = list(autosklearn_clf.keys()),
+    # include_preprocessors = ["LDA"],
+    include_preprocessors = ["no_preprocessing"],
+    ensemble_size = 1,
 )
-
 for rep in range(REPETITIONS):
     results = []
-    for dataset in datasets:
+    for dataset in datasets[:2]:
         dataset_info = arff_io.loadarff(config["dataset"]["folder"] + dataset + ".arff")
         dataset_info = pd.DataFrame(dataset_info[0])
         target = dataset_info["class"].values
@@ -140,12 +128,23 @@ for rep in range(REPETITIONS):
         except AttributeError:
             attrs = np.array(attrs_)
         X_train, X_test, y_train, y_test = train_test_split(attrs, target, test_size = 0.2)
-        pipeline_opt.fit(X_train, y_train)
-        recommended_clf = pipeline_opt.fitted_pipeline_.steps[0][0]
-        results.append({
-            "dataset": dataset,
-            "recommended_clf": tpot_clf[recommended_clf]
-        })
+        automl.fit(X_train, y_train, dataset_name = dataset)
+        try:
+            steps = automl.get_models_with_weights()[0][1].named_steps
+            results.append({
+                "dataset": dataset,
+                "recommended_clf": steps["classifier"].choice.estimator.__class__.__name__,
+                "sucessful": 1
+                #"recommended_pp": steps["data_preprocessing"]
+            })
+        except AttributeError:
+            results.append({
+                "dataset": dataset,
+                "recommended_clf": random.sample(autosklearn_clf.keys(), 1)[0],
+                "sucessful": 0
+                #"recommended_pp": steps["data_preprocessing"]
+            })
+            
 
     results = pd.DataFrame(results)
-    results.to_csv("analysis/plots/base_analysis/tpot_{}.csv".format(rep), sep = ",")
+    results.to_csv("analysis/plots/base_analysis/autosklearn_{}.csv".format(rep), sep = ",")

@@ -1,0 +1,3 @@
+,dataset,recommended_clf,sucessful
+0,1541_volcanoes-d4,k_nearest_neighbors,0
+1,23_cmc,SVC,1
