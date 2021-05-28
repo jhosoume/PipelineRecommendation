@@ -108,7 +108,7 @@ automl = autosklearn.classification.AutoSklearnClassifier(
 )
 for rep in range(REPETITIONS):
     results = []
-    for dataset in datasets[:2]:
+    for dataset in datasets:
         dataset_info = arff_io.loadarff(config["dataset"]["folder"] + dataset + ".arff")
         dataset_info = pd.DataFrame(dataset_info[0])
         target = dataset_info["class"].values

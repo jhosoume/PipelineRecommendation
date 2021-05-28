@@ -32,7 +32,8 @@ translator = {
     "ann": "ANN",
     "cart": "CART",
     "random": "Random",
-    "default": "Default"
+    "default": "Default",
+    "tpot": "TPOT",
 }
 
 pio.templates.default = "plotly_white"
@@ -115,6 +116,12 @@ for rep in range(REP):
     predictions = pd.read_csv("analysis/plots/base_analysis/R_predictions/predictions_{}.csv".format(rep)).drop("Unnamed: 0", axis = 1)
     predictions["max_pred"] = predictions[combinations_strings].idxmax(axis = 1)
     predictions["real_max_pred"] = predictions.apply(lambda pred: float(meta_base[meta_base.name == pred.dataset][pred.max_pred]),axis = 1)
+    if rep == 0:
+        # Adding TPOT
+        tpot_predictions = pd.read_csv("analysis/plots/base_analysis/tpot_0.csv").drop("Unnamed: 0", axis = 1)
+        tpot_predictions["max_pred"] = tpot_predictions.apply(lambda pred: "None+" + pred["recommended_clf"], axis = 1)
+        tpot_predictions["real_max_pred"] = tpot_predictions.apply(lambda pred: float(meta_base[meta_base.name == pred.dataset][pred.max_pred]), axis = 1)
+
     result = {}
     for baseline in ["random", "default"]:
         result[baseline] = {}
@@ -122,13 +129,17 @@ for rep in range(REP):
         for reg in filter(lambda reg: not reg in ["random", "default"], constants.REGRESSORS):
             reg_sum = predictions[predictions.regressor == reg]["real_max_pred"].sum()
             result[baseline][reg] = (reg_sum - baseline_sum) * 100 / (sum_true_max - baseline_sum)
+        tpot_sum = tpot_predictions["real_max_pred"].sum()
+        result[baseline]["tpot"] = (tpot_sum - baseline_sum) * 100 / (sum_true_max - baseline_sum)
     all_predictions.append(result)
+
+
 
 # PLOTTING
 results = {}
 for baseline in ["random", "default"]:
     results[baseline] = {}
-    for reg in filter(lambda reg: not reg in ["random", "default"], constants.REGRESSORS):
+    for reg in filter(lambda reg: not reg in ["random", "default"], constants.REGRESSORS + ["tpot"]):
         results[baseline][reg] = {}
         results[baseline][reg]["mean"] = np.mean([res[baseline][reg] for res in all_predictions])
         results[baseline][reg]["dist"] = DIST_FUNCTION([res[baseline][reg] for res in all_predictions])

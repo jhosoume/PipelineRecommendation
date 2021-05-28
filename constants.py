@@ -10,6 +10,7 @@ CLASSIFIERS = ["svm", "logistic_regression", "linear_discriminant", "kneighbors"
                #"neural_network"]
 # REGRESSORS = [ "svm", "knn","gradient_boosting", "random_forest", "decision_tree", "random", "default"]
 REGRESSORS = [ "ann", "cart", "randomForest", "dwnn", "svm", "random", "default"]
+# REGRESSORS = [ "ann", "cart", "randomForest", "dwnn", "random", "default"]
 CLASSIFIERS_SCORES = ["recall_micro", "recall_macro", "accuracy", "precision_micro",
                       "precision_macro", "f1_micro", "f1_macro",
                       "balanced_accuracy",
