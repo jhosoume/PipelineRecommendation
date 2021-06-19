@@ -113,14 +113,13 @@ sum_true_max = true_max["value"].sum()
 # CALCULATIONS
 all_predictions = []
 for rep in range(REP):
-    predictions = pd.read_csv("analysis/plots/base_analysis/R_predictions/predictions_{}.csv".format(rep)).drop("Unnamed: 0", axis = 1)
+    predictions = pd.read_csv("analysis/plots/base_analysis/R_predictions/predictions.2_{}.csv".format(rep)).drop("Unnamed: 0", axis = 1)
     predictions["max_pred"] = predictions[combinations_strings].idxmax(axis = 1)
     predictions["real_max_pred"] = predictions.apply(lambda pred: float(meta_base[meta_base.name == pred.dataset][pred.max_pred]),axis = 1)
-    if rep == 0:
-        # Adding TPOT
-        tpot_predictions = pd.read_csv("analysis/plots/base_analysis/tpot_0.csv").drop("Unnamed: 0", axis = 1)
-        tpot_predictions["max_pred"] = tpot_predictions.apply(lambda pred: "None+" + pred["recommended_clf"], axis = 1)
-        tpot_predictions["real_max_pred"] = tpot_predictions.apply(lambda pred: float(meta_base[meta_base.name == pred.dataset][pred.max_pred]), axis = 1)
+    # Adding TPOT
+    tpot_predictions = pd.read_csv("analysis/plots/base_analysis/tpot_{}.csv".format(rep)).drop("Unnamed: 0", axis = 1)
+    tpot_predictions["max_pred"] = tpot_predictions.apply(lambda pred: "None+" + pred["recommended_clf"], axis = 1)
+    tpot_predictions["real_max_pred"] = tpot_predictions.apply(lambda pred: float(meta_base[meta_base.name == pred.dataset][pred.max_pred]), axis = 1)
 
     result = {}
     for baseline in ["random", "default"]:
